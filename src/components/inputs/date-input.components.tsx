@@ -30,6 +30,7 @@ export const DateInput = ({name,label,register,error,mode = "visualizacao"}: Dat
                 const formatted = iso.slice(0, 16);
                 setCurrentDate(formatted);
             }
+            trigger(name)
         }, [mode, trigger]);
     
     return(

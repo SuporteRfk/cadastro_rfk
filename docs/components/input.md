@@ -71,4 +71,4 @@ Isso permite integração com `react-hook-form` para:
 
 Se você for usar este componente em um novo campo de formulário, **mantenha os mesmos padrões** e **evite criar variações sem necessidade**.
 
-Para revisão com textarea, use `components/revisaoCampo` junto ao `Input`. Isso garante a separação de responsabilidades entre input e lógica de controle de revisão.
+Para revisão com textarea, use `/components/revisaoCampo` junto ao `Input`. Isso garante a separação de responsabilidades entre input e lógica de controle de revisão.
