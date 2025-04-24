@@ -55,6 +55,7 @@ export const Input = ({name,label,placeholder,type = "text",register,error,icon:
                     `}
                 />
             </div>
+            {error && <p className="text-error/80 text-xs mt-1 pl-1">{error}</p>}
         </div>
     );
 };
