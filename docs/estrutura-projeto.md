@@ -9,7 +9,29 @@ A estrutura segue o padrão por **features**, garantindo **escalabilidade**, **c
 
 <br>
 
+## 🌐 Padrões de Nomeação
+
+- **Pastas e arquivos**: Inglês e `kebab-case` (ex: `form-clientes`, `auth-context`)  
+- **Variáveis, funções e tipos**: Inglês, mas se nome levar algo relacionado a feature, manter o português em `camelCase` (ex: `handleCadastroCliente`)  
+- **Enums, interfaces e constantes globais**: `PascalCase` e em português (ex: `StatusSolicitacoes`, `TipoOperacao`)  
+- **Commits**: Padrão **Conventional Commits**
+- **Comentários**: Em português;
+
+<br>
+
+## 📂 Pasta `/public`
+
+A pasta `public/` é fundamental em projetos com Vite, pois serve diretamente arquivos estáticos.
+
+Use-a para:
+- Imagens institucionais
+- Ícones SVG globais
+- Arquivos públicos acessíveis (como PDF, favicon, etc)
+
+⚠️ Arquivos dentro da `public/` **não** devem ser manipulados por Webpack ou importados via JavaScript.
+
 ## 📂 Estrutura Base
+
 
 ```bash
 src/ 
@@ -22,8 +44,9 @@ src/
     │               ├── components/             # Componentes específicos 
     │               ├── forms/                  # Formulários por tipo (cadastro, edição, revisão) 
     │               ├── schema/                 # Yup schemas do módulo 
-    │               ├── service.ts              # Funções de chamada de API 
-    │               └── index.tsx               # Entrada principal da feature (opcional) 
+    │               ├── service/                # Funções de chamada de API 
+    │               ├── index.tsx               # Entrada principal da feature (opcional) 
+    │               └──cliente.interface.tsx    # Interface da features 
     ├── hooks                               # Custom hooks globais (useToast, useAuth, etc) 
     ├── interfaces                          # Interfaces/Enums globais (se existirem) 
     ├── pages                               # Páginas públicas ou sem layout (login, 404) 
@@ -39,13 +62,6 @@ src/
 ```
 
 <br>
-
-## 🌐 Padrões de Nomeação
-
-- **Pastas e arquivos**: Inglês e `kebab-case` (ex: `form-clientes`, `auth-context`)  
-- **Variáveis, funções e tipos**: Português em `camelCase` (ex: `handleCadastroCliente`)  
-- **Enums e constantes globais**: `PascalCase` e em português (ex: `StatusSolicitacoes`, `TipoOperacao`)  
-- **Commits**: Padrão **Conventional Commits**
 
 ## ✨ Exemplos de Features
 
