@@ -48,10 +48,10 @@ export const Input = ({name,label,placeholder,type = "text",register,error,icon:
                     maxLength={maxCaractere}
                     readOnly={readOnly}
                     className={`
-                        w-full h-10 pl-10 pr-3 rounded-lg text-sm no-spinner bg-white-default
+                        w-full h-10 pl-10 pr-3 rounded-lg text-sm no-spinner 
                         border ${error ? 'border-error' : 'border-border'}
                         focus:outline-hidden ${error ? 'focus:border-error focus:ring-error' : 'focus:border-accent focus:ring-1 focus:ring-accent'}
-                        ${readOnly ? 'cursor-not-allowed text-text-medium/85' : 'cursor-text'}
+                        ${readOnly ? 'cursor-not-allowed text-text-medium/75 bg-white-default/65' : 'cursor-text bg-white-default text-text-medium'}
                     `}
                 />
             </div>
@@ -60,55 +60,3 @@ export const Input = ({name,label,placeholder,type = "text",register,error,icon:
     );
 };
 
-
-
-// // 📁 src/components/ui/Input.tsx
-
-// import { LucideIcon } from "lucide-react";
-
-// interface InputProps {
-//   name: string;
-//   label: string;
-//   register: ReturnType<typeof import("react-hook-form").useForm>["register"];
-//   error?: string;
-//   type?: string;
-//   readOnly?: boolean;
-//   icon?: LucideIcon;
-//   defaultValue?: string;
-// }
-
-// export const Input = ({
-//   name,
-//   label,
-//   register,
-//   error,
-//   type = "text",
-//   readOnly = false,
-//   icon: Icon,
-//   defaultValue,
-// }: InputProps) => {
-//   return (
-//     <div className="w-full space-y-1">
-//       <label htmlFor={name} className="text-sm font-medium text-text-strong">
-//         {label}
-//       </label>
-//       <div className="relative">
-//         {Icon && (
-//           <Icon className="absolute left-2 top-2.5 text-neutral-600" size={18} />
-//         )}
-//         <input
-//           id={name}
-//           {...register(name)}
-//           name={name}
-//           type={type}
-//           defaultValue={defaultValue}
-//           readOnly={readOnly}
-//           className={`w-full h-10 rounded-md border ${
-//             error ? "border-error" : "border-border"
-//           } bg-white pl-9 pr-3 text-sm text-text-strong placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-primary`}
-//         />
-//       </div>
-//       {error && <p className="text-xs text-error">{error}</p>}
-//     </div>
-//   );
-// };
