@@ -23,7 +23,7 @@ export const Button = ({
     variant = "primary",
     sizeWidth = "w-full",
     iconInText: Icon,
-    styleIcon = {size: 20 , color: ''}, 
+    styleIcon = {size: 20 , color: 'var(--color-strong)'}, 
     title,
     roudend="rounded-lg",
     ...rest
@@ -45,10 +45,10 @@ export const Button = ({
       className={`flex items-center justify-center gap-2 ${roudend} px-4 py-2 text-sm font-semibold transition duration-200 ${
         disabled ? "bg-gray-300 text-gray-500 cursor-not-allowed" : style
       } ${sizeWidth}`}
-      disabled={disabled || isLoading}
       title={title}
       aria-label={title || text}
       {...rest}
+      disabled={disabled || isLoading}
     >
       {isLoading ? (
         <Loader2 className="animate-spin h-5 w-5" />
