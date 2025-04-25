@@ -1,0 +1,172 @@
+import { createContext, ReactNode, useEffect, useState } from "react";
+import { ILoginRequest, ITokenBearer, ITokenRefresh, IUser } from "@/interfaces";
+import { Login, Logout, RefreshToken } from "@/services/keycloak-api";
+import Cookies from "js-cookie";
+import { buildUserFromToken, decodeToken } from "@/utils";
+
+interface IAuthContextType {
+    user: IUser | null;
+    isAuthenticated: boolean;
+    isLoading: boolean;
+    loginService: (data: ILoginRequest) => Promise<void>;
+    logoutService: () => Promise<void>;
+};
+ 
+// 🔹 Criando o contexto de autenticação
+export const AuthContext = createContext<IAuthContextType>({
+    user: null,
+    isAuthenticated: false,
+    loginService: async (_dataLogin: ILoginRequest) => {},
+    logoutService: async () => {},
+    isLoading: false
+});
+
+// 🔹 Variável global para armazenar o timeout de renovação de token, evitando multiplos agendamentos.
+let refreshTimeout: NodeJS.Timeout | null = null;
+
+export const AuthProvider = ({children}:{children:ReactNode}) => {
+    const [user, setUser] = useState<IUser | null>(null); //🔹Estado para armazenar os dados do usuário
+    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false); //🔹Estado que indica se o usuário está autenticado 
+    const [isLoading, setIsLoading] = useState<boolean>(false); // 🔹 Estado para controlar o loading de transição
+    const [toastMessage, setToastMessage] = useState<{ 
+        type: "success" | "error" | "warning"; 
+        message: string;
+        duration?: number;
+    } | null>(null);   // 🔹Estado para armazenar uma notificação pendente (Toastify) que será exibida após o carregamento 
+
+
+    //🔹useEffect que verifica a sessão ao carregar a aplicação
+    useEffect(() => {
+        checkSession();
+
+        // 🔹 Se o usuário estiver autenticado, ativa a checagem periódica da sessão
+        if (isAuthenticated) {
+            const sessionInterval = setInterval(() => {
+                checkSession();
+            }, 300000); // 300000 ms = 5 minutos
+            return () => clearInterval(sessionInterval); // 🔹 Limpa o intervalo ao desmontar 
+        }
+    }, [isAuthenticated]); // 🔹 Executa quando isAuthenticated muda 
+
+
+
+    //🔹Realiza o login e armazena os tokens nos cookies
+    const loginService = async (data:ILoginRequest) => {
+        setIsLoading(true);
+        try {
+            const {access_token, refresh_token} = await Login(data);
+
+            //🔹Armazena os tokens nos cookies 
+            Cookies.set("access_token_keycloak_cad_rfk", access_token, { secure: true, httpOnly: false });
+            Cookies.set("refresh_token_keycloak_cad_rfk", refresh_token, { secure: true, httpOnly: false });
+
+            //🔹Decodifica o token e extrai as informações do usuário
+            const tokenDecoded:ITokenBearer = decodeToken(access_token) as ITokenBearer;
+            const user = buildUserFromToken(tokenDecoded);
+
+            setUser(user);
+            setIsAuthenticated(true);
+
+
+           // falta colocar toastify
+           // fazer funcao de atualizar ou inserir usuario da controladoria
+
+        } catch (error) {
+            console.error(error);
+        }finally{
+            setTimeout(()=> {
+                setIsLoading(false)
+            },1000)
+        }
+    }
+
+    //🔹Realiza logout, remove os tokens e força atualização da página
+    const logoutService = async () => {
+        setIsLoading(true);
+        try {
+            const refreshToken = Cookies.get("refresh_token_keycloak_cad_rfk");
+            if(refreshToken) await Logout(refreshToken);
+        } catch (error) {
+            console.error(error);
+        }finally{
+            Cookies.remove("access_token_keycloak_cad_rfk");
+            Cookies.remove("refresh_token_keycloak_cad_rfk");
+            setUser(null);
+            setIsAuthenticated(false);
+            setTimeout(()=> {
+                setIsLoading(false)
+            },1000)
+        }
+    };
+
+    //🔹Verifica se um token já expirou
+    const isTokenExpired = (token: string): boolean => {
+        const decoded: ITokenRefresh = decodeToken(token) as ITokenRefresh;
+        const currentTime = Math.floor(Date.now() / 1000);
+        return decoded.exp < currentTime; // 🔹 Retorna true se o token expirou
+    };
+
+    //🔹Renova o token de acesso caso tenha expirado
+    const refreshTokenService = async(token:string):Promise<void> => {
+        try {
+         const { access_token, refresh_token } = await RefreshToken(token);
+         Cookies.set("access_token_keycloak_cad_rfk", access_token, { secure: true, httpOnly: false });
+         Cookies.set("refresh_token_keycloak_cad_rfk", refresh_token, { secure: true, httpOnly: false });
+         scheduleTokenRefresh(access_token, refresh_token);  
+        } catch (error) {
+            console.error(error);
+            logoutService(); // 🔹 Se o refresh falhar, faz logout automático
+        }
+    }
+    
+    //🔹 Agenda a renovação automática do token antes que ele expire
+    const scheduleTokenRefresh = (tokenAccess:string, tokenRefresh:string):void => {
+        if (refreshTimeout) clearTimeout(refreshTimeout); // 🔹Evita múltiplos agendamentos
+        
+        const decoded: ITokenRefresh = decodeToken(tokenAccess);
+        const expiresIn = (decoded.exp * 1000) - Date.now() - 30000; // 🔹 30 segundos antes de expirar
+        
+        if (expiresIn > 0) {
+            refreshTimeout = setTimeout(() => refreshTokenService(tokenRefresh), expiresIn);
+        }
+    }
+
+    //🔹Verifica a sessão do usuário ao carregar a aplicação
+    const checkSession = async ():Promise<void> => {
+        const refreshToken = Cookies.get("refresh_token_keycloak_cad_rfk");
+        const accessToken = Cookies.get("access_token_keycloak_cad_rfk");
+        
+        // 🔹 Se não houver tokens, desloga o usuário
+        if (!accessToken || !refreshToken || isTokenExpired(refreshToken)) {
+            logoutService();
+            return;
+        }
+        
+        //🔹Se apenas o access token expirou, renova automaticamente
+        if (isTokenExpired(accessToken)) {
+            await refreshTokenService(refreshToken);
+            return;
+        }
+
+        //🔹Se os tokens são válidos, autentica o usuário
+        const tokenDecoded = decodeToken(accessToken) as ITokenBearer;
+        const user = buildUserFromToken(tokenDecoded);
+        setUser(user);
+        setIsAuthenticated(true);
+        //🔹Agendar a renovação automática do token 
+        scheduleTokenRefresh(accessToken, refreshToken);
+    }
+
+    return (
+        <AuthContext.Provider value={{
+            user,
+            isAuthenticated,
+            loginService,
+            logoutService,
+            isLoading
+        }}
+        >
+                {children}
+        </AuthContext.Provider>
+    )
+};
