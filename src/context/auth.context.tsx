@@ -1,4 +1,4 @@
-import { ILoginRequest, ITokenBearer, ITokenRefresh, IUser } from "@/interfaces";
+import { ILoginRequest, IToastifyMessageAuthContext, ITokenBearer, ITokenRefresh, IUser } from "@/interfaces";
 import { buildUserFromToken, decodeToken, handleApiError } from "@/utils";
 import { createContext, ReactNode, useEffect, useState } from "react";
 import { Login, Logout, RefreshToken } from "@/services/keycloak-api";
@@ -30,11 +30,7 @@ export const AuthProvider = ({children}:{children:ReactNode}) => {
     const [user, setUser] = useState<IUser | null>(null); //🔹Estado para armazenar os dados do usuário
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false); //🔹Estado que indica se o usuário está autenticado 
     const [isLoading, setIsLoading] = useState<boolean>(false); // 🔹 Estado para controlar o loading de transição
-    const [toastMessage, setToastMessage] = useState<{ 
-        type: "success" | "error" | "warning"; 
-        message: string;
-        duration?: number;
-    } | null>(null);   // 🔹Estado para armazenar uma notificação pendente (Toastify) que será exibida após o carregamento 
+    const [toastMessage, setToastMessage] = useState<IToastifyMessageAuthContext | null>(null);   // 🔹Estado para armazenar uma notificação pendente (Toastify) que será exibida após o carregamento 
 
 
     //🔹useEffect que verifica a sessão ao carregar a aplicação
@@ -104,16 +100,21 @@ export const AuthProvider = ({children}:{children:ReactNode}) => {
     }
 
     //🔹Realiza logout, remove os tokens e força atualização da página
-    const logoutService = async () => {
+    const logoutService = async (toast?: IToastifyMessageAuthContext) => {
         setIsLoading(true);
         try {
             const refreshToken = Cookies.get("refresh_token_keycloak_cad_rfk");
             if(refreshToken) await Logout(refreshToken);
 
-            setToastMessage({
-                type: "success",
-                message: `Sessão encerrada com sucesso`
-            })
+            if(toast){
+                setToastMessage(toast)
+            }else{
+                setToastMessage({
+                    type: "success",
+                    message: `Sessão encerrada com sucesso`
+                })
+            }
+            
 
         } catch (error) {
             console.error(error);
@@ -145,7 +146,10 @@ export const AuthProvider = ({children}:{children:ReactNode}) => {
          scheduleTokenRefresh(access_token, refresh_token);  
         } catch (error) {
             handleApiError(error, "Erro ao tentar renovar o token! Faça login novamente");
-            logoutService(); // 🔹 Se o refresh falhar, faz logout automático
+            logoutService({
+                type: "error",
+                message: "Erro ao renovar Token! Necessário fazer login novamente."
+            }); // 🔹 Se o refresh falhar, faz logout automático
         }
     }
     
@@ -168,19 +172,21 @@ export const AuthProvider = ({children}:{children:ReactNode}) => {
         
         // 🔹 Se não houver tokens, desloga o usuário
         if (!accessToken || !refreshToken) {
-            logoutService();
+            logoutService({
+                message:"Usuário não autenticado",
+                type: "warning"
+            });
             return;
         }
         
         //🔹Se o refresh token expirou, desloga automaticamente
         if( isTokenExpired(refreshToken)){
             console.warn("Refresh token expirado! Usuário precisa fazer login novamente.");
-            logoutService();
-            Toastify({
-                type: "warning", 
-                message:"Token expirado! Necessário fazer login novamente.", 
-                style:{color: "var(--text-color-strong)", background: "var(--color-warning)"}                
-            })
+            logoutService({
+                message: "Token expirado! Necessário fazer login novamente.",
+                type: "warning",
+                style:{color: "var(--text-color-strong)", background: "var(--color-warning)"} 
+            });
             return;
         }
 

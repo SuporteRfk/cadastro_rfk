@@ -63,7 +63,7 @@ user: {
 
 ### `toastMessage`
 - Armazena uma notificação (mensagem e tipo) que só é exibida **após** o `isLoading` finalizar.
-- Esse atraso é proposital para evitar sobreposição com animações ou troca abrupta de tela.
+- Mensagem pendente que será exibida após loading (usando o componente Toastify)
 
 ```tsx
 useEffect(() => {
@@ -91,13 +91,15 @@ useEffect(() => {
 
 ---
 
-### `logoutService()`
+### `logoutService(toast?)`
 
 1. Chama a API de `Logout()` com `refresh_token`
 2. Remove cookies com os tokens
 3. Limpa estados (`user`, `isAuthenticated`)
-4. Define mensagem de sucesso
-5. Força a transição com `setTimeout`
+4. Exibe um Toastify:
+   - Se for passado um objeto toast, exibe esse.
+   - Caso contrário, exibe a mensagem padrão de logout (Sessão encerrada com sucesso).
+5. Finaliza o `loading` suavemente usando `setTimeout`.
 
 ---
 
