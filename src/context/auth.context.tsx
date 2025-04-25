@@ -1,8 +1,10 @@
-import { createContext, ReactNode, useEffect, useState } from "react";
 import { ILoginRequest, ITokenBearer, ITokenRefresh, IUser } from "@/interfaces";
+import { buildUserFromToken, decodeToken, handleApiError } from "@/utils";
+import { createContext, ReactNode, useEffect, useState } from "react";
 import { Login, Logout, RefreshToken } from "@/services/keycloak-api";
+import { Toastify } from "@/components";
+import { AxiosError } from "axios";
 import Cookies from "js-cookie";
-import { buildUserFromToken, decodeToken } from "@/utils";
 
 interface IAuthContextType {
     user: IUser | null;
@@ -49,6 +51,13 @@ export const AuthProvider = ({children}:{children:ReactNode}) => {
     }, [isAuthenticated]); // 🔹 Executa quando isAuthenticated muda 
 
 
+    useEffect(() => {
+        if (!isLoading && toastMessage) {
+            Toastify({ ...toastMessage });
+            setToastMessage(null); // 🔹Limpa a mensagem após exibição 
+        }
+    },[isLoading, toastMessage])
+
 
     //🔹Realiza o login e armazena os tokens nos cookies
     const loginService = async (data:ILoginRequest) => {
@@ -67,12 +76,26 @@ export const AuthProvider = ({children}:{children:ReactNode}) => {
             setUser(user);
             setIsAuthenticated(true);
 
-
-           // falta colocar toastify
+            
+            /// 🔹Define mensagem de boas vindas ao logar
+            setToastMessage({
+                type: "success",
+                message: `Bem vindo ${user.fullName}`,
+                duration: 3000
+            })
            // fazer funcao de atualizar ou inserir usuario da controladoria
 
         } catch (error) {
-            console.error(error);
+            const message = error instanceof AxiosError 
+                ? (error.status === 401 ? 'Usuário ou senha incorretos' : error.message)
+                : "Erro inesperado. Tente novamente em alguns minutos.";
+
+            setToastMessage({
+                type: "error",
+                message,
+                duration: 5000,
+            });
+            
         }finally{
             setTimeout(()=> {
                 setIsLoading(false)
@@ -86,8 +109,15 @@ export const AuthProvider = ({children}:{children:ReactNode}) => {
         try {
             const refreshToken = Cookies.get("refresh_token_keycloak_cad_rfk");
             if(refreshToken) await Logout(refreshToken);
+
+            setToastMessage({
+                type: "success",
+                message: `Sessão encerrada com sucesso`
+            })
+
         } catch (error) {
             console.error(error);
+            handleApiError(error, "Erro ao encerrar sessão");
         }finally{
             Cookies.remove("access_token_keycloak_cad_rfk");
             Cookies.remove("refresh_token_keycloak_cad_rfk");
@@ -114,7 +144,7 @@ export const AuthProvider = ({children}:{children:ReactNode}) => {
          Cookies.set("refresh_token_keycloak_cad_rfk", refresh_token, { secure: true, httpOnly: false });
          scheduleTokenRefresh(access_token, refresh_token);  
         } catch (error) {
-            console.error(error);
+            handleApiError(error, "Erro ao tentar renovar o token! Faça login novamente");
             logoutService(); // 🔹 Se o refresh falhar, faz logout automático
         }
     }
@@ -137,11 +167,24 @@ export const AuthProvider = ({children}:{children:ReactNode}) => {
         const accessToken = Cookies.get("access_token_keycloak_cad_rfk");
         
         // 🔹 Se não houver tokens, desloga o usuário
-        if (!accessToken || !refreshToken || isTokenExpired(refreshToken)) {
+        if (!accessToken || !refreshToken) {
             logoutService();
             return;
         }
         
+        //🔹Se o refresh token expirou, desloga automaticamente
+        if( isTokenExpired(refreshToken)){
+            console.warn("Refresh token expirado! Usuário precisa fazer login novamente.");
+            logoutService();
+            Toastify({
+                type: "warning", 
+                message:"Token expirado! Necessário fazer login novamente.", 
+                style:{color: "var(--text-color-strong)", background: "var(--color-warning)"}                
+            })
+            return;
+        }
+
+
         //🔹Se apenas o access token expirou, renova automaticamente
         if (isTokenExpired(accessToken)) {
             await refreshTokenService(refreshToken);
