@@ -1,3 +1,4 @@
+import { AuthProvider } from './context/auth.context.tsx';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from "react-router";
 import { Toaster } from 'react-hot-toast';
@@ -10,8 +11,10 @@ import App from './App.tsx';
 createRoot(document.getElementById('root')!).render(
   <BrowserRouter>
     <StrictMode>
-      <Toaster/>
-      <App/>
+      <AuthProvider>
+        <Toaster/>
+        <App/>
+      </AuthProvider>
     </StrictMode>
   </BrowserRouter>
 )

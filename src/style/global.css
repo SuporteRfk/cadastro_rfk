@@ -1,5 +1,6 @@
 @import 'tailwindcss';
 
+
 @theme {
   --breakpoint-*: initial;
   --breakpoint-sm: 640px;
@@ -30,7 +31,7 @@
   --color-bg-sub-menu: var(--color-bg-subMenu);
   --color-bg-modal: var(--color-bg-modal);
 
-  --background-image-login: url('./background/bg_login.png');
+  --background-image-login: url('/background/bg_login.webp');
 
   --animate-spin-slow: spin 1.5s linear infinite;
 }

@@ -25,11 +25,11 @@ export const Input = ({name,label,placeholder,type = "text",register,error,icon:
     }, [valueInitial]);  
 
     return(
-        <div className="w-full flex flex-col gap-1 relative">
+        <div className="w-full flex flex-col gap-1 relative my-1.5">
             {label && 
                 <label 
                     htmlFor={name} 
-                    className="text-sm font-medium mb-1 text-text-medium"
+                    className="text-sm font-medium pl-0.5 text-text-medium"
                 >
                     {label}
                 </label>

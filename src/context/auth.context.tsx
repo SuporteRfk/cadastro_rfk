@@ -57,7 +57,6 @@ export const AuthProvider = ({children}:{children:ReactNode}) => {
 
     //🔹Realiza o login e armazena os tokens nos cookies
     const loginService = async (data:ILoginRequest) => {
-        setIsLoading(true);
         try {
             const {access_token, refresh_token} = await Login(data);
 
@@ -72,7 +71,7 @@ export const AuthProvider = ({children}:{children:ReactNode}) => {
             setUser(user);
             setIsAuthenticated(true);
 
-            
+            setIsLoading(true);
             /// 🔹Define mensagem de boas vindas ao logar
             setToastMessage({
                 type: "success",
@@ -108,11 +107,6 @@ export const AuthProvider = ({children}:{children:ReactNode}) => {
 
             if(toast){
                 setToastMessage(toast)
-            }else{
-                setToastMessage({
-                    type: "success",
-                    message: `Sessão encerrada com sucesso`
-                })
             }
             
 
@@ -172,10 +166,7 @@ export const AuthProvider = ({children}:{children:ReactNode}) => {
         
         // 🔹 Se não houver tokens, desloga o usuário
         if (!accessToken || !refreshToken) {
-            logoutService({
-                message:"Usuário não autenticado",
-                type: "warning"
-            });
+            logoutService();
             return;
         }
         
