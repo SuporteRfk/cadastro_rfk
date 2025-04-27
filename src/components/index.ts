@@ -1,7 +1,7 @@
 // Centralizador dos componentes 
 
-export * from "./inputs/date-input.components";
-export * from "./inputs/input.components";
+export * from "./inputs";
 export * from "./button/button.components";
 export * from "./toastify.components";
+export * from "./full-page-loader.components";
 export * from "./ui";
