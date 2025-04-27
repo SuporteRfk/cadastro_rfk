@@ -36,7 +36,6 @@ export const AuthProvider = ({children}:{children:ReactNode}) => {
     //🔹useEffect que verifica a sessão ao carregar a aplicação
     useEffect(() => {
         checkSession();
-
         // 🔹 Se o usuário estiver autenticado, ativa a checagem periódica da sessão
         if (isAuthenticated) {
             const sessionInterval = setInterval(() => {
@@ -163,7 +162,6 @@ export const AuthProvider = ({children}:{children:ReactNode}) => {
     const checkSession = async ():Promise<void> => {
         const refreshToken = Cookies.get("refresh_token_keycloak_cad_rfk");
         const accessToken = Cookies.get("access_token_keycloak_cad_rfk");
-        
         // 🔹 Se não houver tokens, desloga o usuário
         if (!accessToken || !refreshToken) {
             logoutService();
