@@ -5,6 +5,7 @@ import { Login, Logout, RefreshToken } from "@/services/keycloak-api";
 import { Toastify } from "@/components";
 import { AxiosError } from "axios";
 import Cookies from "js-cookie";
+import { upsertUserApprover } from "@/services/supabase";
 
 interface IAuthContextType {
     user: IUser | null;
@@ -68,6 +69,7 @@ export const AuthProvider = ({children}:{children:ReactNode}) => {
             const user = buildUserFromToken(tokenDecoded);
 
             setUser(user);
+            await registerUpdateUserController(user); // verificar se o usuario é da controladoria e salvando no banco
             setIsAuthenticated(true);
 
             setIsLoading(true);
@@ -194,6 +196,18 @@ export const AuthProvider = ({children}:{children:ReactNode}) => {
         //🔹Agendar a renovação automática do token 
         scheduleTokenRefresh(accessToken, refreshToken);
     }
+
+    //🔹Registar ou atualizar usuario da controladoria 
+    const registerUpdateUserController = async(user:IUser):Promise<void> => {
+        if(!user.access_approver) return;
+
+        try {
+            await upsertUserApprover(user);
+        } catch (error) {
+            console.error(error);
+            handleApiError(error,'Upsert usuario controladoria')
+        }
+    };
 
     return (
         <AuthContext.Provider value={{
