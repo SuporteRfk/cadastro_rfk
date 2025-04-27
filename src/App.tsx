@@ -9,14 +9,14 @@ export const  App = () =>  {
   
   return (
     <>
-      {!isLoading 
-      
-      ? 
-        <FullPageLoader/>
-      : isAuthenticated ? 
+      {
+        isLoading? 
+          <FullPageLoader/>
+        : isAuthenticated ? 
         <div className="bg-gray-500 h-screen">
           Primiero Commit   
         </div>
+
       :
         <div className="bg-gray-500 h-screen">
           nao está autenticado
