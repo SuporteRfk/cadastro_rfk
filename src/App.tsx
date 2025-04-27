@@ -1,15 +1,27 @@
+import { PrivateRoutes, PublicRoutes } from "./routes";
+import { FullPageLoader } from "./components";
+import { AuthContext } from "./context";
+import { useContext } from "react";
 
-function App() {
+
+
+
+export const  App = () =>  {
+  const {isAuthenticated, isLoading} = useContext(AuthContext);
   
-  
-   
   return (
-    <div className="bg-gray-500 h-screen">
-       Primiero Commit
-       
-    </div>
+    <>
+      {
+        isLoading? (
+          <FullPageLoader/>
+        ) : isAuthenticated ? (
+          <PrivateRoutes/>
+        ) : (
+          <PublicRoutes/>
+        )
+      }
+    </>
   );
 
 }
 
-export default App;
