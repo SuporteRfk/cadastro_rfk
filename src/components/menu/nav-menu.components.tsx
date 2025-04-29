@@ -18,7 +18,7 @@ export const NavMenu = () => {
         <nav className="h-full p-2 lg:mt-4 flex flex-col items-center justify-center">
             {menus.map((item, i)=> (
                 // Categorias e opções sem sub menu 
-                <div key={item.label} className="mb-1 w-full">
+                <motion.div layout key={item.label} className="mb-1 w-full">
                     {/* adicionar uma borda para separar o menu comum, como o da controladoria */}
                     {i === lengthMenuCommom && <div className={`border ${isMobileOpenMenu ? "border-neutral/30" : "border-border"}  my-2`}/>}
                         
@@ -30,10 +30,13 @@ export const NavMenu = () => {
                             className={`
                                 flex items-center w-full p-2 rounded hover:bg-accent/30 text-[15px] cursor-pointer
                                 ${isMobileOpenMenu && 'justify-between'}
+                                ${isSidebarOpen ? "lg:gap-2" : "lg:justify-center"}
                                 ${isMenuRouteActive(item.path!) ? "bg-gray-200 font-semibold" : ""}
                             `}
                         >
-                            {<item.icon size={18}/>}
+                            <motion.span layout>
+                                <item.icon size={18} />
+                            </motion.span>
                             {(isMobileOpenMenu || isSidebarOpen) && (
                                 <motion.span
                                     initial={{ opacity: 0 }}
@@ -46,15 +49,19 @@ export const NavMenu = () => {
                             )}
                         </button>
                     ) : (
-                        <button
+                        <motion.button
+                            layout
                             onClick={() => handleCategoryClick(item.label)}
                             title={item.label}
                             className={`flex items-center w-full p-2 rounded hover:bg-accent/30 text-[15px] cursor-pointer 
                                 ${isMobileOpenMenu && 'justify-between'}
+                                ${isSidebarOpen ? "lg:gap-2" : "lg:justify-center"}
                                 ${activeCategory === item.label ? "bg-neutral/40 font-semibold" : ""}`
                             }
                         >
-                            <item.icon size={18} />
+                            <motion.span layout>
+                                <item.icon size={18} />
+                            </motion.span>
                             {(isMobileOpenMenu || isSidebarOpen) && (
                                 <motion.span
                                     initial={{ opacity: 0 }}
@@ -65,7 +72,7 @@ export const NavMenu = () => {
                                     {item.label}
                                 </motion.span>
                             )}
-                        </button>
+                        </motion.button>
                     )}
 
                     {/* Sub Menus */}
@@ -78,6 +85,7 @@ export const NavMenu = () => {
                                     className={`flex items-center w-full p-2 gap-1 rounded hover:bg-accent/20
                                         ${isMenuRouteActive(childSubMenu.path) ? "bg-accent font-semibold text-white-default" : ""}
                                         ${isMobileOpenMenu && "pl-10 justify-between"}
+                                        ${isSidebarOpen ? "lg:pl-3" : "lg:justify-center"}
                                     `}
                                     title={childSubMenu.label}
                                 >
@@ -97,19 +105,22 @@ export const NavMenu = () => {
                             ))}
                         </div>
                     )}
-                </div>                
+                </motion.div>                
             ))}
 
             
             <div className={`flex-1 flex items-end cursor-pointer w-full mt-1 pt-2 ${isMobileOpenMenu ? "border-neutral/30" : "border-border"} border-t-2`}>
                 <button
-                    onClick={handleLogout}
+                    onClick={() => handleLogout}
                     className={`flex items-center w-full p-2 gap-1 rounded hover:bg-neutral/20 text-sm text-error/80 font-semibold 
                          ${isMobileOpenMenu && 'justify-between'}
+                         ${isSidebarOpen ? "lg:gap-2" : "lg:justify-center"}
                     `}
                     title="Logout"
                 >
-                    <LogoutIcon className="w-4 h-4" strokeWidth={3}/>
+                    <motion.span layout>
+                        <LogoutIcon className="w-4 h-4" strokeWidth={3}/>
+                    </motion.span>
                     {(isMobileOpenMenu || isSidebarOpen) && (
                         <motion.span
                             initial={{ opacity: 0 }}
@@ -128,5 +139,5 @@ export const NavMenu = () => {
 
 
 
-// ${isSidebarOpen ? 'gap-2': 'justify-center'}
+
 // ${isMenuOpen? 'pl-3' : 'justify-center'} child

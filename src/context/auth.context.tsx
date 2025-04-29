@@ -19,7 +19,7 @@ interface IAuthContextType {
 // 🔹 Criando o contexto de autenticação
 export const AuthContext = createContext<IAuthContextType>({
     user: null,
-    isAuthenticated: null,
+    isAuthenticated: true,
     loginService: async (_dataLogin: ILoginRequest) => {},
     logoutService: async (_toast:IToastifyMessageAuthContext | undefined) => {},
     isLoading: false
@@ -38,6 +38,8 @@ export const AuthProvider = ({children}:{children:ReactNode}) => {
     //🔹useEffect que verifica a sessão ao carregar a aplicação
     useEffect(() => {
         checkSession();
+        console.log(isAuthenticated)
+        console.log(user)
         // 🔹 Se o usuário estiver autenticado, ativa a checagem periódica da sessão
         if (isAuthenticated) {
             const sessionInterval = setInterval(() => {
