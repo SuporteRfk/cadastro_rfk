@@ -1,10 +1,11 @@
+import { DashboardPage } from "@/features/dashboard/page/dashboard.page";
 import { LoginPage } from "@/features/login/page/login.page";
 
 
 // Arquivo para organiar as rotas do sistema
 
 export const privateRoutes = [
-    {path: "/dashboard", element: "teste"},
+    {path: "/dashboard", element: DashboardPage},
     {path: "/cadastro/cliente", element: "teste"},
     {path: "/cadastro/condicao-pagamento", element: "teste"},
     {path: "/cadastro/fornecedores", element: "teste"},

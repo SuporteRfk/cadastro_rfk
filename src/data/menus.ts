@@ -1,4 +1,4 @@
-import { LucideIcon } from "lucide-react";
+import { MenuItem } from "@/interfaces";
 import {
     UserCheck as PeopleServicesIcon,
     Factory as SuppliersIcon,
@@ -22,51 +22,41 @@ import {
     FileCheck2 as ApprovedRequestIcon,
 } from "lucide-react";
 
-type MenuItem = {
-    label: string;
-    icon: LucideIcon; // Tipo dos ícones
-    path?: string;    // Se for um link direto
-    children?: { 
-        label: string; 
-        path: string;
-        icon: LucideIcon; 
-    }[]; // Se tiver submenu
-};
-  
 
-export const menuComum:MenuItem[] =[
+
+export const menuCommon:MenuItem[] =[
     {
         label: "Pessoas e Serviços",
         icon: PeopleServicesIcon,
         children: [
-            {label: "Cadastro Clientes",path: "/cadastro/cliente",icon: UsersIcon},
-            {label: "Cadastro Fornecedores",path: "/cadastro/cliente",icon: SuppliersIcon},
+            {label: "Cad. Clientes",path: "/cadastro/cliente",icon: UsersIcon},
+            {label: "Cad. Fornecedores",path: "/cadastro/cliente",icon: SuppliersIcon},
         ]
     },
     {
         label: "Produtos Acabados (PA)",
         icon: PAIcon,
         children: [
-            {label: "Cadastro PA Copacker", path: "/cadastro/pa-copacker" , icon:CopackerIcon},
-            {label: "Cadastro PA Fardo (próprio e ind)", path:"/cadastro/pa-fardo", icon: BurdenIcon},
-            {label: "Cadastro PA Unitário (próprio e ind)", path:"/cadastro/pa-unitario", icon:UnitaryIcon},
-            {label: "Cadastro PA Terceiros", path:"/cadastro/pa-terceiro", icon: PAThirdIcon},
+            {label: "Cad. PA Copacker", path: "/cadastro/pa-copacker" , icon:CopackerIcon},
+            {label: "Cad. PA Fardo", path:"/cadastro/pa-fardo", icon: BurdenIcon},
+            {label: "Cad. PA Unitário", path:"/cadastro/pa-unitario", icon:UnitaryIcon},
+            {label: "Cad. PA Terceiros", path:"/cadastro/pa-terceiro", icon: PAThirdIcon},
         ]
     },
     {
         label: "Materiais e Insumos",
         icon: MaterialsIcon,
         children: [
-            {label: "Cadastro Produtos Indiretos", path: "/cadastro/produtos-indiretos", icon: IndirectProductsIcon},
-            {label: "Cadastro Insumos", path: "/cadastro/insumos", icon: InputIcon}
+            {label: "Cad. Produtos Indiretos", path: "/cadastro/produtos-indiretos", icon: IndirectProductsIcon},
+            {label: "Cad. Insumos", path: "/cadastro/insumos", icon: InputIcon}
         ]
     },
     {
         label: "Configuração de Padrões",
         icon: SettingsDefaultIcon,
         children: [
-            {label: "Cadastro Unidade de Medida", path: "/cadastro/unidade-medida", icon: UnitMeasureIcon},
-            {label: "Cadastro Condição de Pagamento", path: "/cadastro/condicao-pagamento", icon: PaymentCoonditionIcon},
+            {label: "Cad. Unidade de Medida", path: "/cadastro/unidade-medida", icon: UnitMeasureIcon},
+            {label: "Cad. Condição de Pagamento", path: "/cadastro/condicao-pagamento", icon: PaymentCoonditionIcon},
         ]
     },
     {
@@ -77,7 +67,7 @@ export const menuComum:MenuItem[] =[
 ];
 
 
-export const menuControladoria:MenuItem[] = [
+export const menuController :MenuItem[] = [
     {
         label: "Painel Solicitações",
         icon: RequestIcon,
