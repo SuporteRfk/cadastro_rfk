@@ -1,14 +1,11 @@
-
-import { MenuDesktop, MenuMobile } from "@/components"
-
+import { PageLayout } from "@/components";
+import { MomentCoffe } from "@/components/moment-coffe.components";
 
 
 export const DashboardPage = () => {
-    return(
-        <main className="w-full h-screen bg-bg">
-            {/* <MenuDesktop/> */}
-            <MenuMobile/>
-            <MenuDesktop/>
-        </main>
-    )
-}
+    return ((
+        <PageLayout>
+            <MomentCoffe mensagem="Olá, seja bem-vindo ao sistema!" />
+        </PageLayout>
+    ))
+};
