@@ -2,7 +2,7 @@
 
 # 📁 Localização
 
-`/components/menu/nav-menu.tsx`
+`/components/menu/nav-menu.components.tsx`
 
 # 📊 Visão Geral
 
