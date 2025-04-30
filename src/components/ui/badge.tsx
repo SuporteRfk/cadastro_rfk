@@ -12,22 +12,22 @@ const badgeVariants = cva(
       variant: {
         default:
           "border-transparent bg-accent text-text-strong text-white-default",
-        pendente:
+        pending:
           "border-transparent bg-yellow-400 text-white-default",
-        "analise":
-          "border-transparent bg-info text-white-default",
-        negado:
+        denied:
           "border-transparent bg-red-500/80 text-white-default",
-        aprovado:
+        approved:
           "border-transparent bg-green-600/80 text-white-default",
-        "revisao":
+        "review":
           "border-transparent bg-purple-700/80 text-white-default",
         outline:
           "text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground",
-        "novo cadastro": 
+        "new register": 
           "rounded-full border-accent bg-accent/10 text-accent font-semibold",  
-        "alteração": 
+        "change": 
           "rounded-full border-warning bg-warning/40 text-text-strong font-semibold",
+        "counter":
+          "rounded-full border-accent bg-accent/10 text-accent font-semibold", 
       },
     },
     defaultVariants: {

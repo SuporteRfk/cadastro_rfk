@@ -1,4 +1,4 @@
-import { AuthProvider } from './context/auth.context.tsx';
+import {AuthProvider, NavigationProvider, RequestProvider} from "./context";
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from "react-router";
 import { Toaster } from 'react-hot-toast';
@@ -8,12 +8,17 @@ import './style/global.css';
 
 
 
+
 createRoot(document.getElementById('root')!).render(
   <BrowserRouter>
     <StrictMode>
       <AuthProvider>
-        <Toaster/>
-        <App/>
+        <NavigationProvider>
+          <RequestProvider>
+            <Toaster/>
+            <App/>
+          </RequestProvider>
+        </NavigationProvider>
       </AuthProvider>
     </StrictMode>
   </BrowserRouter>

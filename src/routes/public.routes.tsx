@@ -9,14 +9,10 @@ export const PublicRoutes = () => {
 
     const {isAuthenticated} = useContext(AuthContext);
 
-    if(isAuthenticated){
-        return <Navigate to={"/dashboard"} replace/>
-    }
-
     return (
         <Routes>
             {publicRoutes.map(({path, element:Element}) => (
-                <Route key={path} path={path} element={<Element/>}/>
+                <Route key={path} path={path} element={isAuthenticated ? <Navigate to={"/dashboard"} replace/> : <Element/>}/>
             ))}   
             <Route path="*" element={<NotFoundPage/>} />
         </Routes>

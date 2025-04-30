@@ -6,21 +6,22 @@ import { Toastify } from "@/components";
 import { AxiosError } from "axios";
 import Cookies from "js-cookie";
 import { upsertUserApprover } from "@/services/supabase";
+import { useNavigate } from "react-router-dom";
 
 interface IAuthContextType {
     user: IUser | null;
-    isAuthenticated: boolean;
+    isAuthenticated: boolean | null;
     isLoading: boolean;
     loginService: (data: ILoginRequest) => Promise<void>;
-    logoutService: () => Promise<void>;
+    logoutService: (toast?:IToastifyMessageAuthContext) => Promise<void>;
 };
  
 // 🔹 Criando o contexto de autenticação
 export const AuthContext = createContext<IAuthContextType>({
     user: null,
-    isAuthenticated: false,
+    isAuthenticated: true,
     loginService: async (_dataLogin: ILoginRequest) => {},
-    logoutService: async () => {},
+    logoutService: async (_toast:IToastifyMessageAuthContext | undefined) => {},
     isLoading: false
 });
 
@@ -32,11 +33,13 @@ export const AuthProvider = ({children}:{children:ReactNode}) => {
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false); //🔹Estado que indica se o usuário está autenticado 
     const [isLoading, setIsLoading] = useState<boolean>(false); // 🔹 Estado para controlar o loading de transição
     const [toastMessage, setToastMessage] = useState<IToastifyMessageAuthContext | null>(null);   // 🔹Estado para armazenar uma notificação pendente (Toastify) que será exibida após o carregamento 
-
+    const navigate = useNavigate();
 
     //🔹useEffect que verifica a sessão ao carregar a aplicação
     useEffect(() => {
         checkSession();
+        console.log(isAuthenticated)
+        console.log(user)
         // 🔹 Se o usuário estiver autenticado, ativa a checagem periódica da sessão
         if (isAuthenticated) {
             const sessionInterval = setInterval(() => {
@@ -73,6 +76,7 @@ export const AuthProvider = ({children}:{children:ReactNode}) => {
             setIsAuthenticated(true);
 
             setIsLoading(true);
+            navigate("/dashboard", {replace:true});
             /// 🔹Define mensagem de boas vindas ao logar
             setToastMessage({
                 type: "success",
@@ -106,19 +110,21 @@ export const AuthProvider = ({children}:{children:ReactNode}) => {
             const refreshToken = Cookies.get("refresh_token_keycloak_cad_rfk");
             if(refreshToken) await Logout(refreshToken);
 
-            if(toast){
-                setToastMessage(toast)
-            }
-            
-
-        } catch (error) {
-            console.error(error);
-            handleApiError(error, "Erro ao encerrar sessão");
-        }finally{
             Cookies.remove("access_token_keycloak_cad_rfk");
             Cookies.remove("refresh_token_keycloak_cad_rfk");
             setUser(null);
             setIsAuthenticated(false);
+
+            if(toast){
+                setToastMessage(toast)
+            }
+
+            navigate("/login", {replace:true});
+                      
+        } catch (error) {
+            console.error(error);
+            handleApiError(error, "Erro ao encerrar sessão");
+        }finally{
             setTimeout(()=> {
                 setIsLoading(false)
             },1000)
