@@ -1,12 +1,16 @@
-import { AuthContext, NavigationContext } from "@/context";
+import { AuthContext, NavigationContext, RequestContext } from "@/context";
 import {LogOut as LogoutIcon} from "lucide-react";
 import { motion } from "framer-motion";
 import { useContext } from "react";
+import { BadgeCounter } from "../badge-counter.components";
 
 
 export const NavMenu = () => {
     const {menus, lengthMenuCommom, handleCategoryClick, activeCategory, isMenuRouteActive, isMobileOpenMenu, isSidebarOpen, handleNavigate} = useContext(NavigationContext);
     const {logoutService}   = useContext(AuthContext);
+    const {counters}   = useContext(RequestContext);
+
+    
     
     const handleLogout = async() => {
         await logoutService({
@@ -14,13 +18,20 @@ export const NavMenu = () => {
             message: "Sessão encerrada com sucesso"
         });
     }
+
+    const handlePositionBadgeSubMenu = ():string => {
+        if(isMobileOpenMenu || isSidebarOpen) return "right-8"
+        if(!isSidebarOpen) return "right-4"
+        return "right-0"
+    }
+
     return (
         <nav className="h-full p-2 lg:mt-4 flex flex-col items-center justify-center">
             {menus.map((item, i)=> (
                 // Categorias e opções sem sub menu 
                 <motion.div layout key={item.label} className="mb-1 w-full">
                     {/* adicionar uma borda para separar o menu comum, como o da controladoria */}
-                    {i === lengthMenuCommom && <div className={`border ${isMobileOpenMenu ? "border-neutral/30" : "border-border"}  my-2`}/>}
+                    {i === lengthMenuCommom && <motion.div layout className={`border ${isMobileOpenMenu ? "border-neutral/30" : "border-border"}  my-2`}/>}
                         
                     {/* categoria ou item direto */}
                     {item.path ? (
@@ -29,7 +40,7 @@ export const NavMenu = () => {
                             title={item.label}
                             className={`
                                 flex items-center w-full p-2 rounded hover:bg-accent/30 text-[15px] cursor-pointer
-                                ${isMobileOpenMenu && 'justify-between'}
+                                ${isMobileOpenMenu && 'justify-between pr-4'}
                                 ${isSidebarOpen ? "lg:gap-2" : "lg:justify-center"}
                                 ${isMenuRouteActive(item.path!) ? "bg-gray-200 font-semibold" : ""}
                             `}
@@ -53,12 +64,14 @@ export const NavMenu = () => {
                             layout
                             onClick={() => handleCategoryClick(item.label)}
                             title={item.label}
-                            className={`flex items-center w-full p-2 rounded hover:bg-accent/30 text-[15px] cursor-pointer 
-                                ${isMobileOpenMenu && 'justify-between'}
+                            className={`flex items-center w-full p-2 rounded hover:bg-accent/30 text-[15px] cursor-pointer relative
+                                ${isMobileOpenMenu && 'justify-between pr-4'}
                                 ${isSidebarOpen ? "lg:gap-2" : "lg:justify-center"}
                                 ${activeCategory === item.label ? "bg-neutral/40 font-semibold" : ""}`
                             }
-                        >
+                        >   
+                            {/* mostrar o badge counter sidebar e menu mobile, mostrar as solicitacoes totais PENDENTE + REVISAO */}
+                            {(item.label === "Painel Solicitações" && activeCategory !== "Painel Solicitações" ) && <BadgeCounter count={counters.total} color="bg-accent"/>}
                             <motion.span layout>
                                 <item.icon size={18} />
                             </motion.span>
@@ -74,22 +87,29 @@ export const NavMenu = () => {
                             )}
                         </motion.button>
                     )}
-
+                    
+                    
+                    
                     {/* Sub Menus */}
                     {item.children && activeCategory === item.label && (
-                        <div className={`flex flex-col ${isMobileOpenMenu? "bg-neutral/15" :"bg-bg-menu/60"} border border-border rounded-b-sm shadow-sm shadow-shadow`}>
+                        <motion.div layout className={`flex flex-col ${isMobileOpenMenu? "bg-neutral/15" :"bg-bg-menu/60"} border border-border rounded-b-sm shadow-sm shadow-shadow`}>
                             {item.children.map((childSubMenu) => (
                                 <button
                                     key={childSubMenu.label}
                                     onClick={() => handleNavigate(childSubMenu.path)}
                                     className={`flex items-center w-full p-2 gap-1 rounded hover:bg-accent/20
                                         ${isMenuRouteActive(childSubMenu.path) ? "bg-accent font-semibold text-white-default" : ""}
-                                        ${isMobileOpenMenu && "pl-10 justify-between"}
+                                        ${isMobileOpenMenu && "pl-10 pr-5 justify-between"}
                                         ${isSidebarOpen ? "lg:pl-3" : "lg:justify-center"}
                                     `}
                                     title={childSubMenu.label}
-                                >
-                                    <childSubMenu.icon className="w-4 h-4" />
+                                >   
+                                    {/* Badge para contar especificamente as solicitacoes de pendente e review, funciona mobile e desktop */}
+                                    {childSubMenu.label === "Pendentes" && <BadgeCounter count={counters.pending} color={`bg-warning`} marginPosition={handlePositionBadgeSubMenu()} size="h-4 w-4"/>}
+                                    {childSubMenu.label === "Revisão" && <BadgeCounter count={counters.review} color={`bg-info`} marginPosition={handlePositionBadgeSubMenu()} size="h-4 w-4"/>}
+                                    <motion.span layout>
+                                        <childSubMenu.icon className="w-4 h-4" />
+                                    </motion.span>
                                     {(isMobileOpenMenu || isSidebarOpen)  && (
                                         <motion.span
                                             initial={{ opacity: 0 }}
@@ -103,17 +123,17 @@ export const NavMenu = () => {
                                     )}
                                 </button>
                             ))}
-                        </div>
+                        </motion.div>
                     )}
                 </motion.div>                
             ))}
 
             
-            <div className={`flex-1 flex items-end cursor-pointer w-full mt-1 pt-2 ${isMobileOpenMenu ? "border-neutral/30" : "border-border"} border-t-2`}>
+            <motion.div layout className={`flex-1 flex items-end cursor-pointer w-full mt-1 pt-2 ${isMobileOpenMenu ? "border-neutral/30" : "border-border"} border-t-2`}>
                 <button
                     onClick={() => handleLogout}
                     className={`flex items-center w-full p-2 gap-1 rounded hover:bg-neutral/20 text-sm text-error/80 font-semibold 
-                         ${isMobileOpenMenu && 'justify-between'}
+                         ${isMobileOpenMenu && 'justify-between pr-4'}
                          ${isSidebarOpen ? "lg:gap-2" : "lg:justify-center"}
                     `}
                     title="Logout"
@@ -132,7 +152,7 @@ export const NavMenu = () => {
                        </motion.span>
                     )}
                 </button>
-            </div>
+            </motion.div>
         </nav>
     );
 };
@@ -140,4 +160,3 @@ export const NavMenu = () => {
 
 
 
-// ${isMenuOpen? 'pl-3' : 'justify-center'} child
