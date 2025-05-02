@@ -34,9 +34,9 @@ export const DateInput = ({name,label,register,error,mode = "visualizacao"}: Dat
         }, [mode, trigger]);
     
     return(
-        <div className="flex flex-col w-full max-w-full sm:max-w-[200px] relative">
+        <div className="w-full max-w-full flex flex-col gap-1 my-1.5 sm:max-w-[200px] relative ">
             {label && (
-                <label htmlFor={name} className="text-text-medium pl-1">
+                <label htmlFor={name} className="text-sm font-medium pl-0.5 text-text-medium">
                     {label}
                 </label>
             )}
@@ -46,7 +46,7 @@ export const DateInput = ({name,label,register,error,mode = "visualizacao"}: Dat
                 value={currentDate}
                 {...register}
                 className={`
-                    w-full h-10 rounded-lg pl-8 mb-2 cursor-not-allowed text-text-medium/75 bg-white-default/65
+                    w-full h-10 rounded-lg pl-8 cursor-not-allowed text-text-medium/75 bg-white-default/65
                     border ${error ? "border-error" : "border-border"} 
                     focus:outline-hidden ${error ? "focus:border-error focus:ring-error" : "focus:border-accent focus:ring-1 focus:ring-accent"}
                     

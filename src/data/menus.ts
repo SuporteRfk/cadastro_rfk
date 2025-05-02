@@ -30,7 +30,7 @@ export const menuCommon:MenuItem[] =[
         icon: PeopleServicesIcon,
         children: [
             {label: "Cad. Clientes",path: "/cadastro/cliente",icon: UsersIcon},
-            {label: "Cad. Fornecedores",path: "/cadastro/cliente",icon: SuppliersIcon},
+            {label: "Cad. Fornecedores",path: "/cadastro/fornecedores",icon: SuppliersIcon},
         ]
     },
     {

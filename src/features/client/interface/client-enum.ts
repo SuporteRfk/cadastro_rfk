@@ -1,0 +1,21 @@
+export enum ClientTpj {
+    MICRO_EMPRESA =  "1 - ME MICRO EMPRESA",
+    PEQUENO_PORTE =  "2 - EPP EMPRESA PEQUENO PORTE",
+    MEI = "3 - MEI MICROEMPREENDEDOR INDIVIDUAL",
+    NAO_OPTANTE = "4 - NAO OPTANTE"
+ };
+ 
+ export enum ClientPFOrPJ{
+    FISICO = "F - FISICA",
+    JURIDICO = "J - JURIDICA"
+ };
+ 
+ export enum ClientType {
+    CONS_FINAL = "F -  CONS FINAL" ,
+    PRODUTOR_RURAL = "L - PRODUTOR RURAL",
+    REVENDEDOR = "R - REVENDEDOR",
+    SOLIDARIO = "S - SOLIDARIO",
+    EXPORTACAO = "X - EXPORTACAO"
+ };
+ 
+ 

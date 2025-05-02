@@ -42,7 +42,7 @@ export const NavMenu = () => {
                                 flex items-center w-full p-2 rounded hover:bg-accent/30 text-[15px] cursor-pointer
                                 ${isMobileOpenMenu && 'justify-between pr-4'}
                                 ${isSidebarOpen ? "lg:gap-2" : "lg:justify-center"}
-                                ${isMenuRouteActive(item.path!) ? "bg-gray-200 font-semibold" : ""}
+                                ${isMenuRouteActive(item.path!) ? "bg-accent/50 font-semibold" : ""}
                             `}
                         >
                             <motion.span layout>
@@ -98,7 +98,7 @@ export const NavMenu = () => {
                                     key={childSubMenu.label}
                                     onClick={() => handleNavigate(childSubMenu.path)}
                                     className={`flex items-center w-full p-2 gap-1 rounded hover:bg-accent/20
-                                        ${isMenuRouteActive(childSubMenu.path) ? "bg-accent font-semibold text-white-default" : ""}
+                                        ${isMenuRouteActive(childSubMenu.path)? "bg-accent font-semibold text-white-default" : ""}
                                         ${isMobileOpenMenu && "pl-10 pr-5 justify-between"}
                                         ${isSidebarOpen ? "lg:pl-3" : "lg:justify-center"}
                                     `}
@@ -122,6 +122,7 @@ export const NavMenu = () => {
                                         </motion.span>
                                     )}
                                 </button>
+                                
                             ))}
                         </motion.div>
                     )}
