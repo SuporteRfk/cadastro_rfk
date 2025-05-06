@@ -35,7 +35,7 @@ export const Input = ({name,label,placeholder,type = "text",register,error,icon:
                 </label>
             }   
             <div className="relative">
-                {Icon && <Icon className="absolute left-2 top-3" color="var(--text-color-strong)" size={20} />}
+                {Icon && <Icon className="absolute left-2 top-[7px]" color="var(--text-color-strong)" size={20} />}
 
                 <input
                     id={name}
@@ -48,7 +48,7 @@ export const Input = ({name,label,placeholder,type = "text",register,error,icon:
                     maxLength={maxCaractere}
                     readOnly={readOnly}
                     className={`
-                        w-full h-10 pl-10 pr-3 rounded-lg text-sm no-spinner 
+                        w-full h-8 pl-10 pr-3 rounded-lg text-sm no-spinner 
                         border ${error ? 'border-error' : 'border-border'}
                         focus:outline-hidden ${error ? 'focus:border-error focus:ring-error' : 'focus:border-accent focus:ring-1 focus:ring-accent'}
                         ${readOnly ? 'cursor-not-allowed text-text-medium/75 bg-white-default/65' : 'cursor-text bg-white-default text-text-medium'}

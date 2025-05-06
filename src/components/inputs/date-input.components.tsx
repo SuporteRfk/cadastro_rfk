@@ -46,14 +46,14 @@ export const DateInput = ({name,label,register,error,mode = "visualizacao"}: Dat
                 value={currentDate}
                 {...register}
                 className={`
-                    w-full h-10 rounded-lg pl-8 cursor-not-allowed text-text-medium/75 bg-white-default/65
+                    w-full h-8 rounded-lg pl-8 cursor-not-allowed text-text-medium/75 bg-white-default/65 text-sm
                     border ${error ? "border-error" : "border-border"} 
                     focus:outline-hidden ${error ? "focus:border-error focus:ring-error" : "focus:border-accent focus:ring-1 focus:ring-accent"}
                     
                 `}
                 readOnly={true}
             />
-            <CalendarIcon className="absolute left-2 top-[33px]" size={20} color="var(--text-color-strong)" />
+            <CalendarIcon className="absolute left-2 top-[30px]" size={20} color="var(--text-color-strong)" />
             {error && <span className="text-sm text-error">{error}</span>}
         </div>
     )

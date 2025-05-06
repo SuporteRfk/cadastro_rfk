@@ -1,9 +1,10 @@
 import { DefaultValues, FormProvider, useForm } from "react-hook-form";
+import { InputWithMask } from "../inputs/input-with-mask.components";
 import { SubTitleForm } from "./sub-title-form.components";
 import { FormSection } from "./form-section.components";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { ReactNode, useContext } from "react";
-import { DateInput, Input } from "../inputs";
+import { DateInput, Input, InputSelect } from "../inputs";
 import { AuthContext } from "@/context";
 import { ScrollArea } from "../ui";
 import * as yup from 'yup';
@@ -12,6 +13,10 @@ import {
     UserRound as UserIcon, 
     Mail as EmailIcon,
 } from "lucide-react";
+import { 
+    FaWhatsapp as WhatsAppIcon
+} from "react-icons/fa6";
+import { Sectors } from "@/interfaces";
 
 
 type FormStateType = 'editing' | 'viewing' | 'reviewing' | 'rejecting';
@@ -68,8 +73,9 @@ export const FormLayout = <T,>({ schema, onSubmit, children, formState, defaultV
                             valueInitial={user?.fullName || ""}
                             readOnly={true}
                         />
+                        
                         {/* Setor solicitante Opcional*/}
-                        {/* colocar setor opcial */}
+                        {showSector && <InputSelect name="setor" options={Object.values(Sectors)} placeholder="Escolhe o seu setor" label="Setor"/>}
                     </FormSection>
                     
                     <FormSection className="sm:flex-row gap-4">
@@ -84,7 +90,14 @@ export const FormLayout = <T,>({ schema, onSubmit, children, formState, defaultV
                             icon={EmailIcon}
                             valueInitial={user?.email}
                         />
-                        {/* Colocar whatsapp */}
+                        <InputWithMask
+                            name="whatsapp"
+                            maskType="whatsapp"
+                            register={methods.register("whatsapp")}
+                            error={methods.formState.errors.whatsapp?.message as string | undefined}
+                            Icon={WhatsAppIcon}
+                            label="WhatsApp"
+                        />
                     </FormSection>
                     {children}
                 </form>
