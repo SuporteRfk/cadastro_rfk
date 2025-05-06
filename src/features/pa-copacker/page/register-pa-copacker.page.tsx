@@ -1,5 +1,5 @@
 import { FormLayout, PageLayout } from "@/components";
-import {PackageOpen as PAIcon,} from "lucide-react";
+import {PackageOpen as PAIcon} from "lucide-react";
 
 export const RegisterPACopacker = () => {
     return(
