@@ -1,3 +1,4 @@
+import { RegisterUnitMeasure } from "@/features/unit-measure/page/register-unit-measure.page";
 import { RegisterPACopacker } from "@/features/pa-copacker/page/register-pa-copacker.page";
 import { RegisterSupplier } from "@/features/suppliers/page/register-supplier.page";
 import { RegisterClientPage } from "@/features/client/page/register-client.page";
@@ -18,7 +19,7 @@ export const privateRoutes = [
     {path: "/cadastro/pa-terceiro", element: "teste"},
     {path: "/cadastro/pa-unitario", element: "teste"},
     {path: "/cadastro/produtos-indiretos", element: "teste"},
-    {path: "/cadastro/unidade-medida", element: "teste"},
+    {path: "/cadastro/unidade-medida", element: RegisterUnitMeasure},
     {path: "/solicitar-alteracao", element: RegisterClientPage},
     {path: "/solicitacoes/pendentes", element: "teste"},
     {path: "/solicitacoes/em-revisao", element: "teste"},
