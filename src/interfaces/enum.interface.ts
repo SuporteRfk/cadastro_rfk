@@ -14,3 +14,10 @@ export enum Sectors {
     TI = "T.I",
     COMPRAS = "Compras",
 }
+
+//Rastro 
+export enum Trail{
+    LOTE="L - LOTE",
+    SUBLOTE="S - SUBLOTE",
+    NAO_UTILIZA="N - NÃO UTILIZA"
+}
