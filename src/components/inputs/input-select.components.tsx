@@ -45,7 +45,10 @@ export const InputSelect = ({name,label, selectLabel, placeholder, error, option
             <p className="text-text-medium pl-1">{label}</p>
             <div className="flex flex-col gap-2">
                 <Select onValueChange={handleSelectChange} value={selectedValue} disabled={disabled}>
-                    <SelectTrigger id={name} className={error && "border-red-400"}>
+                    <SelectTrigger id={name} className={`
+                        ${error && "border-red-400"}
+                        ${disabled ? "bg-gray-100 cursor-not-allowed text-gray-500" : ""}
+                    `}>
                         <SelectValue placeholder={placeholder}/>
                     </SelectTrigger>
                     <SelectContent>
