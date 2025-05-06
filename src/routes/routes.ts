@@ -1,3 +1,4 @@
+import { RegisterPaymentCondition } from "@/features/payment-condition/page/register-payment-codition.page";
 import { RegisterUnitMeasure } from "@/features/unit-measure/page/register-unit-measure.page";
 import { RegisterPACopacker } from "@/features/pa-copacker/page/register-pa-copacker.page";
 import { RegisterSupplier } from "@/features/suppliers/page/register-supplier.page";
@@ -11,7 +12,7 @@ import { LoginPage } from "@/features/login/page/login.page";
 export const privateRoutes = [
     {path: "/dashboard", element: DashboardPage},
     {path: "/cadastro/cliente", element: RegisterClientPage},
-    {path: "/cadastro/condicao-pagamento", element: "teste"},
+    {path: "/cadastro/condicao-pagamento", element: RegisterPaymentCondition},
     {path: "/cadastro/fornecedores", element: RegisterSupplier},
     {path: "/cadastro/insumos", element: "teste"},
     {path: "/cadastro/pa-copacker", element: RegisterPACopacker},
