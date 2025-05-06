@@ -17,6 +17,7 @@ import {
     FaWhatsapp as WhatsAppIcon
 } from "react-icons/fa6";
 import { Sectors } from "@/interfaces";
+import { Button } from "../button/button.components";
 
 
 type FormStateType = 'editing' | 'viewing' | 'reviewing';
@@ -31,9 +32,11 @@ interface BaseFormProps<T> {
     showSector?: boolean;
     titleForm : string;
     iconForm : LucideIcon;
+    showButtonsDefault?: boolean
+    openModal?: (modalKey: string, options: { message: string; onConfirm: () => void }) => void;
 }
 
-export const FormLayout = <T,>({ schema, onSubmit, children, formState, defaultValues, showSector, titleForm, iconForm:IconForm }: BaseFormProps<T>) => {
+export const FormLayout = <T,>({ schema, onSubmit, children, formState, defaultValues, showSector, titleForm, iconForm:IconForm, showButtonsDefault=true, openModal }: BaseFormProps<T>) => {
     const {user} = useContext(AuthContext);
     
 
@@ -42,6 +45,8 @@ export const FormLayout = <T,>({ schema, onSubmit, children, formState, defaultV
         defaultValues: defaultValues as DefaultValues<Partial<T>> | undefined,
     });
 
+    
+
     return(
         <ScrollArea className="h-[90vh] w-full min-w-0 max-w-[1920px] mx-auto ">
             <h1 className="p-3 text-xl text-text-strong font-bold mt-3 flex gap-2 items-center">
@@ -49,7 +54,9 @@ export const FormLayout = <T,>({ schema, onSubmit, children, formState, defaultV
                 {titleForm}
             </h1>
             <FormProvider {...methods}>
-                <form className="bg-white-default w-full max-w-full min-w-0 px-4 border rounded-lg shadow-lg shadow-black/15">
+                <form 
+                    className="bg-white-default w-full max-w-full min-w-0 px-4 border rounded-lg shadow-lg shadow-black/15"
+                >
                     <SubTitleForm title="Dados Solicitantes"/>
                     {/* Dados Solicitantes */}
                     <FormSection className="sm:flex-row gap-4">
@@ -110,7 +117,24 @@ export const FormLayout = <T,>({ schema, onSubmit, children, formState, defaultV
                             readOnly={formState === 'viewing' || formState === 'reviewing'}
                         />
                     </FormSection>
+                    {/* Elementos filhos dinâmicos */}
                     {children}
+                    
+                    {/* Botões de Ação */}
+                    {showButtonsDefault && 
+                        <div className="w-full flex my-2 gap-3 justify-end ">
+                            <Button
+                                text="Cancelar"
+                                variant="secondary"
+                                sizeWidth="w-[120px]"
+                            />
+                            <Button
+                                text="Salvar"
+                                variant="primary"
+                                sizeWidth="w-[120px]"
+                            />
+                        </div>
+                    }
                 </form>
             </FormProvider>
         </ScrollArea>

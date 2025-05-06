@@ -7,5 +7,6 @@ export * from "./button/button.components";
 export * from "./page-layout.components";
 export * from "./toastify.components";
 export * from "./inputs";
+export * from "./modal";
 export * from "./form";
 export * from "./ui";

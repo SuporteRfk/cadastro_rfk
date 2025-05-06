@@ -31,7 +31,7 @@ export const Button = ({
     
     const variantStyles = {
         primary: "bg-accent text-white-default hover:bg-accent-hover",
-        secondary: "bg-medium/60 text-gray-700 hover:bg-gray-300 border-transparent",
+        secondary: "bg-medium/50 text-text-medium hover:bg-gray-300 border-transparent",
         ghost: "bg-transparent text-text-strong hover:bg-neutral/10",
         danger: "bg-error text-white-default hover:bg-red-600",
         outline: "bg-transparent hover:bg-accent border-2 border-accent text-accent hover:text-white-default",
