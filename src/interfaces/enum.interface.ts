@@ -13,11 +13,19 @@ export enum Sectors {
     FABRICA = "Fábrica",
     TI = "T.I",
     COMPRAS = "Compras",
-}
+};
 
 //Rastro 
 export enum Trail{
     LOTE="L - LOTE",
     SUBLOTE="S - SUBLOTE",
     NAO_UTILIZA="N - NÃO UTILIZA"
-}
+};
+
+export enum ValidityPeriod {
+    HORAS="H - HORAS",
+    DIAS="D - DIAS",
+    SEMANAS="S - SEMANA",
+    MES="M - MÊS",
+    ANO="A - ANO"
+};
