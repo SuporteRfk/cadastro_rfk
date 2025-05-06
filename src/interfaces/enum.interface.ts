@@ -29,3 +29,9 @@ export enum ValidityPeriod {
     MES="M - MÊS",
     ANO="A - ANO"
 };
+
+
+export enum ConverterType{
+    DIVISOR="D - DIVISOR",
+    MULTIPLICADOR="M - MULTIPLICADOR"
+}
