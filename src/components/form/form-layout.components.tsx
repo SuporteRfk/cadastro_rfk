@@ -19,7 +19,7 @@ import {
 import { Sectors } from "@/interfaces";
 
 
-type FormStateType = 'editing' | 'viewing' | 'reviewing' | 'rejecting';
+type FormStateType = 'editing' | 'viewing' | 'reviewing';
 
 
 interface BaseFormProps<T> {
@@ -75,7 +75,16 @@ export const FormLayout = <T,>({ schema, onSubmit, children, formState, defaultV
                         />
                         
                         {/* Setor solicitante Opcional*/}
-                        {showSector && <InputSelect name="setor" options={Object.values(Sectors)} placeholder="Escolhe o seu setor" label="Setor"/>}
+                        {showSector && 
+                            <InputSelect 
+                                name="setor" 
+                                options={Object.values(Sectors)} 
+                                placeholder="Escolhe o seu setor" 
+                                label="Setor"
+                                selectLabel="Setores"
+                                disabled={formState === 'viewing' || formState === 'reviewing'}
+                            />
+                        }
                     </FormSection>
                     
                     <FormSection className="sm:flex-row gap-4">
@@ -89,6 +98,7 @@ export const FormLayout = <T,>({ schema, onSubmit, children, formState, defaultV
                             type="email"
                             icon={EmailIcon}
                             valueInitial={user?.email}
+                            readOnly={true}
                         />
                         <InputWithMask
                             name="whatsapp"
@@ -97,6 +107,7 @@ export const FormLayout = <T,>({ schema, onSubmit, children, formState, defaultV
                             error={methods.formState.errors.whatsapp?.message as string | undefined}
                             Icon={WhatsAppIcon}
                             label="WhatsApp"
+                            readOnly={formState === 'viewing' || formState === 'reviewing'}
                         />
                     </FormSection>
                     {children}

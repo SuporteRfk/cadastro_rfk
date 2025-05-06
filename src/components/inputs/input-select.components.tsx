@@ -41,13 +41,13 @@ export const InputSelect = ({name,label, selectLabel, placeholder, error, option
     };
 
     return (
-        <div className={`flex flex-col w-full ${maxWidth} gap-1`}>
-            <p className="text-text-medium pl-1">{label}</p>
+        <div className={`w-full flex flex-col gap-1 relative my-1.5 ${maxWidth}`}>
+            <p className="text-sm font-medium pl-0.5 text-text-medium">{label}</p>
             <div className="flex flex-col gap-2">
                 <Select onValueChange={handleSelectChange} value={selectedValue} disabled={disabled}>
                     <SelectTrigger id={name} className={`
                         ${error && "border-red-400"}
-                        ${disabled ? "bg-gray-100 cursor-not-allowed text-gray-500" : ""}
+                        ${disabled ? "bg-neutral/30 cursor-not-allowed text-gray-500" : ""}
                     `}>
                         <SelectValue placeholder={placeholder}/>
                     </SelectTrigger>

@@ -1,3 +1,4 @@
+import { RegisterIndirectProducts } from "@/features/indirect-products/page/register-indirect-products.page";
 import { RegisterPaymentCondition } from "@/features/payment-condition/page/register-payment-codition.page";
 import { RegisterUnitMeasure } from "@/features/unit-measure/page/register-unit-measure.page";
 import { RegisterPACopacker } from "@/features/pa-copacker/page/register-pa-copacker.page";
@@ -23,7 +24,7 @@ export const privateRoutes = [
     {path: "/cadastro/pa-fardo", element: RegisterPABurden},
     {path: "/cadastro/pa-terceiro", element: RegisterPAThird},
     {path: "/cadastro/pa-unitario", element: RegisterPAUnitary},
-    {path: "/cadastro/produtos-indiretos", element: "teste"},
+    {path: "/cadastro/produtos-indiretos", element: RegisterIndirectProducts},
     {path: "/cadastro/unidade-medida", element: RegisterUnitMeasure},
     {path: "/solicitar-alteracao", element: "teste-altercao"},
     {path: "/solicitacoes/pendentes", element: "teste"},
