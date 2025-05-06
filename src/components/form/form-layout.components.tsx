@@ -4,7 +4,7 @@ import { SubTitleForm } from "./sub-title-form.components";
 import { FormSection } from "./form-section.components";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { ReactNode, useContext } from "react";
-import { DateInput, Input } from "../inputs";
+import { DateInput, Input, InputSelect } from "../inputs";
 import { AuthContext } from "@/context";
 import { ScrollArea } from "../ui";
 import * as yup from 'yup';
@@ -16,6 +16,7 @@ import {
 import { 
     FaWhatsapp as WhatsAppIcon
 } from "react-icons/fa6";
+import { Sectors } from "@/interfaces";
 
 
 type FormStateType = 'editing' | 'viewing' | 'reviewing' | 'rejecting';
@@ -72,8 +73,9 @@ export const FormLayout = <T,>({ schema, onSubmit, children, formState, defaultV
                             valueInitial={user?.fullName || ""}
                             readOnly={true}
                         />
+                        
                         {/* Setor solicitante Opcional*/}
-                        {/* colocar setor opcial */}
+                        {showSector && <InputSelect name="setor" options={Object.values(Sectors)} placeholder="Escolhe o seu setor" label="Setor"/>}
                     </FormSection>
                     
                     <FormSection className="sm:flex-row gap-4">
