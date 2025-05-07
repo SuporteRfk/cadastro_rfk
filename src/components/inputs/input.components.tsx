@@ -42,7 +42,7 @@ export const Input = ({name,label,placeholder,type = "text",register,error,icon:
                     {...register}
                     type={type}
                     name={name}
-                    value={value}
+                    defaultValue={valueInitial}
                     onChange={(e) => setValue(e.target.value)}
                     placeholder={placeholder}
                     maxLength={maxCaractere}
