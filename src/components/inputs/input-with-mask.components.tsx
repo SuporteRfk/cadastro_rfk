@@ -69,14 +69,14 @@ export const InputWithMask = forwardRef<HTMLInputElement, InputMaskProps>(
                     placeholder={placeholder}
                     ref={ref as any} 
                     className={`
-                        w-full h-8 pl-10 pr-3 rounded-lg text-sm no-spinner 
+                        w-full h-8 pl-8 pr-3 rounded-lg text-sm no-spinner 
                         border ${error ? 'border-error' : 'border-border'}
                         focus:outline-hidden ${error ? 'focus:border-error focus:ring-error' : 'focus:border-accent focus:ring-1 focus:ring-accent'}
                         ${readOnly ? 'cursor-not-allowed text-text-medium/75 bg-white-default/65' : 'cursor-text bg-white-default text-text-medium'}    
                     `}
                 />
             </div>
-            {error && <span className="text-error/80 text-xs mt-1 pl-1">{error}</span>}
+            {error && <span className="text-error/80 text-xs pl-1">{error}</span>}
         </div>
       );
     }

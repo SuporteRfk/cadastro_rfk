@@ -62,7 +62,7 @@ export const InputSelect = ({name,label, selectLabel, placeholder, error, option
                         </SelectGroup>
                     </SelectContent>
                 </Select>
-                {error && <p className="text-sm text-error">{error}</p>}
+                {error && <p className="text-error/80 text-xs pl-1">{error}</p>}
             </div>
         </div>
     );

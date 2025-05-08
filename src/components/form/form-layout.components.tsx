@@ -103,6 +103,7 @@ export const FormLayout = <T extends FieldValues> ({methods, onSubmit, children,
                                 label="Setor"
                                 selectLabel="Setores"
                                 disabled={formState === 'viewing' || formState === 'reviewing'}
+                                error={methods.formState.errors.setor?.message as string | undefined}
                             />
                         }
                     </FormSection>

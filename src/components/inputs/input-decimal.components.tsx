@@ -29,19 +29,19 @@ export const InputDecimal =({Icon, name, error, label, placeholder, decimalScale
       }, [watchedValue]);
 
     return (
-        <div className="flex flex-col w-full max-w-full min-w-0 relative">
+        <div className="w-full flex flex-col gap-1 relative my-1.5">
             
             {label && 
                 <label 
                     htmlFor={name}
-                    className="text-text-medium pl-1"
+                    className="text-sm font-medium pl-0.5 text-text-medium"
                 >
                         {label}
                 </label>
             }
             <CurrencyFormat
                 className={`
-                    w-full min-w-0 max-w-full h-10 rounded-lg px-8 mb-2 bg-white-default no-spinner
+                    w-full min-w-0 max-w-full h-8 rounded-lg px-8 mb-2 bg-white-default no-spinner
                     border ${error ? 'border-error ' : 'border-border'} 
                     focus:outline-hidden ${error ? 'focus:border-error focus:ring-error' : 'focus:border-accent focus:ring-1 focus:ring-accent'}    
                 `}
@@ -58,9 +58,9 @@ export const InputDecimal =({Icon, name, error, label, placeholder, decimalScale
                 value={internalValue }
             />
             {Icon && (
-              <Icon className="absolute left-2 top-[34px] text-gray-400" size={20} color="var(--text-color-strong)" />
+              <Icon className="absolute left-2 top-[31px] text-gray-400" size={20} color="var(--text-color-strong)" />
             )}
-            {error && <span className="text-sm text-error">{error}</span>}
+            {error && <p className="text-error/80 text-xs pl-1">{error}</p>}
         </div>
     )
 };

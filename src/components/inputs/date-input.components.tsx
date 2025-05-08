@@ -54,7 +54,7 @@ export const DateInput = ({name,label,register,error,mode = "visualizacao"}: Dat
                 readOnly={true}
             />
             <CalendarIcon className="absolute left-2 top-[30px]" size={20} color="var(--text-color-strong)" />
-            {error && <span className="text-sm text-error">{error}</span>}
+            {error && <p className="text-error/80 text-xs pl-1">{error}</p>}
         </div>
     )
 };
