@@ -1,4 +1,4 @@
-import { FormLayout, FormSection, Input, InputDecimal, InputSelect, InputWithMask, PageLayout, SubTitleForm, Toastify } from "@/components";
+import { FormLayout, FormProductCategorySelector, FormSection, Input, InputDecimal, InputSelect, InputWithMask, PageLayout, SubTitleForm, Toastify } from "@/components";
 import { FamilyCodePAThird, GroupCodePAThird , TypeCodePAThird } from "../interface/pa-third-enum";
 import { insertPATerceiroService } from "../service/insert-pa-third.service";
 import { paThirdRegisterSchema } from "../schema/pa-third.schema";
@@ -128,36 +128,13 @@ export const RegisterPAThird = () => {
                     </p>
                 </div>
 
-                {/* Sessão de tipo, familia e grupo */}
-                <FormSection className="mt-2 md:mt-3 md:flex-row gap-4">
-                    {/* Família */}
-                    <InputSelect
-                        label="Familia do Terceiro" 
-                        name="codigo_familia"
-                        error={methods.formState.errors.codigo_familia?.message} 
-                        placeholder="Selecione a família"
-                        options={Object.values(FamilyCodePAThird)}
-                        selectLabel="Código da família"
-                    />
-                    {/* Grupo */}
-                    <InputSelect
-                        label="Grupo do Terceiro" 
-                        name="codigo_grupo"
-                        error={methods.formState.errors.codigo_grupo?.message} 
-                        placeholder="Selecione o grupo"
-                        options={Object.values(GroupCodePAThird)}
-                        selectLabel="Código do grupo"
-                    />
-                    {/* Tipo */}
-                    <InputSelect
-                        label="Tipo do Terceiro"
-                        selectLabel="Tipos"
-                        options={Object.values(TypeCodePAThird)}
-                        name="tipo"
-                        error={methods.formState.errors.tipo?.message}
-                        placeholder="Selecione o tipo"
-                    />
-                </FormSection>
+                {/* Sessão do tipo, familia e grupo do PA */}
+                <FormProductCategorySelector 
+                    family={Object.values(FamilyCodePAThird)}
+                    group={Object.values(GroupCodePAThird)}
+                    type={Object.values(TypeCodePAThird)}
+                    methods={methods}
+                />
 
                 {/* Sessão das Unidades de Medidas */}
                 <FormSection className="mt-2 md:mt-3 md:flex-row gap-4">

@@ -1,4 +1,4 @@
-import { FormLayout, PageLayout, InputSelect, FormSection, Input, InputDecimal, InputWithMask, Toastify, SubTitleForm } from "@/components";
+import { FormLayout, PageLayout, InputSelect, FormSection, Input, InputDecimal, InputWithMask, Toastify, SubTitleForm, FormProductCategorySelector } from "@/components";
 import { FamilyCodePABurden, GroupCodePABurden, TypeCodeoPABurden } from "../interface/pa-burden-enum";
 import { insertPABurdenService } from "../service/insert-pa-burden.service";
 import { paBurdenRegisterSchema } from "../schema/pa-burden.schema";
@@ -112,35 +112,12 @@ export const RegisterPABurden = () => {
                 />
 
                 {/* Sessão do tipo, familia e grupo do PA */}
-                <FormSection className="mt-2 md:mt-3 md:flex-row gap-4">
-                    {/* Familia */}
-                    <InputSelect
-                        label="Família do Fardo" 
-                        name="codigo_familia"
-                        error={methods.formState.errors.codigo_familia?.message} 
-                        placeholder="Selecione a família"
-                        options={Object.values(FamilyCodePABurden)}
-                        selectLabel="Código da família"
-                    />
-                    {/* Grupo */}
-                    <InputSelect
-                        label="Grupo do Fardo" 
-                        name="codigo_grupo"
-                        error={methods.formState.errors.codigo_grupo?.message} 
-                        placeholder="Selecione o grupo"
-                        options={Object.values(GroupCodePABurden)}
-                        selectLabel="Código do grupo"
-                    />
-                    {/* Tipo */}
-                    <InputSelect
-                        label="Tipo de Fardo"
-                        selectLabel="Tipos"
-                        options={Object.values(TypeCodeoPABurden)}
-                        name="tipo"
-                        error={methods.formState.errors.tipo?.message}
-                        placeholder="Selecione o tipo"
-                    />
-                </FormSection>
+                <FormProductCategorySelector 
+                    family={Object.values(FamilyCodePABurden)}
+                    group={Object.values(GroupCodePABurden)}
+                    type={Object.values(TypeCodeoPABurden)}
+                    methods={methods}
+                />
 
                 {/* Sessão de Medida, Marcar e Sabor */}
                 <FormSection className="mt-2 md:mt-3 md:flex-row gap-4">

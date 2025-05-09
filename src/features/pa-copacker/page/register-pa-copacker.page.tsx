@@ -1,4 +1,4 @@
-import { FormLayout, FormSection, Input, InputDecimal, InputSelect, InputWithMask, PageLayout, SubTitleForm, Toastify } from "@/components";
+import { FormLayout, FormProductCategorySelector, FormSection, Input, InputDecimal, InputSelect, InputWithMask, PageLayout, SubTitleForm, Toastify } from "@/components";
 import { FamilyCodePACopacker, GroupCodePACopacker , TypeCodeoPACopacker } from "../interface/pa-copacker-enum";
 import { insertPACopackerService } from "../service/insert-pa-copacker.service";
 import { paCopackerRegisterSchema } from "../schema/pa-copacker.schema";
@@ -101,35 +101,12 @@ export const RegisterPACopacker = () => {
                 />
 
                 {/* Sessão do tipo, familia e grupo do PA */}
-                <FormSection className="mt-2 md:mt-3 md:flex-row gap-4">
-                    {/* Familia */}
-                    <InputSelect
-                        label="Família do Copacker" 
-                        name="codigo_familia"
-                        error={methods.formState.errors.codigo_familia?.message} 
-                        placeholder="Selecione a família"
-                        options={Object.values(FamilyCodePACopacker)}
-                        selectLabel="Código da família"
-                    />
-                    {/* Grupo */}
-                    <InputSelect
-                        label="Grupo do Copacker" 
-                        name="codigo_grupo"
-                        error={methods.formState.errors.codigo_grupo?.message} 
-                        placeholder="Selecione o grupo"
-                        options={Object.values(GroupCodePACopacker)}
-                        selectLabel="Código do grupo"
-                    />
-                    {/* Tipo */}
-                    <InputSelect
-                        label="Tipo de Copacker"
-                        selectLabel="Tipos"
-                        options={Object.values(TypeCodeoPACopacker)}
-                        name="tipo"
-                        error={methods.formState.errors.tipo?.message}
-                        placeholder="Selecione o tipo"
-                    />
-                </FormSection>
+                <FormProductCategorySelector 
+                    family={Object.values(FamilyCodePACopacker)}
+                    group={Object.values(GroupCodePACopacker)}
+                    type={Object.values(TypeCodeoPACopacker)}
+                    methods={methods}
+                />
 
                 {/* Sessão de Medida, Marcar e Sabor */}
                 <FormSection className="mt-2 md:mt-3 md:flex-row gap-4">

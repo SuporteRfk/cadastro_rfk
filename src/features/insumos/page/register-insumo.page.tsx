@@ -1,4 +1,4 @@
-import { FormLayout, FormSection, Input, InputSelect, PageLayout, SubTitleForm, Toastify, InputWithMask, InputDecimal } from "@/components";
+import { FormLayout, FormSection, Input, InputSelect, PageLayout, SubTitleForm, Toastify, InputWithMask, InputDecimal, FormProductCategorySelector } from "@/components";
 import { FamilyCodeInsumos, GroupCodeInsumos , TypeCodeoInsumos } from "../interface/insumos-enum";
 import { insertInsumosService } from "../service/insert-insumo.service";
 import { insumosRegisterSchema } from "../schema/insumos.schema";
@@ -81,36 +81,15 @@ export const RegisterInsumo = () => {
                         icon={CodeSaibIcon}
                     />
                 </FormSection>
-                {/* Sessão do tipo do insumo (familia, grupo e tipo) */}
-                <FormSection className="md:mt-3 md:flex-row gap-4">
-                     {/* familia do insumo*/}
-                     <InputSelect    
-                        label="Família do Insumo" 
-                        name="codigo_familia"
-                        error={methods.formState.errors.codigo_familia?.message} 
-                        placeholder="Selecione a família"
-                        options={Object.values(FamilyCodeInsumos)}
-                        selectLabel="Código da família"
-                    />
-                    {/* Grupo do insumo */}
-                    <InputSelect    
-                        label="Grupo do Insumo" 
-                        name="codigo_grupo"
-                        error={methods.formState.errors.codigo_grupo?.message} 
-                        placeholder="Selecione o grupo"
-                        options={Object.values(GroupCodeInsumos)}
-                        selectLabel="Código do grupo"
-                    />
-                    {/* Tipo de insumo */}
-                    <InputSelect
-                        label="Tipo de Insumo"
-                        selectLabel="Tipos"
-                        options={Object.values(TypeCodeoInsumos)}
-                        name="tipo"
-                        error={methods.formState.errors.tipo?.message}
-                        placeholder="Selecione o tipo"
-                    />
-                </FormSection>
+             
+                {/* Sessão do tipo, familia e grupo do PA */}
+                <FormProductCategorySelector 
+                    family={Object.values(FamilyCodeInsumos)}
+                    group={Object.values(GroupCodeInsumos)}
+                    type={Object.values(TypeCodeoInsumos)}
+                    methods={methods}
+                />
+                
                  {/* Sessão da unidades de medida e NCM*/}
                  <FormSection className="md:flex-row gap-1 md:gap-4 md:mt-3">
                     {/* Unidade de medida*/}

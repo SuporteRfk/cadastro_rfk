@@ -3,7 +3,6 @@ export enum OptionYesNo {
     NAO = "2 - NAO"
 };
 
-
 export enum Sectors {
     ADM = "Administrativo",
     MANUTENCAO = "Manutenção",
@@ -34,4 +33,6 @@ export enum ValidityPeriod {
 export enum ConverterType{
     DIVISOR="D - DIVISOR",
     MULTIPLICADOR="M - MULTIPLICADOR"
-}
+};
+
+export type FormStateType = 'editing' | 'viewing' | 'reviewing';

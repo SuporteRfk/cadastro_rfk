@@ -1,4 +1,4 @@
-import { FormLayout, FormSection, Input, InputSelect, InputWithMask, PageLayout, SubTitleForm, Toastify } from "@/components";
+import { FormLayout, FormProductCategorySelector, FormSection, Input, InputSelect, InputWithMask, PageLayout, SubTitleForm, Toastify } from "@/components";
 import { insertIndirectProductsService } from "../service/insert-indirect-products.service";
 import { indirectProductsRegisterSchema } from "../schema/indirect-products.schema";
 import { IIndirectProductsRegister } from "../interface/indirect-products";
@@ -115,37 +115,15 @@ export const RegisterIndirectProducts = () => {
                         icon={DescriptionIcon}
                     />
                 </FormSection>
-                {/* Sessão do tipo , familia e grupo */}
-                <FormSection className="mt-2 md:mt-3 md:flex-row gap-4">
-                    {/* Familia */}
-                    <InputSelect
-                        label="Família do Produto" 
-                        name="codigo_familia"
-                        error={methods.formState.errors.codigo_familia?.message} 
-                        placeholder="Selecione a família"
-                        options={Object.values(FamilyCodeIndirectProducts)}
-                        selectLabel="Código da família"
-                    />
-                    {/* Grupo */}
-                    <InputSelect
-                        label="Grupo do Produto" 
-                        name="codigo_grupo"
-                        error={methods.formState.errors.codigo_grupo?.message} 
-                        placeholder="Selecione o grupo"
-                        options={Object.values(group)}
-                        selectLabel="Código do grupo"
-                    />
-                    {/* Tipo */}
-                    <InputSelect
-                        label="Tipo de Produto"
-                        selectLabel="Tipos"
-                        options={Object.values(TypeCodeIndirectProducts)}
-                        name="tipo"
-                        error={methods.formState.errors.tipo?.message}
-                        placeholder="Selecione o tipo"
-                    />
-                </FormSection>
-                {/*  */}
+                             
+                {/* Sessão do tipo, familia e grupo do PA */}
+                <FormProductCategorySelector 
+                    family={Object.values(FamilyCodeIndirectProducts)}
+                    group={Object.values(group)}
+                    type={Object.values(TypeCodeIndirectProducts)}
+                    methods={methods}
+                />
+
                 <FormSection className="md:flex-row gap-1 md:gap-4 md:mt-3">
                      {/* Unidade de medida | unit of measure */}
                      <Input    

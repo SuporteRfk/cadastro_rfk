@@ -7,7 +7,7 @@ import { FormSection } from "./form-section.components";
 import { AuthContext, ModalContext } from "@/context";
 import { Button } from "../button/button.components";
 import { ReactNode, useContext } from "react";
-import { Sectors } from "@/interfaces";
+import { FormStateType, Sectors } from "@/interfaces";
 import { ScrollArea } from "../ui";
 import { 
     LucideIcon, 
@@ -18,8 +18,6 @@ import {
     FaWhatsapp as WhatsAppIcon
 } from "react-icons/fa6";
 
-
-type FormStateType = 'editing' | 'viewing' | 'reviewing';
 
 interface BaseFormProps<T extends FieldValues> {
     onSubmit?: (data: T) => void;
