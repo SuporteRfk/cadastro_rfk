@@ -1,4 +1,4 @@
-import { FormLayout, FormProductCategorySelector, FormSection, Input, InputDecimal, InputSelect, InputWithMask, PageLayout, SubTitleForm, Toastify } from "@/components";
+import { FormLayout, FormProductCategorySelector, FormProductDescription, FormSection, Input, InputDecimal, InputSelect, InputWithMask, PageLayout, SubTitleForm, Toastify } from "@/components";
 import { FamilyCodePACopacker, GroupCodePACopacker , TypeCodeoPACopacker } from "../interface/pa-copacker-enum";
 import { insertPACopackerService } from "../service/insert-pa-copacker.service";
 import { paCopackerRegisterSchema } from "../schema/pa-copacker.schema";
@@ -12,7 +12,6 @@ import { handleApiError } from "@/utils";
 import { Trail } from "@/interfaces";
 import { useState } from "react";
 import {
-    ClipboardPenLine as DescriptionIcon,
     Computer as CodeSaibIcon,
     Ruler as UnitMeasureIcon,
     Weight as KgIcon,
@@ -20,7 +19,6 @@ import {
     Cherry as FlavorIcon,
     Crown as MarkIcon,
     Layers as BallastIcon,
-    Atom as ScientificIcon,
     Barcode as CodeBarIcon,
     Move3D as DepthIcon,
     MoveHorizontal as WidthIcon,
@@ -65,18 +63,11 @@ export const RegisterPACopacker = () => {
             >
                 <SubTitleForm title="Dados do P.A Copacker"  styleLine="border-t-3 border-dashed border-strong/10 mt-4" icon={PAIcon}/>
                 
-                {/* Sessão de descrição do P.A */}
+                {/* Sessão de descrição/nome Científico do P.A */}
+                <FormProductDescription methods={methods} />
+
                 <FormSection className="sm:flex-row gap-4 w-full">
                     {/* Descrição */}
-                    <Input    
-                        label="Descrição Curta" 
-                        name="descricao_curta"
-                        register={methods.register("descricao_curta")}
-                        error={methods.formState.errors.descricao_curta?.message} 
-                        placeholder="Descrição breve do copacker"
-                        type="text"
-                        icon={DescriptionIcon}
-                    />
                     {/* Codigo de barras*/}
                     <Input    
                         label="Código de barras GTIN" 
@@ -88,17 +79,6 @@ export const RegisterPACopacker = () => {
                         icon={CodeBarIcon}
                     />
                 </FormSection>
-
-                {/* Nome Cientifico*/}
-                <Input    
-                    label="Nome Científico" 
-                    name="nome_cientifico"
-                    register={methods.register("nome_cientifico")}
-                    error={methods.formState.errors.nome_cientifico?.message} 
-                    placeholder="Descrição completa do nome nome cientifíco"
-                    type="text"
-                    icon={ScientificIcon}
-                />
 
                 {/* Sessão do tipo, familia e grupo do PA */}
                 <FormProductCategorySelector 

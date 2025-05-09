@@ -1,11 +1,69 @@
-import { FormLayout, PageLayout } from "@/components";
-import {Box as UnitaryIcon} from "lucide-react";
+import { FamilyCodePAUnitary, GroupCodePAUnitary, TypeCodeoPAUnitary } from "../interface/pa-unitary-enum";
+import { IPAUnitaryRegister } from "../interface/pa-unitary";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { FormLayout, FormProductDescription, PageLayout, SubTitleForm, Toastify } from "@/components";
+import { useForm } from "react-hook-form";
+import {
+    Box as UnitaryIcon,
+    Computer as CodeSaibIcon,
+    Ruler as UnitMeasureIcon,
+    Weight as KgIcon,
+    Landmark as TaxIcon,
+    Cherry as FlavorIcon,
+    Crown as MarkIcon,
+    Layers as BallastIcon,
+    Barcode as CodeBarIcon,
+    Move3D as DepthIcon,
+    MoveHorizontal as WidthIcon,
+    MoveVertical as HeightIcon,
+    Warehouse as StorageIcon,
+    Box as packagingTypeIcon,
+    Expand as packagingSizeIcon,
+    Clock as ValidityIcon,
+    PackageMinus as BatchesMinimumIcon,
+    Boxes as BatchesEconomicIcon
+} from "lucide-react";
+import { useState } from "react";
+import { handleApiError } from "@/utils";
+import { insertPAUnitaryService } from "../service/insert-pa-unitary.service";
+import { paUnitaryRegisterSchema } from "../schema/pa-unitary.schema";
 
 export const RegisterPAUnitary = () => {
+    const [loading, setLoading] = useState<boolean>(false);
+
+    const methods = useForm<IPAUnitaryRegister>({
+        resolver: yupResolver(paUnitaryRegisterSchema)
+    });
+
+    const onSubmit = async (data:IPAUnitaryRegister) => {
+        try {
+            setLoading(true);
+            await insertPAUnitaryService(data);
+            Toastify({
+                type: "success",
+                message: "Solicitação realizada com sucesso"
+            });
+            methods.reset();
+        } catch (error) {
+            handleApiError(error, "Erro ao cadastrar produto unitário");
+        }finally {
+            setLoading(false);
+        }
+    };
+
     return(
         <PageLayout>
-            <FormLayout titleForm="P.A Unitário" iconForm={UnitaryIcon}>
-         
+            <FormLayout 
+                titleForm="P.A Unitário" 
+                iconForm={UnitaryIcon}
+                methods={methods}
+                loading={loading}
+                onSubmit={onSubmit}
+            >
+                 <SubTitleForm title="Dados do P.A Unitário"  styleLine="border-t-3 border-dashed border-strong/10 mt-4" icon={UnitaryIcon}/>
+                {/* Sessão de descrição do P.A */}
+                <FormProductDescription methods={methods}/>
+                
             </FormLayout>
         </PageLayout>
     );

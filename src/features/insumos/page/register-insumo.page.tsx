@@ -1,4 +1,4 @@
-import { FormLayout, FormSection, Input, InputSelect, PageLayout, SubTitleForm, Toastify, InputWithMask, InputDecimal, FormProductCategorySelector } from "@/components";
+import { FormLayout, FormSection, Input, InputSelect, PageLayout, SubTitleForm, Toastify, InputWithMask, InputDecimal, FormProductCategorySelector, FormProductDescription } from "@/components";
 import { FamilyCodeInsumos, GroupCodeInsumos , TypeCodeoInsumos } from "../interface/insumos-enum";
 import { insertInsumosService } from "../service/insert-insumo.service";
 import { insumosRegisterSchema } from "../schema/insumos.schema";
@@ -11,7 +11,6 @@ import { useState } from "react";
 import {
     Droplet as InsumoIcon,
     NotebookText as InsumoSubTitleIcon,
-    ClipboardPenLine as DescriptionIcon,
     Computer as CodeSaibIcon,
     Ruler as UnitMeasureIcon,
     Scale as ConverterWeightSubTitleIcon,
@@ -20,7 +19,6 @@ import {
     Group as GroupIcon,
     Vault as ProductAlternativeIcon,
     Building2 as EnterpriseIcon,
-    Atom as ScientificIcon
 } from "lucide-react";
 import { ConverterType, Trail } from "@/interfaces";
 
@@ -56,31 +54,12 @@ export const RegisterInsumo = () => {
                 onSubmit={onSubmit}
                 methods={methods}
             >
+                {/* Sessão dos dados do insumo */}
                 <SubTitleForm title="Dados do Insumo"  styleLine="border-t-3 border-dashed border-strong/10 mt-4" icon={InsumoSubTitleIcon}/>
-                {/* sessão da descrição do insumo */}
-                <FormSection className="sm:flex-row gap-4">
-                    {/* descrição curta */}
-                    <Input    
-                        label="Descrição Curta" 
-                        name="descricao_curta"
-                        register={methods.register("descricao_curta")}
-                        error={methods.formState.errors.descricao_curta?.message} 
-                        placeholder="Descrição breve do insumo"
-                        type="text"
-                        icon={DescriptionIcon}
-                    />
-                    
-                    {/* Codigo saib */}
-                    <Input    
-                        label="Código Saib (opcional)" 
-                        name="codigo_saib"
-                        register={methods.register("codigo_saib")}
-                        error={methods.formState.errors.codigo_saib?.message} 
-                        placeholder="Código do insumo na saib"
-                        type="number"
-                        icon={CodeSaibIcon}
-                    />
-                </FormSection>
+                
+                {/* sessão da descrição do insumo e nome Científico*/}
+                <FormProductDescription methods={methods}/>
+                
              
                 {/* Sessão do tipo, familia e grupo do PA */}
                 <FormProductCategorySelector 
@@ -123,16 +102,17 @@ export const RegisterInsumo = () => {
                     />
                  </FormSection>
                  
-                 {/* Nome Ciêntifico */}
-                 <Input    
-                    label="Nome Científico" 
-                    name="nome_cientifico"
-                    register={methods.register("nome_cientifico")}
-                    error={methods.formState.errors.nome_cientifico?.message} 
-                    placeholder="Descrição completa do nome nome cientifíco"
-                    type="text"
-                    icon={ScientificIcon}
-                />
+               
+                   {/* Codigo saib */}
+                   <Input    
+                        label="Código Saib (opcional)" 
+                        name="codigo_saib"
+                        register={methods.register("codigo_saib")}
+                        error={methods.formState.errors.codigo_saib?.message} 
+                        placeholder="Código do insumo na saib"
+                        type="number"
+                        icon={CodeSaibIcon}
+                    />
 
                 {/* Informações de conversores e peso */}
                 <SubTitleForm title="Conversores e Peso"  styleLine="border-t-3 border-dashed border-strong/10 mt-4" icon={ConverterWeightSubTitleIcon}/>

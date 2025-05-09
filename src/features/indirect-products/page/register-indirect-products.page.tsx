@@ -1,4 +1,4 @@
-import { FormLayout, FormProductCategorySelector, FormSection, Input, InputSelect, InputWithMask, PageLayout, SubTitleForm, Toastify } from "@/components";
+import { FormLayout, FormProductCategorySelector, FormProductDescription, FormSection, Input, InputWithMask, PageLayout, SubTitleForm, Toastify } from "@/components";
 import { insertIndirectProductsService } from "../service/insert-indirect-products.service";
 import { indirectProductsRegisterSchema } from "../schema/indirect-products.schema";
 import { IIndirectProductsRegister } from "../interface/indirect-products";
@@ -22,7 +22,6 @@ import {
     TbNumber as NCMIcon
 } from "react-icons/tb";
 import {
-    ClipboardPenLine as DescriptionIcon,
     Ruler as UnidadeMedidaIcon,
 } from "lucide-react";
 
@@ -91,30 +90,9 @@ export const RegisterIndirectProducts = () => {
                 onSubmit={onSubmit}
             >
                 <SubTitleForm title="Dados do Produto Indireto"  styleLine="border-t-3 border-dashed border-strong/10 mt-4" icon={IndirectProductsIcon}/>
+                
                 {/* Sessão de descrição do produto */}
-                <FormSection className="gap-4 md:flex-row">
-                    {/* Descrição curta do produto*/}
-                    <Input    
-                        label="Descrição Curta" 
-                        name="descricao_curta"
-                        register={methods.register("descricao_curta")}
-                        error={methods.formState.errors.descricao_curta?.message} 
-                        placeholder="Descrição breve do produto"
-                        type="text"
-                        icon={DescriptionIcon}
-                    />
-
-                    {/* Descrição do uso do produto*/}
-                    <Input    
-                        label="Uso do produto" 
-                        name="descricao_uso"
-                        register={methods.register("descricao_uso")}
-                        error={methods.formState.errors.descricao_uso?.message} 
-                        placeholder="Para que o produto será utilizado"
-                        type="text"
-                        icon={DescriptionIcon}
-                    />
-                </FormSection>
+                <FormProductDescription methods={methods} viewKeyUseProduct viewKeyNameScientific={false}/>
                              
                 {/* Sessão do tipo, familia e grupo do PA */}
                 <FormProductCategorySelector 

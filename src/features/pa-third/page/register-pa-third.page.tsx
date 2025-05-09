@@ -1,4 +1,4 @@
-import { FormLayout, FormProductCategorySelector, FormSection, Input, InputDecimal, InputSelect, InputWithMask, PageLayout, SubTitleForm, Toastify } from "@/components";
+import { FormLayout, FormProductCategorySelector, FormProductDescription, FormSection, Input, InputDecimal, InputSelect, InputWithMask, PageLayout, SubTitleForm, Toastify } from "@/components";
 import { FamilyCodePAThird, GroupCodePAThird , TypeCodePAThird } from "../interface/pa-third-enum";
 import { insertPATerceiroService } from "../service/insert-pa-third.service";
 import { paThirdRegisterSchema } from "../schema/pa-third.schema";
@@ -12,14 +12,12 @@ import { useForm } from "react-hook-form";
 import { handleApiError } from "@/utils";
 import { useState } from "react";
 import {
-    ClipboardPenLine as DescriptionIcon,
     Computer as CodeSaibIcon,
     Ruler as UnitMeasureIcon,
     Weight as KgIcon,
     Landmark as TaxIcon,
     Cherry as FlavorIcon,
     Crown as MarkIcon,
-    Atom as CientificoIcon,
     Barcode as CodeBarIcon,
     Warehouse as StorageIcon,
     Box as packagingTypeIcon,
@@ -61,29 +59,10 @@ export const RegisterPAThird = () => {
                 loading={loading}
             >
                 <SubTitleForm title="Dados do P.A Terceiro"  styleLine="border-t-3 border-dashed border-strong/10 mt-4" icon={PAThirdIcon}/>
-                {/* Sessão de descrição do P.A */}
-                <div>
-                    {/* Descrição*/}
-                    <Input    
-                        label="Descrição Curta" 
-                        name="descricao_curta"
-                        register={methods.register("descricao_curta")}
-                        error={methods.formState.errors.descricao_curta?.message} 
-                        placeholder="Descrição breve do fardo"
-                        type="text"
-                        icon={DescriptionIcon}
-                    />
-                    <p className="ml-1 my-1 text-text-neutral text-sm">
-                        Regra para Descrição, seguir a ordem: <span className="text-medium/80 font-semibold">Tipo do produto - Marca - Sabor - Tamanho - Descartável/Retornável</span>
-                    </p>
-                    <p className="ml-1 my-1 text-text-neutral text-sm">
-                        Abreviação para produtos com dois nomes, Ex: <span className="text-medium/80 font-semibold">Vinho Tinto</span>, colocar primeira letra do primeiro e segundo nome. <span className="text-medium/80 font-semibold">Ex: VT</span>
-                    </p>
-                    <p className="ml-1 my-1 text-text-neutral text-sm">
-                        produtos com um nome, Ex: <span className="text-medium/80 font-semibold">Espumante</span>, abreviar utilizando as 3 primeiras letras. <span className="text-medium/80 font-semibold">Ex: ESP</span>
-                    </p>
-                </div>
-
+                
+                {/* Sessão de descrição/nome Científico do P.A */}
+                <FormProductDescription methods={methods} viewInstructions/>
+             
                 {/* Codigos de baras */}
                 <FormSection className="sm:flex-row gap-4">
                     {/* Primeiro Codigo de barras */}
@@ -108,25 +87,6 @@ export const RegisterPAThird = () => {
                         
                     />
                 </FormSection>
-
-                 {/* Nome Ciêntifico*/}
-                 <div>
-                    <Input    
-                        label="Nome Científico (Descrição completa)" 
-                        name="nome_cientifico"
-                        register={methods.register("nome_cientifico")}
-                        error={methods.formState.errors.nome_cientifico?.message} 
-                        placeholder="Descrição completa do nome nome cientifíco"
-                        type="text"
-                        icon={CientificoIcon}
-                    />
-                    <p className="ml-1 text-text-neutral text-sm">
-                        Como preencher, seguir a ordem: <span className="text-medium/80 font-semibold">Tipo do produto - Marca - Sabor - Tamanho - Descartável/Retornável</span>
-                    </p>
-                    <p className="ml-1 mt-1 text-accent font-medium text-sm">
-                        Ex: REFRIGERANTE REFRIKO GUARANA 6X2LT - DESCARTÁVEL
-                    </p>
-                </div>
 
                 {/* Sessão do tipo, familia e grupo do PA */}
                 <FormProductCategorySelector 
