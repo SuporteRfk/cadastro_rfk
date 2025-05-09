@@ -1,6 +1,6 @@
 import { FormLayout, FormSection, Input, InputDecimal, InputSelect, InputWithMask, PageLayout, SubTitleForm, Toastify } from "@/components";
 import { FamilyCodePAThird, GroupCodePAThird , TypeCodePAThird } from "../interface/pa-third-enum";
-import { insertPATerceiro } from "../service/insert-pa-third.service";
+import { insertPATerceiroService } from "../service/insert-pa-third.service";
 import { paThirdRegisterSchema } from "../schema/pa-third.schema";
 import { IPAThirdRegister } from "../interface/pa-third";
 import { MdPallet as PalletIcon } from "react-icons/md";
@@ -37,7 +37,7 @@ export const RegisterPAThird = () => {
     const onSubmit = async (data: IPAThirdRegister) => {
         try {
             setLoading(true);
-            await insertPATerceiro(data);
+            await insertPATerceiroService(data);
             Toastify({
                 type: "success",
                 message: "Solicitação realizada com sucesso!",
