@@ -294,26 +294,26 @@ export const RegisterPACopacker = () => {
                     {/* Profundidade */}
                     <InputDecimal  
                         Icon={DepthIcon}  
-                        name="profundidade_fardo"
+                        name="profundidade_outro"
                         label="Profundidade (outro)" 
                         placeholder="Medida da profundidade do fardo"
-                        error={methods.formState.errors.profundidade_fardo?.message} 
+                        error={methods.formState.errors.profundidade_outro?.message} 
                     />
                     {/* Largura */}
                     <InputDecimal  
                         Icon={WidthIcon}  
-                        name="largura_fardo"
+                        name="largura_outro"
                         label="Largura (outro)" 
                         placeholder="Medida da largura do fardo"
-                        error={methods.formState.errors.largura_fardo?.message}  
+                        error={methods.formState.errors.largura_outro?.message}  
                     />
                     {/* Altura */}
                     <InputDecimal  
                         Icon={HeightIcon}  
-                        name="altura_fardo"
+                        name="altura_outro"
                         label="Altura (outro)" 
                         placeholder="Medida da altura do fardo"
-                        error={methods.formState.errors.altura_fardo?.message} 
+                        error={methods.formState.errors.altura_outro?.message} 
                     />
                 </FormSection>
 
@@ -352,7 +352,6 @@ export const RegisterPACopacker = () => {
                             icon={packagingTypeIcon}
                         />
                 </FormSection>
-
             </FormLayout>
         </PageLayout>
     );
