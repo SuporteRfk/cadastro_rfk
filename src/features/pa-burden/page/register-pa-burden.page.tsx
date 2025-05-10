@@ -1,4 +1,4 @@
-import { FormLayout, PageLayout, InputSelect, FormSection, Input, InputDecimal, InputWithMask, Toastify, SubTitleForm, FormProductCategorySelector, FormProductDescription } from "@/components";
+import { FormLayout, PageLayout, InputSelect, FormSection, Input, InputDecimal, InputWithMask, Toastify, SubTitleForm, FormProductCategorySelector, FormProductDescription, FormProductCode } from "@/components";
 import { FamilyCodePABurden, GroupCodePABurden, TypeCodeoPABurden } from "../interface/pa-burden-enum";
 import { insertPABurdenService } from "../service/insert-pa-burden.service";
 import { paBurdenRegisterSchema } from "../schema/pa-burden.schema";
@@ -12,14 +12,12 @@ import { handleApiError } from "@/utils";
 import { useState } from "react";
 import {
     Boxes as BurdenIcon,
-    Computer as CodeSaibIcon,
     Ruler as UnitMeasureIcon,
     Weight as KgIcon,
     Landmark as TaxIcon,
     Cherry as FlavorIcon,
     Crown as MarkIcon,
     Layers as BallastIcon,
-    Barcode as CodeBarIcon,
     Move3D as DepthIcon,
     MoveHorizontal as WidthIcon,
     MoveVertical as HeightIcon,
@@ -67,28 +65,8 @@ export const RegisterPABurden = () => {
                 {/* Sessão de descrição do P.A */}
                 <FormProductDescription methods={methods} />
 
-                <FormSection className="sm:flex-row gap-4 w-full">
-                    {/* Codigo de barras | bar code */}
-                    <Input    
-                        label="Código de barras GTIN" 
-                        name="codigo_barras"
-                        register={methods.register("codigo_barras")}
-                        error={methods.formState.errors.codigo_barras?.message} 
-                        placeholder="Insira o código de barras da nota fiscal"
-                        type="number"
-                        icon={CodeBarIcon}
-                    />
-                    {/* Codigo de barras unitário | bar code unitary */}
-                    <Input    
-                        label="Código de barras (Unitário)" 
-                        name="codigo_barras_unitario"
-                        register={methods.register("codigo_barras_unitario")}
-                        error={methods.formState.errors.codigo_barras_unitario?.message} 
-                        placeholder="Insira o código de barras da unidade"
-                        type="number"
-                        icon={CodeBarIcon}
-                    />
-                </FormSection>
+                {/* Sessão do código saib e códigos de barras */}
+                <FormProductCode methods={methods} showSecondCodeBar configSecondCodeBar="formPABurden"/>
 
                 {/* Sessão do tipo, familia e grupo do PA */}
                 <FormProductCategorySelector 
@@ -161,16 +139,6 @@ export const RegisterPABurden = () => {
                         placeholder="Insira o grupo tributário do produto"
                         type="number"
                         icon={TaxIcon}
-                    />
-                    {/* codido saib */}
-                    <Input    
-                        label="Código Saib (opcional)" 
-                        name="codigo_saib"
-                        register={methods.register("codigo_saib")}
-                        error={methods.formState.errors.codigo_saib?.message} 
-                        placeholder="Código do insumo na saib"
-                        type="number"
-                        icon={CodeSaibIcon}
                     />
                 </FormSection>
 

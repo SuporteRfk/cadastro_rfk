@@ -1,4 +1,4 @@
-import { FormLayout, FormProductCategorySelector, FormProductDescription, FormSection, Input, InputDecimal, InputSelect, InputWithMask, PageLayout, SubTitleForm, Toastify } from "@/components";
+import { FormLayout, FormProductCategorySelector, FormProductCode, FormProductDescription, FormSection, Input, InputDecimal, InputSelect, InputWithMask, PageLayout, SubTitleForm, Toastify } from "@/components";
 import { FamilyCodePAThird, GroupCodePAThird , TypeCodePAThird } from "../interface/pa-third-enum";
 import { insertPATerceiroService } from "../service/insert-pa-third.service";
 import { paThirdRegisterSchema } from "../schema/pa-third.schema";
@@ -12,13 +12,11 @@ import { useForm } from "react-hook-form";
 import { handleApiError } from "@/utils";
 import { useState } from "react";
 import {
-    Computer as CodeSaibIcon,
     Ruler as UnitMeasureIcon,
     Weight as KgIcon,
     Landmark as TaxIcon,
     Cherry as FlavorIcon,
     Crown as MarkIcon,
-    Barcode as CodeBarIcon,
     Warehouse as StorageIcon,
     Box as packagingTypeIcon,
     Expand as packagingSizeIcon,
@@ -63,30 +61,8 @@ export const RegisterPAThird = () => {
                 {/* Sessão de descrição/nome Científico do P.A */}
                 <FormProductDescription methods={methods} viewInstructions/>
              
-                {/* Codigos de baras */}
-                <FormSection className="sm:flex-row gap-4">
-                    {/* Primeiro Codigo de barras */}
-                    <Input    
-                        label="Código de barras" 
-                        name="codigo_barras"
-                        register={methods.register("codigo_barras")}
-                        error={methods.formState.errors.codigo_barras?.message} 
-                        placeholder="Insira o código de barras"
-                        type="number"
-                        icon={CodeBarIcon}
-                    />
-                    {/* Segundo codigo de barras */}
-                    <Input    
-                        label="Código de barras (Segundo)" 
-                        name="segundo_codigo_barras"
-                        register={methods.register("segundo_codigo_barras")}
-                        error={methods.formState.errors.segundo_codigo_barras?.message} 
-                        placeholder="Insira o segundo código de barras"
-                        type="number"
-                        icon={CodeBarIcon}
-                        
-                    />
-                </FormSection>
+                {/* Sessão do código saib e código de barras*/}
+                <FormProductCode methods={methods} showSecondCodeBar configSecondCodeBar="formPaThird"/>
 
                 {/* Sessão do tipo, familia e grupo do PA */}
                 <FormProductCategorySelector 
@@ -173,16 +149,6 @@ export const RegisterPAThird = () => {
                         placeholder="Insira o grupo tributário do produto"
                         type="number"
                         icon={TaxIcon}
-                    />
-                    {/* codido saib*/}
-                    <Input    
-                        label="Código Saib (opcional)" 
-                        name="codigo_saib"
-                        register={methods.register("codigo_saib")}
-                        error={methods.formState.errors.codigo_saib?.message} 
-                        placeholder="Código do fardo na saib"
-                        type="number"
-                        icon={CodeSaibIcon}
                     />
                 </FormSection>
 

@@ -1,18 +1,16 @@
+import { FormLayout, FormProductCategorySelector, FormProductCode, FormProductDescription, PageLayout, SubTitleForm, Toastify } from "@/components";
 import { FamilyCodePAUnitary, GroupCodePAUnitary, TypeCodeoPAUnitary } from "../interface/pa-unitary-enum";
 import { IPAUnitaryRegister } from "../interface/pa-unitary";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { FormLayout, FormProductDescription, PageLayout, SubTitleForm, Toastify } from "@/components";
 import { useForm } from "react-hook-form";
 import {
     Box as UnitaryIcon,
-    Computer as CodeSaibIcon,
     Ruler as UnitMeasureIcon,
     Weight as KgIcon,
     Landmark as TaxIcon,
     Cherry as FlavorIcon,
     Crown as MarkIcon,
     Layers as BallastIcon,
-    Barcode as CodeBarIcon,
     Move3D as DepthIcon,
     MoveHorizontal as WidthIcon,
     MoveVertical as HeightIcon,
@@ -60,10 +58,20 @@ export const RegisterPAUnitary = () => {
                 loading={loading}
                 onSubmit={onSubmit}
             >
-                 <SubTitleForm title="Dados do P.A Unitário"  styleLine="border-t-3 border-dashed border-strong/10 mt-4" icon={UnitaryIcon}/>
+                <SubTitleForm title="Dados do P.A Unitário"  styleLine="border-t-3 border-dashed border-strong/10 mt-4" icon={UnitaryIcon}/>
                 {/* Sessão de descrição do P.A */}
                 <FormProductDescription methods={methods}/>
                 
+                {/* Sessão do código de barras e código saib */}
+                <FormProductCode methods={methods} showSecondCodeBar configSecondCodeBar="formPaUnitary"/>
+
+                {/* Sessão do tipo, grupo e família */}
+                <FormProductCategorySelector 
+                    methods={methods} 
+                    family={Object.values(FamilyCodePAUnitary)}
+                    group={Object.values(GroupCodePAUnitary)}
+                    type={Object.values(TypeCodeoPAUnitary)}
+                />
             </FormLayout>
         </PageLayout>
     );

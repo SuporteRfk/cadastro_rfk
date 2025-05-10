@@ -1,4 +1,4 @@
-import { FormLayout, FormSection, Input, InputSelect, PageLayout, SubTitleForm, Toastify, InputWithMask, InputDecimal, FormProductCategorySelector, FormProductDescription } from "@/components";
+import { FormLayout, FormSection, Input, InputSelect, PageLayout, SubTitleForm, Toastify, InputWithMask, InputDecimal, FormProductCategorySelector, FormProductDescription, FormProductCode } from "@/components";
 import { FamilyCodeInsumos, GroupCodeInsumos , TypeCodeoInsumos } from "../interface/insumos-enum";
 import { insertInsumosService } from "../service/insert-insumo.service";
 import { insumosRegisterSchema } from "../schema/insumos.schema";
@@ -11,7 +11,6 @@ import { useState } from "react";
 import {
     Droplet as InsumoIcon,
     NotebookText as InsumoSubTitleIcon,
-    Computer as CodeSaibIcon,
     Ruler as UnitMeasureIcon,
     Scale as ConverterWeightSubTitleIcon,
     Weight as KgIcon,
@@ -102,17 +101,8 @@ export const RegisterInsumo = () => {
                     />
                  </FormSection>
                  
-               
-                   {/* Codigo saib */}
-                   <Input    
-                        label="Código Saib (opcional)" 
-                        name="codigo_saib"
-                        register={methods.register("codigo_saib")}
-                        error={methods.formState.errors.codigo_saib?.message} 
-                        placeholder="Código do insumo na saib"
-                        type="number"
-                        icon={CodeSaibIcon}
-                    />
+                {/* Sessão do código saib */}
+                <FormProductCode methods={methods} showOnlyCodeSaib/>
 
                 {/* Informações de conversores e peso */}
                 <SubTitleForm title="Conversores e Peso"  styleLine="border-t-3 border-dashed border-strong/10 mt-4" icon={ConverterWeightSubTitleIcon}/>

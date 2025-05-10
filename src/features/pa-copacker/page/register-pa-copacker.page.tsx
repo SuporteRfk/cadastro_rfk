@@ -1,4 +1,4 @@
-import { FormLayout, FormProductCategorySelector, FormProductDescription, FormSection, Input, InputDecimal, InputSelect, InputWithMask, PageLayout, SubTitleForm, Toastify } from "@/components";
+import { FormLayout, FormProductCategorySelector, FormProductCode, FormProductDescription, FormSection, Input, InputDecimal, InputSelect, InputWithMask, PageLayout, SubTitleForm, Toastify } from "@/components";
 import { FamilyCodePACopacker, GroupCodePACopacker , TypeCodeoPACopacker } from "../interface/pa-copacker-enum";
 import { insertPACopackerService } from "../service/insert-pa-copacker.service";
 import { paCopackerRegisterSchema } from "../schema/pa-copacker.schema";
@@ -12,14 +12,12 @@ import { handleApiError } from "@/utils";
 import { Trail } from "@/interfaces";
 import { useState } from "react";
 import {
-    Computer as CodeSaibIcon,
     Ruler as UnitMeasureIcon,
     Weight as KgIcon,
     Landmark as TaxIcon,
     Cherry as FlavorIcon,
     Crown as MarkIcon,
     Layers as BallastIcon,
-    Barcode as CodeBarIcon,
     Move3D as DepthIcon,
     MoveHorizontal as WidthIcon,
     MoveVertical as HeightIcon,
@@ -66,19 +64,8 @@ export const RegisterPACopacker = () => {
                 {/* Sessão de descrição/nome Científico do P.A */}
                 <FormProductDescription methods={methods} />
 
-                <FormSection className="sm:flex-row gap-4 w-full">
-                    {/* Descrição */}
-                    {/* Codigo de barras*/}
-                    <Input    
-                        label="Código de barras GTIN" 
-                        name="codigo_barras"
-                        register={methods.register("codigo_barras")}
-                        error={methods.formState.errors.codigo_barras?.message} 
-                        placeholder="Insira o código de barras da nota fiscal"
-                        type="number"
-                        icon={CodeBarIcon}
-                    />
-                </FormSection>
+                {/* Sessão do código saib e código de barras*/}
+                <FormProductCode methods={methods} />
 
                 {/* Sessão do tipo, familia e grupo do PA */}
                 <FormProductCategorySelector 
@@ -151,16 +138,6 @@ export const RegisterPACopacker = () => {
                         placeholder="Insira o grupo tributário do produto"
                         type="number"
                         icon={TaxIcon}
-                    />
-                    {/* codido saib */}
-                    <Input    
-                        label="Código Saib (opcional)" 
-                        name="codigo_saib"
-                        register={methods.register("codigo_saib")}
-                        error={methods.formState.errors.codigo_saib?.message} 
-                        placeholder="Código do insumo na saib"
-                        type="number"
-                        icon={CodeSaibIcon}
                     />
                 </FormSection>
 
