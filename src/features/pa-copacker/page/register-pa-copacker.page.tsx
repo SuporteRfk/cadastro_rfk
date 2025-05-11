@@ -22,9 +22,8 @@ import {
     MoveHorizontal as WidthIcon,
     MoveVertical as HeightIcon,
     Warehouse as StorageIcon,
-    Box as packagingTypeIcon,
-    Expand as packagingSizeIcon
 } from "lucide-react";
+import { FormProductPackagingInfo } from "@/components/form/form-product-packaging-info.components";
 
 export const RegisterPACopacker = () => {
     const [loading, setLoading] = useState<boolean>(false);
@@ -254,38 +253,8 @@ export const RegisterPACopacker = () => {
                 
                 {/* Sessão Armazenagem */}
                 <SubTitleForm title="Armazenagem e Embalagem"  styleLine="border-t-3 border-dashed border-strong/10 mt-4" icon={StorageIcon}/>
-                <FormSection className="mt-2 md:mt-3 md:flex-row gap-4">
-                     {/* Armazém | Storage */}
-                     <Input    
-                            label="Armazém Padrão" 
-                            name="armazem_padrao"
-                            register={methods.register("armazem_padrao")}
-                            error={methods.formState.errors.armazem_padrao?.message} 
-                            placeholder="Informe o armazém"
-                            type="text"
-                            icon={StorageIcon}
-                        />
-                        {/*  */}
-                        <Input    
-                            label="Tamanho da Embalagem" 
-                            name="tamanho_embalagem"
-                            register={methods.register("tamanho_embalagem")}
-                            error={methods.formState.errors.tamanho_embalagem?.message} 
-                            placeholder="Informe o tamanho da embalagem"
-                            type="text"
-                            icon={packagingSizeIcon}
-                        />
-                        {/*  tipo embalagem |packaging type*/}
-                        <Input    
-                            label="Tipo de Embalagem" 
-                            name="tipo_embalagem"
-                            register={methods.register("tipo_embalagem")}
-                            error={methods.formState.errors.tipo_embalagem?.message} 
-                            placeholder="Informe o tipo de embalagem"
-                            type="text"
-                            icon={packagingTypeIcon}
-                        />
-                </FormSection>
+                <FormProductPackagingInfo methods={methods}/>
+                
             </FormLayout>
         </PageLayout>
     );

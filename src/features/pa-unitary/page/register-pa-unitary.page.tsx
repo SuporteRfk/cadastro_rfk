@@ -5,6 +5,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import {
     Box as UnitaryIcon,
+    Warehouse as StorageIcon,
     Ruler as UnitMeasureIcon,
     Weight as KgIcon,
     Landmark as TaxIcon,
@@ -13,10 +14,7 @@ import {
     Layers as BallastIcon,
     Move3D as DepthIcon,
     MoveHorizontal as WidthIcon,
-    MoveVertical as HeightIcon,
-    Warehouse as StorageIcon,
-    Box as packagingTypeIcon,
-    Expand as packagingSizeIcon,
+    MoveVertical as HeightIcon,    
     Clock as ValidityIcon,
     PackageMinus as BatchesMinimumIcon,
     Boxes as BatchesEconomicIcon
@@ -25,6 +23,7 @@ import { useState } from "react";
 import { handleApiError } from "@/utils";
 import { insertPAUnitaryService } from "../service/insert-pa-unitary.service";
 import { paUnitaryRegisterSchema } from "../schema/pa-unitary.schema";
+import { FormProductPackagingInfo } from "@/components/form/form-product-packaging-info.components";
 
 export const RegisterPAUnitary = () => {
     const [loading, setLoading] = useState<boolean>(false);
@@ -72,6 +71,12 @@ export const RegisterPAUnitary = () => {
                     group={Object.values(GroupCodePAUnitary)}
                     type={Object.values(TypeCodeoPAUnitary)}
                 />
+                {/* Sessão Armazenagem */}
+                <SubTitleForm title="Armazenagem e Embalagem"  styleLine="border-t-3 border-dashed border-strong/10 mt-4" icon={StorageIcon}/>
+                <FormProductPackagingInfo methods={methods}/>
+            
+            
+            
             </FormLayout>
         </PageLayout>
     );
