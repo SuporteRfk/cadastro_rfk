@@ -1,14 +1,14 @@
-import { FormLayout, PageLayout, InputSelect, FormSection, Input, InputDecimal, InputWithMask, Toastify, SubTitleForm, FormProductCategorySelector, FormProductDescription, FormProductCode } from "@/components";
+import { FormLayout, PageLayout, InputSelect, FormSection, FormProductPackagingInfo, Input, InputDecimal, InputWithMask, Toastify, SubTitleForm, FormProductCategorySelector, FormProductDescription, FormProductCode, FormValidity } from "@/components";
 import { FamilyCodePABurden, GroupCodePABurden, TypeCodeoPABurden } from "../interface/pa-burden-enum";
 import { insertPABurdenService } from "../service/insert-pa-burden.service";
 import { paBurdenRegisterSchema } from "../schema/pa-burden.schema";
 import { IPABurdenRegister } from "../interface/pa-burden";
 import { MdPallet as PalletIcon } from "react-icons/md";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Trail, ValidityPeriod } from "@/interfaces";
 import { TbNumber as NCMIcon} from "react-icons/tb";
 import { useForm } from "react-hook-form";
 import { handleApiError } from "@/utils";
+import { Trail } from "@/interfaces";
 import { useState } from "react";
 import {
     Boxes as BurdenIcon,
@@ -23,10 +23,7 @@ import {
     MoveVertical as HeightIcon,
     Warehouse as StorageIcon,
     Clock as ValidityIcon,
-    PackageMinus as BatchesMinimumIcon,
-    Boxes as BatchesEconomicIcon
 } from "lucide-react";
-import { FormProductPackagingInfo } from "@/components/form/form-product-packaging-info.components";
 
 export const RegisterPABurden = () => {
     const [loading, setLoading] = useState<boolean>(false);
@@ -257,47 +254,8 @@ export const RegisterPABurden = () => {
 
                 {/* Sessão Validade */}
                 <SubTitleForm title="Validade e Lote"  styleLine="border-t-3 border-dashed border-strong/10 mt-4" icon={ValidityIcon}/>
-                <FormSection className="mt-2 lg:mt-3 lg:flex-row gap-4">
-                    {/* Tipo do prazo */}
-                    <InputSelect
-                        label="Tipo de Prazo"
-                        selectLabel="Prazos"
-                        options={Object.values(ValidityPeriod)}
-                        name="tipo_prazo"
-                        error={methods.formState.errors.tipo_prazo?.message}
-                        placeholder="Selecione o tipo de prazo"
-                    />
-                    {/* Prazo Validade */}
-                    <Input    
-                        label="Prazo de validade" 
-                        name="prazo_validade"
-                        register={methods.register("prazo_validade")}
-                        error={methods.formState.errors.prazo_validade?.message} 
-                        placeholder="Informe a validade"
-                        type="number"
-                        icon={ValidityIcon}
-                    />
-                    {/* Lotes Economico*/}
-                    <Input    
-                        label="Lote econômico" 
-                        name="lote_economico"
-                        register={methods.register("lote_economico")}
-                        error={methods.formState.errors.lote_economico?.message} 
-                        placeholder="Informe o lote econômico"
-                        type="text"
-                        icon={BatchesEconomicIcon}
-                    />
-                    {/* Lotes Minimo */}
-                    <Input    
-                        label="Lote mínimo" 
-                        name="lote_minimo"
-                        register={methods.register("lote_minimo")}
-                        error={methods.formState.errors.lote_minimo?.message} 
-                        placeholder="Informe o lote mínimo"
-                        type="text"
-                        icon={BatchesMinimumIcon}
-                    />
-                </FormSection>
+                <FormValidity methods={methods}/>
+
             </FormLayout>
         </PageLayout>
     );

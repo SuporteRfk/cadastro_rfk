@@ -1,8 +1,11 @@
-import { FormLayout, FormProductCategorySelector, FormProductCode, FormProductDescription, PageLayout, SubTitleForm, Toastify } from "@/components";
+import { FormLayout, FormProductCategorySelector, FormProductCode, FormProductPackagingInfo, FormProductDescription, FormValidity, PageLayout, SubTitleForm, Toastify } from "@/components";
 import { FamilyCodePAUnitary, GroupCodePAUnitary, TypeCodeoPAUnitary } from "../interface/pa-unitary-enum";
+import { insertPAUnitaryService } from "../service/insert-pa-unitary.service";
+import { paUnitaryRegisterSchema } from "../schema/pa-unitary.schema";
 import { IPAUnitaryRegister } from "../interface/pa-unitary";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
+import { handleApiError } from "@/utils";
 import {
     Box as UnitaryIcon,
     Warehouse as StorageIcon,
@@ -16,14 +19,8 @@ import {
     MoveHorizontal as WidthIcon,
     MoveVertical as HeightIcon,    
     Clock as ValidityIcon,
-    PackageMinus as BatchesMinimumIcon,
-    Boxes as BatchesEconomicIcon
 } from "lucide-react";
 import { useState } from "react";
-import { handleApiError } from "@/utils";
-import { insertPAUnitaryService } from "../service/insert-pa-unitary.service";
-import { paUnitaryRegisterSchema } from "../schema/pa-unitary.schema";
-import { FormProductPackagingInfo } from "@/components/form/form-product-packaging-info.components";
 
 export const RegisterPAUnitary = () => {
     const [loading, setLoading] = useState<boolean>(false);
@@ -74,7 +71,10 @@ export const RegisterPAUnitary = () => {
                 {/* Sessão Armazenagem */}
                 <SubTitleForm title="Armazenagem e Embalagem"  styleLine="border-t-3 border-dashed border-strong/10 mt-4" icon={StorageIcon}/>
                 <FormProductPackagingInfo methods={methods}/>
-            
+
+                {/* Sessão Validade */}
+                <SubTitleForm title="Validade e Lote"  styleLine="border-t-3 border-dashed border-strong/10 mt-4" icon={ValidityIcon}/>
+                <FormValidity methods={methods}/>
             
             
             </FormLayout>
