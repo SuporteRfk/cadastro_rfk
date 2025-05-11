@@ -1,10 +1,11 @@
-import { FormLayout, FormSection, Input, InputSelect, PageLayout, SubTitleForm, Toastify, InputWithMask, InputDecimal, FormProductCategorySelector, FormProductDescription, FormProductCode, FormWeights } from "@/components";
+import { FormLayout, FormSection, Input, InputSelect, PageLayout, SubTitleForm, Toastify, InputWithMask, FormPalletizingTrackingConversion, InputDecimal, FormProductCategorySelector, FormProductDescription, FormProductCode, FormWeights } from "@/components";
 import { FamilyCodeInsumos, GroupCodeInsumos , TypeCodeoInsumos } from "../interface/insumos-enum";
 import { insertInsumosService } from "../service/insert-insumo.service";
 import { insumosRegisterSchema } from "../schema/insumos.schema";
 import { IInsumoRegister } from "../interface/insumos";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { TbNumber as NCMIcon} from "react-icons/tb";
+import { ConverterType } from "@/interfaces";
 import { useForm } from "react-hook-form";
 import { handleApiError } from "@/utils";
 import { useState } from "react";
@@ -13,12 +14,12 @@ import {
     NotebookText as InsumoSubTitleIcon,
     Ruler as UnitMeasureIcon,
     Scale as ConverterWeightSubTitleIcon,
-    Variable as ConverterIcon,
     Group as GroupIcon,
     Vault as ProductAlternativeIcon,
     Building2 as EnterpriseIcon,
+    Variable as ConverterIcon,
 } from "lucide-react";
-import { ConverterType, Trail } from "@/interfaces";
+
 
 export const RegisterInsumo = () => {
     const [loading, setLoading] = useState<boolean>(false);
@@ -105,35 +106,8 @@ export const RegisterInsumo = () => {
 
                 {/* Informações de conversores e peso */}
                 <SubTitleForm title="Conversores e Peso"  styleLine="border-t-3 border-dashed border-strong/10 mt-4" icon={ConverterWeightSubTitleIcon}/>
-                {/* Sessão dos conversores, peso e rastro */}
-                <FormSection className="xl:flex-row gap-1 md:gap-4 md:mt-3">
-                    {/* Fator conversor */}
-                    <InputDecimal  
-                        Icon={ConverterIcon}  
-                        name="fator_conversor"
-                        label="Fator Conversor" 
-                        placeholder="Fator conversor do insumo"
-                        error={methods.formState.errors.fator_conversor?.message} 
-                    />
-                    {/* Tipo de conversor*/}
-                    <InputSelect
-                        label="Tipo de conversor"
-                        selectLabel="Conversores"
-                        options={Object.values(ConverterType)}
-                        name="tipo_conversor"
-                        error={methods.formState.errors.tipo_conversor?.message}
-                        placeholder="Selecione o conversor"
-                    />
-                    {/* Rastro */}
-                    <InputSelect
-                        label="Rastro"
-                        selectLabel="Tipo de Rastro"
-                        options={Object.values(Trail)}
-                        name="rastro"
-                        error={methods.formState.errors.rastro?.message}
-                        placeholder="Selecione o rastro"
-                    />
-                </FormSection>
+                 {/* Sessão dos conversores e rastro */}
+                <FormPalletizingTrackingConversion methods={methods} showConverters/>
 
                 {/* Sessão Pesos */}
                 <FormWeights methods={methods}/>

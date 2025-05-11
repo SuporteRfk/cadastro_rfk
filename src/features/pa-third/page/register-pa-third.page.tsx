@@ -1,13 +1,11 @@
-import { FormLayout, FormProductCategorySelector, FormProductCode, FormProductDescription, FormSection, FormWeights, Input, InputSelect, InputWithMask, PageLayout, SubTitleForm, Toastify } from "@/components";
+import { FormLayout, FormProductCategorySelector, FormProductCode, FormPalletizingTrackingConversion, FormProductDescription, FormSection, FormWeights, Input, InputWithMask, PageLayout, SubTitleForm, Toastify } from "@/components";
 import { FamilyCodePAThird, GroupCodePAThird , TypeCodePAThird } from "../interface/pa-third-enum";
 import { insertPATerceiroService } from "../service/insert-pa-third.service";
 import { paThirdRegisterSchema } from "../schema/pa-third.schema";
 import { IPAThirdRegister } from "../interface/pa-third";
-import { MdPallet as PalletIcon } from "react-icons/md";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {Building as PAThirdIcon} from "lucide-react";
 import { TbNumber as NCMIcon} from "react-icons/tb";
-import { ConverterType, Trail } from "@/interfaces";
 import { useForm } from "react-hook-form";
 import { handleApiError } from "@/utils";
 import { useState } from "react";
@@ -162,38 +160,11 @@ export const RegisterPAThird = () => {
                     icon={SubGroupIcon}
                 />
 
+                {/* Sessão de pesos e medidas */}
                 <SubTitleForm title="Peso e Medidas"  styleLine="border-t-3 border-dashed border-strong/10 mt-4" icon={KgIcon}/>
+                
                 {/* Sessão de Conversor e Rastro */}
-                <FormSection className=" mt-2 md:mt-3 md:flex-row gap-4">
-                    {/* Fator Conversão */}
-                    <Input    
-                        label="Fator Conversão" 
-                        name="fator_conversor"
-                        register={methods.register("fator_conversor")}
-                        error={methods.formState.errors.fator_conversor?.message} 
-                        placeholder="Informe quantas unidades por caixa"
-                        type="number"
-                        icon={PalletIcon}
-                    />
-                    {/* Tipo Conversor  */}
-                    <InputSelect
-                        label="Tipo de Conversor"
-                        selectLabel="Conversores"
-                        options={Object.values(ConverterType)}
-                        name="tipo_conversor"
-                        error={methods.formState.errors.tipo_conversor?.message}
-                        placeholder="Selecione o conversor"
-                    />
-                    {/* Rastro */}
-                    <InputSelect
-                        label="Rastro"
-                        selectLabel="Tipo de Rastro"
-                        options={Object.values(Trail)}
-                        name="rastro"
-                        error={methods.formState.errors.rastro?.message}
-                        placeholder="Selecione o rastro"
-                    />
-                </FormSection>
+                <FormPalletizingTrackingConversion methods={methods} showConverters/>
 
                 {/* Sessão Pesos */}
                 <FormWeights methods={methods}/>

@@ -1,4 +1,4 @@
-import { FormLayout, FormProductCategorySelector, FormProductCode, FormProductPackagingInfo, FormProductDescription, FormValidity, PageLayout, SubTitleForm, Toastify, FormWeights } from "@/components";
+import { FormLayout, FormProductCategorySelector, FormProductCode, FormProductPackagingInfo, FormProductDescription, FormValidity, PageLayout, SubTitleForm, Toastify, FormWeights, FormPalletizingTrackingConversion } from "@/components";
 import { FamilyCodePAUnitary, GroupCodePAUnitary, TypeCodeoPAUnitary } from "../interface/pa-unitary-enum";
 import { insertPAUnitaryService } from "../service/insert-pa-unitary.service";
 import { paUnitaryRegisterSchema } from "../schema/pa-unitary.schema";
@@ -14,7 +14,6 @@ import {
     Landmark as TaxIcon,
     Cherry as FlavorIcon,
     Crown as MarkIcon,
-    Layers as BallastIcon,
     Move3D as DepthIcon,
     MoveHorizontal as WidthIcon,
     MoveVertical as HeightIcon,    
@@ -72,6 +71,9 @@ export const RegisterPAUnitary = () => {
                 {/* Sessão de Peso e Medidas */}
                 <SubTitleForm title="Peso e Medidas"  styleLine="border-t-3 border-dashed border-strong/10 mt-4" icon={KgIcon}/>
                 
+                {/* Sessão de paletizao, rastro e lastro */}
+                <FormPalletizingTrackingConversion methods={methods} showConverters={false}/>
+
                 {/* Sessão Pesos */}
                 <FormWeights methods={methods}/>
 

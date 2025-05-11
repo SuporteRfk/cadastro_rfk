@@ -1,3 +1,4 @@
+export * from "./form-palletizing-tracking-conversion.components";
 export * from "./form-product-category-selector.components";
 export * from "./form-product-packaging-info.components";
 export * from "./form-product-description.componentes";

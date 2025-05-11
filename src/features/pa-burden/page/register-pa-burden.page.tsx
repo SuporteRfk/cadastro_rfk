@@ -1,14 +1,12 @@
-import { FormLayout, PageLayout, InputSelect, FormSection, FormProductPackagingInfo, Input, InputDecimal, InputWithMask, Toastify, SubTitleForm, FormProductCategorySelector, FormProductDescription, FormProductCode, FormValidity, FormWeights } from "@/components";
+import { FormLayout, PageLayout, FormSection, FormProductPackagingInfo, Input, InputDecimal, InputWithMask, Toastify, SubTitleForm, FormProductCategorySelector, FormProductDescription, FormProductCode, FormValidity, FormWeights, FormPalletizingTrackingConversion } from "@/components";
 import { FamilyCodePABurden, GroupCodePABurden, TypeCodeoPABurden } from "../interface/pa-burden-enum";
 import { insertPABurdenService } from "../service/insert-pa-burden.service";
 import { paBurdenRegisterSchema } from "../schema/pa-burden.schema";
 import { IPABurdenRegister } from "../interface/pa-burden";
-import { MdPallet as PalletIcon } from "react-icons/md";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { TbNumber as NCMIcon} from "react-icons/tb";
 import { useForm } from "react-hook-form";
 import { handleApiError } from "@/utils";
-import { Trail } from "@/interfaces";
 import { useState } from "react";
 import {
     Boxes as BurdenIcon,
@@ -17,7 +15,6 @@ import {
     Landmark as TaxIcon,
     Cherry as FlavorIcon,
     Crown as MarkIcon,
-    Layers as BallastIcon,
     Move3D as DepthIcon,
     MoveHorizontal as WidthIcon,
     MoveVertical as HeightIcon,
@@ -140,37 +137,9 @@ export const RegisterPABurden = () => {
 
                 {/* Sessão de Peso e Medidas */}
                 <SubTitleForm title="Peso e Medidas"  styleLine="border-t-3 border-dashed border-strong/10 mt-4" icon={KgIcon}/>
-                <FormSection className="mt-2 md:mt-3 md:flex-row gap-4">
-                    {/* paletizacao | palletizing */}
-                    <Input    
-                        label="Paletização" 
-                        name="paletizacao"
-                        register={methods.register("paletizacao")}
-                        error={methods.formState.errors.paletizacao?.message} 
-                        placeholder="Informe a paletização"
-                        type="number"
-                        icon={PalletIcon}
-                    />
-                    {/* lastro | ballast*/}
-                    <Input    
-                        label="Lastro" 
-                        name="lastro"
-                        register={methods.register("lastro")}
-                        error={methods.formState.errors.lastro?.message} 
-                        placeholder="Informe o lastro"
-                        type="number"
-                        icon={BallastIcon}
-                    />
-                    {/* Rastro */}
-                    <InputSelect
-                        label="Rastro"
-                        selectLabel="Tipo de Rastro"
-                        options={Object.values(Trail)}
-                        name="rastro"
-                        error={methods.formState.errors.rastro?.message}
-                        placeholder="Selecione o rastro"
-                    />
-                </FormSection>
+                
+                {/* Sessão de paletizao, rastro e lastro */}
+                <FormPalletizingTrackingConversion methods={methods} showConverters={false}/>
 
                 {/* Sessão Pesos */}
                 <FormWeights methods={methods}/>
