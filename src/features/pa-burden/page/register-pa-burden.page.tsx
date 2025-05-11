@@ -1,4 +1,4 @@
-import { FormLayout, PageLayout, InputSelect, FormSection, FormProductPackagingInfo, Input, InputDecimal, InputWithMask, Toastify, SubTitleForm, FormProductCategorySelector, FormProductDescription, FormProductCode, FormValidity } from "@/components";
+import { FormLayout, PageLayout, InputSelect, FormSection, FormProductPackagingInfo, Input, InputDecimal, InputWithMask, Toastify, SubTitleForm, FormProductCategorySelector, FormProductDescription, FormProductCode, FormValidity, FormWeights } from "@/components";
 import { FamilyCodePABurden, GroupCodePABurden, TypeCodeoPABurden } from "../interface/pa-burden-enum";
 import { insertPABurdenService } from "../service/insert-pa-burden.service";
 import { paBurdenRegisterSchema } from "../schema/pa-burden.schema";
@@ -138,7 +138,7 @@ export const RegisterPABurden = () => {
                     />
                 </FormSection>
 
-                 {/* Sessão de Peso e Medidas */}
+                {/* Sessão de Peso e Medidas */}
                 <SubTitleForm title="Peso e Medidas"  styleLine="border-t-3 border-dashed border-strong/10 mt-4" icon={KgIcon}/>
                 <FormSection className="mt-2 md:mt-3 md:flex-row gap-4">
                     {/* paletizacao | palletizing */}
@@ -172,25 +172,8 @@ export const RegisterPABurden = () => {
                     />
                 </FormSection>
 
-                 {/* Sessão Pesos */}
-                 <FormSection className="mt-2 md:mt-3 md:flex-row gap-4">
-                    {/* Peso Bruto */}
-                    <InputDecimal  
-                        Icon={KgIcon}  
-                        name="peso_bruto"
-                        label="Peso Bruto" 
-                        placeholder="Peso Bruto do insumo"
-                        error={methods.formState.errors.peso_bruto?.message} 
-                    />
-                    {/* peso líquido*/}
-                    <InputDecimal  
-                        Icon={KgIcon}  
-                        name="peso_liquido"
-                        label="Peso Líquido" 
-                        placeholder="Peso Líquido do insumo"
-                        error={methods.formState.errors.peso_liquido?.message} 
-                    />
-                </FormSection>
+                {/* Sessão Pesos */}
+                <FormWeights methods={methods}/>
 
                 {/* Profundidade, Largura e Altura */}
                 <FormSection className="sm:flex-row gap-4 w-full">

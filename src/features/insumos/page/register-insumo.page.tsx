@@ -1,4 +1,4 @@
-import { FormLayout, FormSection, Input, InputSelect, PageLayout, SubTitleForm, Toastify, InputWithMask, InputDecimal, FormProductCategorySelector, FormProductDescription, FormProductCode } from "@/components";
+import { FormLayout, FormSection, Input, InputSelect, PageLayout, SubTitleForm, Toastify, InputWithMask, InputDecimal, FormProductCategorySelector, FormProductDescription, FormProductCode, FormWeights } from "@/components";
 import { FamilyCodeInsumos, GroupCodeInsumos , TypeCodeoInsumos } from "../interface/insumos-enum";
 import { insertInsumosService } from "../service/insert-insumo.service";
 import { insumosRegisterSchema } from "../schema/insumos.schema";
@@ -13,7 +13,6 @@ import {
     NotebookText as InsumoSubTitleIcon,
     Ruler as UnitMeasureIcon,
     Scale as ConverterWeightSubTitleIcon,
-    Weight as KgIcon,
     Variable as ConverterIcon,
     Group as GroupIcon,
     Vault as ProductAlternativeIcon,
@@ -125,22 +124,6 @@ export const RegisterInsumo = () => {
                         error={methods.formState.errors.tipo_conversor?.message}
                         placeholder="Selecione o conversor"
                     />
-                     {/* peso bruto */}
-                    <InputDecimal  
-                        Icon={KgIcon}  
-                        name="peso_bruto"
-                        label="Peso Bruto" 
-                        placeholder="Peso Bruto do insumo"
-                        error={methods.formState.errors.peso_bruto?.message} 
-                    />
-                    {/* peso líquido*/}
-                    <InputDecimal  
-                        Icon={KgIcon}  
-                        name="peso_liquido"
-                        label="Peso Líquido" 
-                        placeholder="Peso Líquido do insumo"
-                        error={methods.formState.errors.peso_liquido?.message} 
-                    />
                     {/* Rastro */}
                     <InputSelect
                         label="Rastro"
@@ -151,6 +134,9 @@ export const RegisterInsumo = () => {
                         placeholder="Selecione o rastro"
                     />
                 </FormSection>
+
+                {/* Sessão Pesos */}
+                <FormWeights methods={methods}/>
 
                 {/* Informações de subgrupo */}
                 <SubTitleForm title="SubGrupo e produto alternativo"  styleLine="border-t-3 border-dashed border-strong/10 mt-4" icon={GroupIcon}/>

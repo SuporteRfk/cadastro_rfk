@@ -1,4 +1,4 @@
-import { FormLayout, FormProductCategorySelector, FormProductCode, FormProductDescription, FormSection, Input, InputDecimal, InputSelect, InputWithMask, PageLayout, SubTitleForm, Toastify } from "@/components";
+import { FormLayout, FormProductCategorySelector, FormProductCode, FormProductDescription, FormSection, FormWeights, Input, InputDecimal, InputSelect, InputWithMask, PageLayout, SubTitleForm, Toastify } from "@/components";
 import { FamilyCodePACopacker, GroupCodePACopacker , TypeCodeoPACopacker } from "../interface/pa-copacker-enum";
 import { insertPACopackerService } from "../service/insert-pa-copacker.service";
 import { paCopackerRegisterSchema } from "../schema/pa-copacker.schema";
@@ -175,24 +175,7 @@ export const RegisterPACopacker = () => {
                 </FormSection>
 
                 {/* Sessão Pesos */}
-                <FormSection className="mt-2 md:mt-3 md:flex-row gap-4">
-                    {/* Peso Bruto */}
-                    <InputDecimal  
-                        Icon={KgIcon}  
-                        name="peso_bruto"
-                        label="Peso Bruto" 
-                        placeholder="Peso Bruto do insumo"
-                        error={methods.formState.errors.peso_bruto?.message} 
-                    />
-                    {/* peso líquido*/}
-                    <InputDecimal  
-                        Icon={KgIcon}  
-                        name="peso_liquido"
-                        label="Peso Líquido" 
-                        placeholder="Peso Líquido do insumo"
-                        error={methods.formState.errors.peso_liquido?.message} 
-                    />
-                </FormSection>
+                <FormWeights methods={methods}/>
                 
                 {/* Profundidade, Largura e Altura */}
                 <FormSection className="sm:flex-row gap-4 w-full">

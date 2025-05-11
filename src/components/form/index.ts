@@ -5,4 +5,5 @@ export * from "./form-product-code.components";
 export * from "./sub-title-form.components";
 export * from "./form-validity.components";
 export * from "./form-section.components";  
+export * from "./form-weights.components";
 export * from "./form-layout.components";

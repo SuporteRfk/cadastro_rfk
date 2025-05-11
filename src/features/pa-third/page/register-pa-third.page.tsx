@@ -1,4 +1,4 @@
-import { FormLayout, FormProductCategorySelector, FormProductCode, FormProductDescription, FormSection, Input, InputDecimal, InputSelect, InputWithMask, PageLayout, SubTitleForm, Toastify } from "@/components";
+import { FormLayout, FormProductCategorySelector, FormProductCode, FormProductDescription, FormSection, FormWeights, Input, InputSelect, InputWithMask, PageLayout, SubTitleForm, Toastify } from "@/components";
 import { FamilyCodePAThird, GroupCodePAThird , TypeCodePAThird } from "../interface/pa-third-enum";
 import { insertPATerceiroService } from "../service/insert-pa-third.service";
 import { paThirdRegisterSchema } from "../schema/pa-third.schema";
@@ -195,25 +195,8 @@ export const RegisterPAThird = () => {
                     />
                 </FormSection>
 
-                {/* Sessão de pesos */}
-                <FormSection className="mt-2 md:mt-3 md:flex-row gap-4">
-                    {/* peso bruto | gross weight */}
-                    <InputDecimal  
-                        Icon={KgIcon}  
-                        name="peso_bruto"
-                        label="Peso Bruto" 
-                        placeholder="Peso Bruto do fardo"
-                        error={methods.formState.errors.peso_bruto?.message} 
-                    />
-                    {/* peso líquido | net weight */}
-                    <InputDecimal  
-                        Icon={KgIcon}  
-                        name="peso_liquido"
-                        label="Peso Líquido" 
-                        placeholder="Peso Líquido do fardo"
-                        error={methods.formState.errors.peso_liquido?.message} 
-                    />
-                </FormSection>
+                {/* Sessão Pesos */}
+                <FormWeights methods={methods}/>
 
                 {/* Sessão Armazenagem */}
                 <SubTitleForm title="Armazenagem e Embalagem"  styleLine="border-t-3 border-dashed border-strong/10 mt-4" icon={StorageIcon}/>

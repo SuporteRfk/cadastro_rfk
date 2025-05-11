@@ -1,4 +1,4 @@
-import { FormLayout, FormProductCategorySelector, FormProductCode, FormProductPackagingInfo, FormProductDescription, FormValidity, PageLayout, SubTitleForm, Toastify } from "@/components";
+import { FormLayout, FormProductCategorySelector, FormProductCode, FormProductPackagingInfo, FormProductDescription, FormValidity, PageLayout, SubTitleForm, Toastify, FormWeights } from "@/components";
 import { FamilyCodePAUnitary, GroupCodePAUnitary, TypeCodeoPAUnitary } from "../interface/pa-unitary-enum";
 import { insertPAUnitaryService } from "../service/insert-pa-unitary.service";
 import { paUnitaryRegisterSchema } from "../schema/pa-unitary.schema";
@@ -68,6 +68,13 @@ export const RegisterPAUnitary = () => {
                     group={Object.values(GroupCodePAUnitary)}
                     type={Object.values(TypeCodeoPAUnitary)}
                 />
+
+                {/* Sessão de Peso e Medidas */}
+                <SubTitleForm title="Peso e Medidas"  styleLine="border-t-3 border-dashed border-strong/10 mt-4" icon={KgIcon}/>
+                
+                {/* Sessão Pesos */}
+                <FormWeights methods={methods}/>
+
                 {/* Sessão Armazenagem */}
                 <SubTitleForm title="Armazenagem e Embalagem"  styleLine="border-t-3 border-dashed border-strong/10 mt-4" icon={StorageIcon}/>
                 <FormProductPackagingInfo methods={methods}/>
