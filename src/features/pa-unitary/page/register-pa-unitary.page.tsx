@@ -1,4 +1,4 @@
-import { FormLayout, FormProductCategorySelector, FormProductCode, FormProductPackagingInfo, FormProductDescription, FormValidity, PageLayout, SubTitleForm, Toastify, FormWeights, FormPalletizingTrackingConversion } from "@/components";
+import { FormLayout, FormProductCategorySelector, FormProductCode, FormProductPackagingInfo, FormProductDescription, FormValidity, PageLayout, SubTitleForm, Toastify, FormWeights, FormPalletizingTrackingConversion, FormProductDimensions } from "@/components";
 import { FamilyCodePAUnitary, GroupCodePAUnitary, TypeCodeoPAUnitary } from "../interface/pa-unitary-enum";
 import { insertPAUnitaryService } from "../service/insert-pa-unitary.service";
 import { paUnitaryRegisterSchema } from "../schema/pa-unitary.schema";
@@ -13,10 +13,7 @@ import {
     Weight as KgIcon,
     Landmark as TaxIcon,
     Cherry as FlavorIcon,
-    Crown as MarkIcon,
-    Move3D as DepthIcon,
-    MoveHorizontal as WidthIcon,
-    MoveVertical as HeightIcon,    
+    Crown as MarkIcon, 
     Clock as ValidityIcon,
 } from "lucide-react";
 import { useState } from "react";
@@ -76,6 +73,9 @@ export const RegisterPAUnitary = () => {
 
                 {/* Sessão Pesos */}
                 <FormWeights methods={methods}/>
+
+                {/* Sessão de dimenssões (peso, altura e largura) */}
+                <FormProductDimensions methods={methods} configSecondDimensions="formPaUnitary"/>
 
                 {/* Sessão Armazenagem */}
                 <SubTitleForm title="Armazenagem e Embalagem"  styleLine="border-t-3 border-dashed border-strong/10 mt-4" icon={StorageIcon}/>

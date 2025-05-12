@@ -51,6 +51,7 @@ export const FormPalletizingTrackingConversion = <T extends FieldValues>({mode, 
                         placeholder="Informe a paletização"
                         type="number"
                         icon={PalletIcon}
+                        readOnly={mode === 'viewing' || mode === 'reviewing'}
                     />
                     {/* lastro */}
                     <Input    
@@ -61,6 +62,7 @@ export const FormPalletizingTrackingConversion = <T extends FieldValues>({mode, 
                         placeholder="Informe o lastro"
                         type="number"
                         icon={BallastIcon}
+                        readOnly={mode === 'viewing' || mode === 'reviewing'}
                     />
                 </>
            )}

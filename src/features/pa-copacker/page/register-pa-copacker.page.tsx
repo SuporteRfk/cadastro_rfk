@@ -1,4 +1,4 @@
-import { FormLayout, FormProductCategorySelector, FormProductCode, FormPalletizingTrackingConversion, FormProductDescription, FormSection, FormWeights, Input, InputDecimal, InputWithMask, PageLayout, SubTitleForm, Toastify } from "@/components";
+import { FormLayout, FormProductCategorySelector, FormProductCode, FormPalletizingTrackingConversion, FormProductDescription, FormSection, FormWeights, Input, InputWithMask, PageLayout, SubTitleForm, Toastify, FormProductDimensions } from "@/components";
 import { FamilyCodePACopacker, GroupCodePACopacker , TypeCodeoPACopacker } from "../interface/pa-copacker-enum";
 import { insertPACopackerService } from "../service/insert-pa-copacker.service";
 import { paCopackerRegisterSchema } from "../schema/pa-copacker.schema";
@@ -15,9 +15,6 @@ import {
     Landmark as TaxIcon,
     Cherry as FlavorIcon,
     Crown as MarkIcon,
-    Move3D as DepthIcon,
-    MoveHorizontal as WidthIcon,
-    MoveVertical as HeightIcon,
     Warehouse as StorageIcon,
 } from "lucide-react";
 import { FormProductPackagingInfo } from "@/components/form/form-product-packaging-info.components";
@@ -146,63 +143,9 @@ export const RegisterPACopacker = () => {
                 {/* Sessão Pesos */}
                 <FormWeights methods={methods}/>
                 
-                {/* Profundidade, Largura e Altura */}
-                <FormSection className="sm:flex-row gap-4 w-full">
-                    {/* Profundidade */}
-                    <InputDecimal  
-                        Icon={DepthIcon}  
-                        name="profundidade_fardo"
-                        label="Profundidade do fardo" 
-                        placeholder="Medida da profundidade do fardo"
-                        error={methods.formState.errors.profundidade_fardo?.message} 
-                    />
-                    {/* Largura */}
-                    <InputDecimal  
-                        Icon={WidthIcon}  
-                        name="largura_fardo"
-                        label="Largura do fardo" 
-                        placeholder="Medida da largura do fardo"
-                        error={methods.formState.errors.largura_fardo?.message} 
-                    />
-                    {/* Altura */}
-                    <InputDecimal  
-                        Icon={HeightIcon}  
-                        name="altura_fardo"
-                        label="Medida da altura do fardo" 
-                        placeholder="Peso Líquido do insumo"
-                        error={methods.formState.errors.altura_fardo?.message} 
-                    />
-                </FormSection>
-                
-                {/* Profundidade, Largura e Altura OUTRO*/}
-                <FormSection className="sm:flex-row gap-4 w-full">
-                    {/* Profundidade */}
-                    <InputDecimal  
-                        Icon={DepthIcon}  
-                        name="profundidade_outro"
-                        label="Profundidade (outro)" 
-                        placeholder="Medida da profundidade do fardo"
-                        error={methods.formState.errors.profundidade_outro?.message} 
-                    />
-                    {/* Largura */}
-                    <InputDecimal  
-                        Icon={WidthIcon}  
-                        name="largura_outro"
-                        label="Largura (outro)" 
-                        placeholder="Medida da largura do fardo"
-                        error={methods.formState.errors.largura_outro?.message}  
-                    />
-                    {/* Altura */}
-                    <InputDecimal  
-                        Icon={HeightIcon}  
-                        name="altura_outro"
-                        label="Altura (outro)" 
-                        placeholder="Medida da altura do fardo"
-                        error={methods.formState.errors.altura_outro?.message} 
-                    />
-                </FormSection>
-
-                
+                {/* Sessão de dimenssões (peso, altura e largura) */}
+                <FormProductDimensions methods={methods} configSecondDimensions="formCopacker"/>
+                               
                 {/* Sessão Armazenagem */}
                 <SubTitleForm title="Armazenagem e Embalagem"  styleLine="border-t-3 border-dashed border-strong/10 mt-4" icon={StorageIcon}/>
                 <FormProductPackagingInfo methods={methods}/>
