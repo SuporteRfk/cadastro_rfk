@@ -1,20 +1,15 @@
-import { FormLayout, PageLayout, FormSection, FormProductPackagingInfo, Input, InputWithMask, Toastify, SubTitleForm, FormProductCategorySelector, FormProductDescription, FormProductCode, FormValidity, FormWeights, FormPalletizingTrackingConversion, FormProductDimensions } from "@/components";
+import { FormLayout, PageLayout, FormProductPackagingInfo, Toastify, SubTitleForm, FormProductCategorySelector, FormProductDescription, FormProductCode, FormValidity, FormWeights, FormPalletizingTrackingConversion, FormProductDimensions, FormProductAttributes } from "@/components";
 import { FamilyCodePABurden, GroupCodePABurden, TypeCodeoPABurden } from "../interface/pa-burden-enum";
 import { insertPABurdenService } from "../service/insert-pa-burden.service";
 import { paBurdenRegisterSchema } from "../schema/pa-burden.schema";
 import { IPABurdenRegister } from "../interface/pa-burden";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { TbNumber as NCMIcon} from "react-icons/tb";
 import { useForm } from "react-hook-form";
 import { handleApiError } from "@/utils";
 import { useState } from "react";
 import {
     Boxes as BurdenIcon,
-    Ruler as UnitMeasureIcon,
     Weight as KgIcon,
-    Landmark as TaxIcon,
-    Cherry as FlavorIcon,
-    Crown as MarkIcon,
     Warehouse as StorageIcon,
     Clock as ValidityIcon,
 } from "lucide-react";
@@ -65,72 +60,9 @@ export const RegisterPABurden = () => {
                     type={Object.values(TypeCodeoPABurden)}
                     methods={methods}
                 />
-
-                {/* Sessão de Medida, Marcar e Sabor */}
-                <FormSection className="mt-2 md:mt-3 md:flex-row gap-4">
-                    {/* Unidade de medida */}
-                    <Input    
-                        label="Unidade de Medida" 
-                        name="unidade_medida"
-                        register={methods.register("unidade_medida")}
-                        error={methods.formState.errors.unidade_medida?.message} 
-                        placeholder="Unidade de medida por extenso. Ex: Unidade(UN)"
-                        type="text"
-                        icon={UnitMeasureIcon}
-                    />
-                    {/* Sabor */}
-                    <Input    
-                        label="Sabor do PA Copacker" 
-                        name="sabor"
-                        register={methods.register("sabor")}
-                        error={methods.formState.errors.sabor?.message} 
-                        placeholder="Por favor, insira o sabor"
-                        type="text"
-                        icon={FlavorIcon}
-                    />
-                    {/* Marca*/}
-                    <Input    
-                        label="Marca do PA Copacker" 
-                        name="marca"
-                        register={methods.register("marca")}
-                        error={methods.formState.errors.marca?.message} 
-                        placeholder="Por favor, insira a marca"
-                        type="text"
-                        icon={MarkIcon}
-                    />
-                </FormSection>
-
-                 {/* Sessão de códigos tributários e código do saib */}
-                <FormSection className="mt-2 md:mt-3 md:flex-row gap-4">
-                    {/* NCM */}
-                    <InputWithMask   
-                        label="NCM" 
-                        name="ncm"
-                        maskType="custom"
-                        error={methods.formState.errors.ncm?.message} 
-                        Icon={NCMIcon}
-                        customMask="9999.99.99"   
-                    />
-                    {/* CEST */}
-                    <InputWithMask   
-                        label="CEST" 
-                        name="cest"
-                        maskType="custom"
-                        error={methods.formState.errors.cest?.message} 
-                        Icon={NCMIcon}
-                        customMask="99.999.99"   
-                    />
-                    {/* Grupo Tributário */}
-                    <Input    
-                        label="Grupo Tributário" 
-                        name="grupo_tributario"
-                        register={methods.register("grupo_tributario")}
-                        error={methods.formState.errors.grupo_tributario?.message} 
-                        placeholder="Insira o grupo tributário do produto"
-                        type="number"
-                        icon={TaxIcon}
-                    />
-                </FormSection>
+           
+                {/* Sessão de atributos (unidades de medida, ncm, sabor, marca, grupo tributário e cest) */}
+                <FormProductAttributes methods={methods} showFlavorAndMark showCestAndTax labelMarkAndFlavor="Fardo"/>
 
                 {/* Sessão de Peso e Medidas */}
                 <SubTitleForm title="Peso e Medidas"  styleLine="border-t-3 border-dashed border-strong/10 mt-4" icon={KgIcon}/>

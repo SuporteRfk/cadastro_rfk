@@ -1,4 +1,4 @@
-import { FormLayout, FormProductCategorySelector, FormProductDescription, FormSection, Input, InputWithMask, PageLayout, SubTitleForm, Toastify } from "@/components";
+import { FormLayout, FormProductAttributes, FormProductCategorySelector, FormProductDescription, PageLayout, SubTitleForm, Toastify } from "@/components";
 import { insertIndirectProductsService } from "../service/insert-indirect-products.service";
 import { indirectProductsRegisterSchema } from "../schema/indirect-products.schema";
 import { IIndirectProductsRegister } from "../interface/indirect-products";
@@ -18,12 +18,7 @@ import {
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { handleApiError } from "@/utils";
-import { 
-    TbNumber as NCMIcon
-} from "react-icons/tb";
-import {
-    Ruler as UnidadeMedidaIcon,
-} from "lucide-react";
+
 
 export const RegisterIndirectProducts = () => {
     const [loading, setLoading] = useState(false);
@@ -102,27 +97,9 @@ export const RegisterIndirectProducts = () => {
                     methods={methods}
                 />
 
-                <FormSection className="md:flex-row gap-1 md:gap-4 md:mt-3">
-                     {/* Unidade de medida | unit of measure */}
-                     <Input    
-                        label="Unidade de Medida" 
-                        name="unidade_medida"
-                        register={methods.register("unidade_medida")}
-                        error={methods.formState.errors.unidade_medida?.message} 
-                        placeholder="Unidade de medida por extenso. Ex: Unidade(UN)"
-                        type="text"
-                        icon={UnidadeMedidaIcon}
-                    />
-                    {/* NCM | NCM */}
-                    <InputWithMask   
-                        label="NCM" 
-                        name="ncm"
-                        maskType="custom"
-                        error={methods.formState.errors.ncm?.message} 
-                        Icon={NCMIcon}
-                        customMask="9999.99.99"
-                    />
-                </FormSection>
+                {/* Sessão de atributos (unidades de medida e ncm) */}
+                <FormProductAttributes methods={methods}/>
+
             </FormLayout>
         </PageLayout>
     );

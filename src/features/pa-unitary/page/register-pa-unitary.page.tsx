@@ -1,4 +1,4 @@
-import { FormLayout, FormProductCategorySelector, FormProductCode, FormProductPackagingInfo, FormProductDescription, FormValidity, PageLayout, SubTitleForm, Toastify, FormWeights, FormPalletizingTrackingConversion, FormProductDimensions } from "@/components";
+import { FormLayout, FormProductCategorySelector, FormProductCode, FormProductPackagingInfo, FormProductDescription, FormValidity, PageLayout, SubTitleForm, Toastify, FormWeights, FormPalletizingTrackingConversion, FormProductDimensions, FormProductAttributes } from "@/components";
 import { FamilyCodePAUnitary, GroupCodePAUnitary, TypeCodeoPAUnitary } from "../interface/pa-unitary-enum";
 import { insertPAUnitaryService } from "../service/insert-pa-unitary.service";
 import { paUnitaryRegisterSchema } from "../schema/pa-unitary.schema";
@@ -9,11 +9,7 @@ import { handleApiError } from "@/utils";
 import {
     Box as UnitaryIcon,
     Warehouse as StorageIcon,
-    Ruler as UnitMeasureIcon,
     Weight as KgIcon,
-    Landmark as TaxIcon,
-    Cherry as FlavorIcon,
-    Crown as MarkIcon, 
     Clock as ValidityIcon,
 } from "lucide-react";
 import { useState } from "react";
@@ -64,6 +60,9 @@ export const RegisterPAUnitary = () => {
                     group={Object.values(GroupCodePAUnitary)}
                     type={Object.values(TypeCodeoPAUnitary)}
                 />
+                
+                {/* Sessão de atributos (unidades de medida, ncm, sabor, marca, grupo tributário e cest) */}
+                <FormProductAttributes methods={methods} showFlavorAndMark showCestAndTax labelMarkAndFlavor="Unitário"/>
 
                 {/* Sessão de Peso e Medidas */}
                 <SubTitleForm title="Peso e Medidas"  styleLine="border-t-3 border-dashed border-strong/10 mt-4" icon={KgIcon}/>
@@ -84,8 +83,7 @@ export const RegisterPAUnitary = () => {
                 {/* Sessão Validade */}
                 <SubTitleForm title="Validade e Lote"  styleLine="border-t-3 border-dashed border-strong/10 mt-4" icon={ValidityIcon}/>
                 <FormValidity methods={methods}/>
-            
-            
+                     
             </FormLayout>
         </PageLayout>
     );

@@ -1,10 +1,9 @@
-import { FormLayout, FormSection, Input, InputSelect, PageLayout, SubTitleForm, Toastify, InputWithMask, FormPalletizingTrackingConversion, InputDecimal, FormProductCategorySelector, FormProductDescription, FormProductCode, FormWeights } from "@/components";
+import { FormLayout, FormSection, Input, InputSelect, PageLayout, SubTitleForm, Toastify, FormPalletizingTrackingConversion, InputDecimal, FormProductCategorySelector, FormProductDescription, FormProductCode, FormWeights, FormProductAttributes } from "@/components";
 import { FamilyCodeInsumos, GroupCodeInsumos , TypeCodeoInsumos } from "../interface/insumos-enum";
 import { insertInsumosService } from "../service/insert-insumo.service";
 import { insumosRegisterSchema } from "../schema/insumos.schema";
 import { IInsumoRegister } from "../interface/insumos";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { TbNumber as NCMIcon} from "react-icons/tb";
 import { ConverterType } from "@/interfaces";
 import { useForm } from "react-hook-form";
 import { handleApiError } from "@/utils";
@@ -12,7 +11,6 @@ import { useState } from "react";
 import {
     Droplet as InsumoIcon,
     NotebookText as InsumoSubTitleIcon,
-    Ruler as UnitMeasureIcon,
     Scale as ConverterWeightSubTitleIcon,
     Group as GroupIcon,
     Vault as ProductAlternativeIcon,
@@ -67,46 +65,16 @@ export const RegisterInsumo = () => {
                     type={Object.values(TypeCodeoInsumos)}
                     methods={methods}
                 />
-                
-                 {/* Sessão da unidades de medida e NCM*/}
-                 <FormSection className="md:flex-row gap-1 md:gap-4 md:mt-3">
-                    {/* Unidade de medida*/}
-                    <Input    
-                        label="Unidade de Medida" 
-                        name="unidade_medida"
-                        register={methods.register("unidade_medida")}
-                        error={methods.formState.errors.unidade_medida?.message} 
-                        placeholder="Unidade de medida por extenso. Ex: Unidade(UN)"
-                        type="text"
-                        icon={UnitMeasureIcon}
-                    />
-                    {/* segunda unidade de medida*/}
-                    <Input    
-                        label="Segunda unidade de Medida" 
-                        name="segunda_unidade_medida"
-                        register={methods.register("segunda_unidade_medida")}
-                        error={methods.formState.errors.segunda_unidade_medida?.message} 
-                        placeholder="Unidade de medida por extenso. Ex: Unidade(UN)"
-                        type="text"
-                        icon={UnitMeasureIcon}
-                    />
-                    {/* NCM */}
-                    <InputWithMask
-                        label="NCM" 
-                        name="ncm"
-                        maskType="custom"
-                        error={methods.formState.errors.ncm?.message} 
-                        Icon={NCMIcon}
-                        customMask="9999.99.99"
-                    />
-                 </FormSection>
+                {/* Sessão de atributos (unidades de medida e ncm) */}
+                <FormProductAttributes methods={methods} showSecondUnitMeasure/>
                  
                 {/* Sessão do código saib */}
                 <FormProductCode methods={methods} showOnlyCodeSaib/>
 
-                {/* Informações de conversores e peso */}
+                {/* Titulo - Conversores e peso */}
                 <SubTitleForm title="Conversores e Peso"  styleLine="border-t-3 border-dashed border-strong/10 mt-4" icon={ConverterWeightSubTitleIcon}/>
-                 {/* Sessão dos conversores e rastro */}
+                
+                {/* Sessão dos conversores e rastro */}
                 <FormPalletizingTrackingConversion methods={methods} showConverters/>
 
                 {/* Sessão Pesos */}

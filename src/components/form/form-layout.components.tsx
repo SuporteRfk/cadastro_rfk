@@ -53,7 +53,7 @@ export const FormLayout = <T extends FieldValues> ({methods, onSubmit, children,
     
 
     return(
-        <ScrollArea className="h-[90vh] w-full min-w-0 max-w-[1920px] mx-auto ">
+        <ScrollArea className="h-[98vh] w-full min-w-0 max-w-[1920px] mx-auto rounded-lg">
             {/* Titulo do Formulário */}
             <h1 className="p-3 text-xl text-text-strong font-bold mt-3 flex gap-2 items-center">
                 {<IconForm size={20}/>}
