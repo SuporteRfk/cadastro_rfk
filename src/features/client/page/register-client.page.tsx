@@ -1,7 +1,7 @@
 import { ClientPFOrPJ, ClientTpj ,ClientType } from "../interface/client-enum";
 import { IClientRegisterForm } from "../interface/client";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { FormLayout, PageLayout, Toastify } from "@/components";
+import { FormLayout, FormTelephone, PageLayout, SubTitleForm, Toastify } from "@/components";
 import {Users as UsersIcon} from "lucide-react";
 import { useForm } from "react-hook-form";
 import { clientRegisterFormSchema } from "../schema/client.schema";
@@ -41,7 +41,10 @@ export const RegisterClientPage = () => {
                 loading={loading}
                 onSubmit={onSubmit}
             >
-         s
+            {/* SubTitulo Dados do cliente*/}
+            <SubTitleForm title="Dados do Cliente"  styleLine="border-t-3 border-dashed border-strong/10 mt-4" icon={UsersIcon}/>
+            <FormTelephone methods={methods}/>
+
             </FormLayout>
         </PageLayout>
     );

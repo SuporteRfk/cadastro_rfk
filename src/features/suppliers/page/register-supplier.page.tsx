@@ -1,4 +1,4 @@
-import { FormLayout, PageLayout, Toastify } from "@/components";
+import { FormLayout, FormTelephone, PageLayout, SubTitleForm, Toastify } from "@/components";
 import { insertSupplierService } from "../service/insert-supplier.service";
 import { SupplierTpj, SupplierType } from "../interface/supplier-enum";
 import { supplierRegisterSchema } from "../schema/supplier.schema";
@@ -39,8 +39,10 @@ export const RegisterSupplier = () => {
                 loading={loading}
                 onSubmit={onSubmit}
                 methods={methods}
-            >
-                aoba
+            >   
+               {/* SubTitulo Dados do fornecedor */}
+               <SubTitleForm title="Dados do Fornecedor"  styleLine="border-t-3 border-dashed border-strong/10 mt-4" icon={SuppliersIcon}/>
+               <FormTelephone methods={methods}/>
             </FormLayout>
         </PageLayout>
     );

@@ -29,7 +29,7 @@ Isso garante que os usuários acessem com a mesma senha de rede, sem criar conta
 | **UX/UI** | Lucide React, React Icons, Framer Motion | X |
 | **Roteamento** | React Router DOM | X |
 | **Formulários** | react-hook-form + yup + @hookform/resolvers | X |
-| **Input Masks** | react-input-mask | [documentação](https://www.npmjs.com/package/react-input-mask)|
+| **Input Masks** | remask | [documentação](https://www.npmjs.com/package/remask)|
 | **Requisições** | Axios | X |
 | **Banco de Dados e Auth** | Supabase | X |
 | **Hooks Utilitários** | react-use (`useClickAway`) | [documentação](https://github.com/streamich/react-use/blob/HEAD/docs/useClickAway.md)|
