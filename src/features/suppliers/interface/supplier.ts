@@ -31,8 +31,5 @@ export interface ISupplier {
     produtor_rural: OptionYesNo;
 };
 
-export interface ISupplierRegisterForm extends Omit<ISupplier, 'id'> {
-    documentType: "cpf" | "cnpj";
-}
+export interface ISupplierRegister extends Omit<ISupplier, 'id'> {}
 
-export interface ISupplierRegisterSupabase extends Omit<ISupplier, 'id'>{}
