@@ -17,9 +17,7 @@ interface FormTelephoneProps<T extends FieldValues> {
 }
 
 export const FormTelephone = <T extends FieldValues>({mode, methods}:FormTelephoneProps<T>) => {
-    
-   
-     
+         
     return(
         <FormSection className="mt-2 lg:mt-3 lg:flex-row gap-4">
             {/* Telefone */}
