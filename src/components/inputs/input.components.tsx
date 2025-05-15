@@ -14,9 +14,10 @@ interface InputProps {
     valueInitial?: string;
     maxCaractere?: number;
     readOnly?: boolean;
+    widthContainer?: string;
   }
 
-export const Input = ({name,label,placeholder,type = "text",register,error,icon: Icon,valueInitial = "", maxCaractere,readOnly = false,}:InputProps) => {
+export const Input = ({name,label,placeholder,type = "text",register,error,icon: Icon,valueInitial = "", maxCaractere,readOnly = false,widthContainer="w-full"}:InputProps) => {
     const [value, setValue] = useState(valueInitial);
     
     // Atualiza o state interno quando muda o valor inicial (ex: reset de formulário)
@@ -25,7 +26,7 @@ export const Input = ({name,label,placeholder,type = "text",register,error,icon:
     }, [valueInitial]);  
 
     return(
-        <div className="w-full flex flex-col gap-1 relative my-1.5">
+        <div className={`${widthContainer} flex flex-col gap-1 relative my-1.5`}>
             {label && 
                 <label 
                     htmlFor={name} 
@@ -42,7 +43,7 @@ export const Input = ({name,label,placeholder,type = "text",register,error,icon:
                     {...register}
                     type={type}
                     name={name}
-                    defaultValue={valueInitial}
+                    defaultValue={value}
                     onChange={(e) => setValue(e.target.value)}
                     placeholder={placeholder}
                     maxLength={maxCaractere}

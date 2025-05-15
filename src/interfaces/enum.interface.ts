@@ -29,10 +29,15 @@ export enum ValidityPeriod {
     ANO="A - ANO"
 };
 
-
 export enum ConverterType{
     DIVISOR="D - DIVISOR",
     MULTIPLICADOR="M - MULTIPLICADOR"
 };
 
 export type FormStateType = 'editing' | 'viewing' | 'reviewing';
+
+export enum  PfOrPj {
+   FISICO = "F - FISICA",
+   JURIDICO = "J - JURIDICA"
+};
+  

@@ -1,11 +1,11 @@
 
 import { SupplierTpj, SupplierType } from '../interface/supplier-enum';
-import { ISupplierRegister } from '../interface/supplier';
-import { OptionYesNo } from '@/interfaces';
+import { ISupplierRegisterForm } from '../interface/supplier';
+import { OptionYesNo, PfOrPj } from '@/interfaces';
 import * as yup from 'yup';
 
 
-export const supplierRegisterSchema:yup.ObjectSchema<ISupplierRegister> = yup.object<ISupplierRegister>().shape({
+export const supplierRegisterSchema:yup.ObjectSchema<ISupplierRegisterForm> = yup.object<ISupplierRegisterForm>().shape({
     criado_em: yup.string()
         .required("Data é obrigatório"),
     email: yup.string()
@@ -18,13 +18,13 @@ export const supplierRegisterSchema:yup.ObjectSchema<ISupplierRegister> = yup.ob
         .required("Por favor informe o número do whatsapp com o DDD"),
     nome_solicitante: yup.string()
         .required("Por favor informe seu nome"),
-    documentType: yup.string()
-        .oneOf(["cpf", "cnpj"])
-        .required("Por favor selecione o tipo de documento"),
+    fisico_juridico: yup.string()
+        .oneOf(Object.values(PfOrPj))
+        .required("Por favor selecione o tipo de cadastro"),
     cnpj_cpf: yup.string()
         .transform((value) => value.replace(/\D/g, ""))
         .required("Por favor informe o CNPJ/CPF"),
-    tipo_fornecedor: yup.string()
+    tipo: yup.string()
         .oneOf(Object.values(SupplierType))
         .required("Por favor selecione o tipo de fornecedor"),
     produtor_rural: yup.string()
@@ -111,6 +111,8 @@ export const supplierRegisterSchema:yup.ObjectSchema<ISupplierRegister> = yup.ob
         }),
     endereco: yup.string()
         .required("Por favor informe o endereço"),
+    numero: yup.string()
+        .required("Informe o número"),
     bairro: yup.string()
         .required("Por favor informe o bairro"),
     complemento: yup.string()

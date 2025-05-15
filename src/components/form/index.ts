@@ -1,4 +1,5 @@
 export * from "./form-palletizing-tracking-conversion.components";
+export * from "./form-registration-identification.components";
 export * from "./form-product-category-selector.components";
 export * from "./form-product-packaging-info.components";
 export * from "./form-product-description.componentes";
@@ -10,4 +11,5 @@ export * from "./form-telephone.components";
 export * from "./form-validity.components";
 export * from "./form-section.components";  
 export * from "./form-weights.components";
+export * from "./form-address.components";
 export * from "./form-layout.components";

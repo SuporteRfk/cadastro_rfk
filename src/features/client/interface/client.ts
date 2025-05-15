@@ -1,5 +1,5 @@
-import { OptionYesNo } from "@/interfaces";
-import { ClientPFOrPJ, ClientType, ClientTpj } from "./client-enum";
+import { OptionYesNo, PfOrPj } from "@/interfaces";
+import { ClientType, ClientTpj } from "./client-enum";
 
 export interface IClient {
     id: number;
@@ -8,12 +8,13 @@ export interface IClient {
     nome_solicitante: string;
     email: string;
     tipo: ClientType;
-    fisica_juridica: ClientPFOrPJ;
+    fisica_juridica: PfOrPj;
     cnpj_cpf: string;
-    nome_razao_social: string;
+    razao_social: string;
     nome_fantasia?:string | null;
     cnae?: string | null;
     endereco: string;
+    numero: string;
     bairro: string;
     complemento?:string | null;
     estado: string;
@@ -27,6 +28,7 @@ export interface IClient {
     inscricao_municipal?: string | null; 
     email_cliente?:string | null;
     endereco_cobranca?: string | null;
+    numero_cobranca?:string | null;
     bairro_cobranca?: string | null;
     complemento_cobranca?:string | null;
     estado_cobranca?: string | null;

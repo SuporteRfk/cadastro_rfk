@@ -1,9 +1,9 @@
 import { supabaseApi } from "@/services/supabase/connection-supabase-api";
-import { ISupplierRegister } from "../interface/supplier";
+import { ISupplierRegisterSupabase } from "../interface/supplier";
 
 
 //Cadastrar Fornecedores 
-export const insertSupplierService = async(data:ISupplierRegister):Promise<void> => {
+export const insertSupplierService = async(data:ISupplierRegisterSupabase):Promise<void> => {
     const {error} = await supabaseApi
         .from("cad_fornecedores")
         .insert(data)

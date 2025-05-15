@@ -1,5 +1,5 @@
 import { SupplierType, SupplierTpj } from "./supplier-enum";
-import { OptionYesNo } from "@/interfaces";
+import { OptionYesNo, PfOrPj } from "@/interfaces";
 
 export interface ISupplier {
     id: number;
@@ -7,7 +7,7 @@ export interface ISupplier {
     email: string;
     nome_solicitante: string;
     whatsapp: string;
-    tipo_fornecedor: SupplierType;
+    tipo: SupplierType;
     cnpj_cpf: string;
     razao_social: string;
     nome_fantasia?: string | null;
@@ -25,11 +25,16 @@ export interface ISupplier {
     cep: string;
     endereco: string;
     bairro: string;
+    numero: string;
     complemento?: string | null;
     municipio: string;
     estado: string;
     produtor_rural: OptionYesNo;
 };
 
-export interface ISupplierRegister extends Omit<ISupplier, 'id'> {}
+export interface ISupplierRegisterForm extends Omit<ISupplier, 'id'> {
+    fisico_juridico: PfOrPj;
+}
+
+export interface ISupplierRegisterSupabase extends Omit<ISupplier, 'id'> {}
 

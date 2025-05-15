@@ -13,6 +13,7 @@ interface InputMaskProps {
     readOnly?: boolean;
     register?: UseFormRegisterReturn;
     onBlur?: () => void;
+    widthContainer?: string;
   }
 
 
@@ -21,7 +22,7 @@ interface InputMaskProps {
  * Integra com React Hook Form usando useFormContext.
  * Suporta máscaras para cpf, cnpj, telefone, whatsapp e customizadas.
  */
-export const InputWithMask = ({ name, label, maskType = "custom", customMask = "", Icon, error, readOnly = false ,onBlur}:InputMaskProps) => {
+export const InputWithMask = ({ name, label, maskType = "custom", customMask = "", Icon, error, readOnly = false ,onBlur, widthContainer="w-full"}:InputMaskProps) => {
       
       const { setValue, watch } = useFormContext();
   
@@ -58,7 +59,7 @@ export const InputWithMask = ({ name, label, maskType = "custom", customMask = "
    
 
       return (
-        <div className="w-full flex flex-col gap-1 relative my-1.5">
+        <div className={`${widthContainer} flex flex-col gap-1 relative my-1.5`}>
           {label && (
             <label htmlFor={name} className="text-sm font-medium pl-0.5 text-text-medium">
               {label}

@@ -1,6 +1,6 @@
-import { ClientPFOrPJ, ClientTpj, ClientType } from '../interface/client-enum';
+import { ClientTpj, ClientType } from '../interface/client-enum';
 import { IClientRegisterForm } from '../interface/client';
-import { OptionYesNo } from '@/interfaces';
+import { OptionYesNo, PfOrPj } from '@/interfaces';
 import * as yup from 'yup';
 
 export const clientRegisterFormSchema:yup.ObjectSchema<IClientRegisterForm> = yup.object<IClientRegisterForm>().shape({
@@ -20,12 +20,12 @@ export const clientRegisterFormSchema:yup.ObjectSchema<IClientRegisterForm> = yu
         .oneOf(Object.values(ClientType))
         .required("Por favor selecione o tipo de cliente"),
     fisica_juridica: yup.string()
-        .oneOf(Object.values(ClientPFOrPJ))
+        .oneOf(Object.values(PfOrPj))
         .required("Selecione o tipo de cadastro"),
     cnpj_cpf: yup.string()
         .transform((value) => value.replace(/\D/g, ""))
         .required("Por favor informe o CNPJ/CPF"),
-    nome_razao_social: yup.string()
+    razao_social: yup.string()
         .required("Por favor informe a razão social"),
     nome_fantasia: yup.string()
         .transform((value, originalValue) =>
@@ -106,7 +106,7 @@ export const clientRegisterFormSchema:yup.ObjectSchema<IClientRegisterForm> = yu
         .notRequired(),
     destaca_ie: yup.mixed<OptionYesNo>()
         .when("fisica_juridica", ([fisica_juridica], schema) =>{
-            if(fisica_juridica === ClientPFOrPJ.JURIDICO){
+            if(fisica_juridica === PfOrPj.JURIDICO){
                 return schema
                     .oneOf(Object.values(OptionYesNo))
                     .required("Por favor selecione a opção");
@@ -116,6 +116,8 @@ export const clientRegisterFormSchema:yup.ObjectSchema<IClientRegisterForm> = yu
         }),
     endereco: yup.string()
         .required("Por favor informe o endereço"),
+    numero: yup.string()
+        .required("Informe o número"),
     bairro: yup.string()
         .required("Por favor informe o bairro"),
     complemento: yup.string()
@@ -125,22 +127,28 @@ export const clientRegisterFormSchema:yup.ObjectSchema<IClientRegisterForm> = yu
         .nullable()
         .notRequired(),
     estado: yup.string()
-        .required("Por favor selecione o estado"),
+        .required("Por favor, informe o estado"),
     municipio: yup.string()
-        .required("Por favor selecione o município"),
+        .required("Por favor, informe o município"),
     cep: yup.string()
-        .required("Por favor informe o CEP"),
+        .required("Por favor, informe o CEP"),
     mesmo_endereco_cobranca: yup.string()
         .oneOf(["sim", "não"])
         .required("Por favor selecione a opção"),
     endereco_cobranca: yup.string()
         .when('mesmo_endereco_cobranca', ([value]) => {
-        return value === "nao" 
+        return value === "não" 
             ? yup.string().required("Por favor informe o endereço de cobrança")
             : yup.string().nullable().notRequired()
     }),
+    numero_cobranca: yup.string()
+        .when('mesmo_endereco_cobranca', ([value]) => {
+        return value === "não" 
+            ? yup.string().required("Informe o número")
+            : yup.string().nullable().notRequired()
+    }),
     bairro_cobranca: yup.string().when('mesmo_endereco_cobranca', ([value]) => {
-        return value === "nao" 
+        return value === "não" 
             ? yup.string().required("Por favor informe o bairro de cobrança")
             : yup.string().nullable().notRequired()
     }),
@@ -151,17 +159,17 @@ export const clientRegisterFormSchema:yup.ObjectSchema<IClientRegisterForm> = yu
         .nullable()
         .notRequired(),
     estado_cobranca: yup.string().when('mesmo_endereco_cobranca', ([value]) => {
-        return value === "nao" 
+        return value === "não" 
         ? yup.string().required("Por favor informe o estado de cobrança")
         : yup.string().nullable().notRequired()
     }),
     municipio_cobranca: yup.string().when('mesmo_endereco_cobranca', ([value]) => {
-        return value === "nao" 
+        return value === "não" 
         ? yup.string().required("Por favor informe o município de cobrança")
         : yup.string().nullable().notRequired()
     }),
     cep_cobranca: yup.string().when('mesmo_endereco_cobranca', ([value] ) => {
-        return value === "nao" 
+        return value === "não" 
         ? yup.string().required("Por favor informe o CEP")
         : yup.string().nullable().notRequired()
     }),    
