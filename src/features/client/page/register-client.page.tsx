@@ -1,4 +1,4 @@
-import { FormAddress, FormLayout, FormRegistrationIdentification, FormTelephone, InputRadio, PageLayout, SubTitleForm, Toastify } from "@/components";
+import { FormAddress, FormBusinessNames, FormLayout, FormRegistrationIdentification, FormTaxIdentification, FormTelephone, InputRadio, PageLayout, SubTitleForm, Toastify } from "@/components";
 import { ClientTpj ,ClientType } from "../interface/client-enum";
 import { IClientRegisterForm } from "../interface/client";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -12,6 +12,8 @@ import {
     MapPinned as ZipCodeIcon,
     LocateFixed as BillingAddressIcon
 } from "lucide-react";
+import { PfOrPj } from "@/interfaces";
+
 
 
 export const RegisterClientPage = () => {
@@ -39,6 +41,11 @@ export const RegisterClientPage = () => {
 
 
     const isBillingAddressValue = methods.watch("mesmo_endereco_cobranca");
+    
+    const handleIsPJ = ():boolean => {
+        const fisicaJuridicaValue = methods.watch("fisica_juridica");
+        return fisicaJuridicaValue === PfOrPj.JURIDICO;
+    };
 
     return(
         <PageLayout>
@@ -58,10 +65,20 @@ export const RegisterClientPage = () => {
                     setLoading={setLoading} 
                     optionsForType={Object.values(ClientType)}/>
 
+                {/* Sessão de razão social e nome fantasia */}
+                <FormBusinessNames methods={methods}/>
+
+                {/* Sessão de identificação jurifica (CNAE, I.E, OPTANTE e Email do cliente) */}
+                <FormTaxIdentification 
+                    methods={methods} 
+                    optionsTpj={Object.values(ClientTpj)}
+                    typeForm="client"
+                    isPj={handleIsPJ()}
+                />
+                
                 {/* Sessão telefones */}
                 <FormTelephone methods={methods}/>
                 
-
                 {/* SubTitulo Endereço */}
                 <div className="flex flex-col sm:flex-row justify-between border-t-3 border-dashed border-strong/10 mt-4">
                     <SubTitleForm title="Endereço" icon={ZipCodeIcon}/>

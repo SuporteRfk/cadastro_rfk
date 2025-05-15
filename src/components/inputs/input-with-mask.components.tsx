@@ -31,7 +31,7 @@ export const InputWithMask = ({ name, label, maskType = "custom", customMask = "
       const masks: Record<string, string | string[]> = {
         whatsapp: ["99", "+55(99)9", "+55(99) 9 9999-9999"],
         cpf: "999.999.999-99",
-        dynamic: ["99", "+55(99)9", "+55(99) 9 9999-9999" , "(99) 9999-9999"],
+        dynamic: ["99", "(99)9", "(99) 9999-9999", "+55(99) 9 9999-9999"],
         phone: "(99) 9999-9999",
         cnpj: "99.999.999/9999-99",
         custom: customMask,

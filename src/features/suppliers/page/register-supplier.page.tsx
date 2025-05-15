@@ -1,4 +1,4 @@
-import { FormLayout, FormRegistrationIdentification, FormTelephone, PageLayout, SubTitleForm, Toastify } from "@/components";
+import { FormBusinessNames, FormLayout, FormRegistrationIdentification, FormTaxIdentification, FormTelephone, PageLayout, SubTitleForm, Toastify } from "@/components";
 import { insertSupplierService } from "../service/insert-supplier.service";
 import { SupplierTpj, SupplierType } from "../interface/supplier-enum";
 import { supplierRegisterSchema } from "../schema/supplier.schema";
@@ -56,13 +56,23 @@ export const RegisterSupplier = () => {
                     optionsForType={Object.values(SupplierType)}
                 />
                
-               {/* Sessão telefones */}
-               <FormTelephone methods={methods}/>
-               
-               {/* SubTitulo Endereço */}
-               <SubTitleForm title="Endereço"  styleLine="border-t-3 border-dashed border-strong/10 mt-4" icon={ZipCodeIcon}/>
-               {/* Sessão endereço */}
-               <FormAddress methods={methods} setLoading={setLoading} />
+                {/* Sessão de razão social e nome fantasia */}
+                <FormBusinessNames methods={methods}/>
+
+                {/* Sessão de identificação jurifica (CNAE, I.E, OPTANTE e Email do cliente) */}
+                <FormTaxIdentification 
+                    methods={methods} 
+                    optionsTpj={Object.values(SupplierTpj)}
+                    typeForm="supplier"
+                />
+                
+                {/* Sessão telefones */}
+                <FormTelephone methods={methods}/>
+                
+                {/* SubTitulo Endereço */}
+                <SubTitleForm title="Endereço"  styleLine="border-t-3 border-dashed border-strong/10 mt-4" icon={ZipCodeIcon}/>
+                {/* Sessão endereço */}
+                <FormAddress methods={methods} setLoading={setLoading} />
             </FormLayout>
         </PageLayout>
     );
