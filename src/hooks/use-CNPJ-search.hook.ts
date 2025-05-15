@@ -1,8 +1,9 @@
-import { ClientTpj } from "@/features/client/interface/client-enum";
-import { SupplierTpj } from "@/features/suppliers/interface/supplier-enum";
-import { OptionYesNo } from "@/interfaces";
 import { searchCNPJService } from "@/services/brasil-api/search-cnpj.service";
 import { FieldValues, Path, PathValue, UseFormReturn } from "react-hook-form";
+import { SupplierTpj } from "@/features/suppliers/interface/supplier-enum";
+import { ClientTpj } from "@/features/client/interface/client-enum";
+import { OptionYesNo } from "@/interfaces";
+import { mask as applyMask} from 'remask';
 
 interface useCNPJSearchProps<T extends FieldValues> {
     methods: UseFormReturn<T>; 
@@ -12,6 +13,12 @@ interface useCNPJSearchProps<T extends FieldValues> {
 }
 
 export const useCNPJSearch = async <T extends FieldValues>({methods, cnpjValue, setLoading, form}:useCNPJSearchProps<T>) => {
+    
+    const handleMaskPhone = (number:string):string => {
+        const maskedValue = applyMask(number, ["(99) 9999-9999", "+55(99) 9 9999-9999"]);
+        return maskedValue
+    };
+
     try {
         setLoading(true);
         const cnpjData = await searchCNPJService(cnpjValue);
@@ -29,8 +36,8 @@ export const useCNPJSearch = async <T extends FieldValues>({methods, cnpjValue, 
             methods.setValue("nome_fantasia" as Path<T>, cnpjData.nome_fantasia as PathValue<T, Path<T>>);
             methods.setValue("cnae" as Path<T>, `${cnpjData.cnae_fiscal} - ${cnpjData.cnae_fiscal_descricao}` as PathValue<T, Path<T>>)
             //telefones
-            methods.setValue("telefone_3" as Path<T>, cnpjData.ddd_telefone_1 as PathValue<T, Path<T>>)
-            methods.setValue("telefone_4" as Path<T>, cnpjData.ddd_telefone_2 as PathValue<T, Path<T>>)
+            methods.setValue("telefone_3" as Path<T>, handleMaskPhone(cnpjData.ddd_telefone_1) as PathValue<T, Path<T>>)
+            methods.setValue("telefone_4" as Path<T>, handleMaskPhone(cnpjData.ddd_telefone_2) as PathValue<T, Path<T>>)
 
             
             // Se optante pelo simples nacional
