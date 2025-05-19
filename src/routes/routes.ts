@@ -1,8 +1,13 @@
 import { RegisterIndirectProducts } from "@/features/indirect-products/page/register-indirect-products.page";
 import { RegisterPaymentCondition } from "@/features/payment-condition/page/register-payment-codition.page";
 import { RegisterUnitMeasure } from "@/features/unit-measure/page/register-unit-measure.page";
+import { RequestRevisionPage } from "@/features/request-revision/page/request-revision.page";
+import { RequestApprovedPage } from "@/features/request-approved/page/request-approved.page";
 import { RegisterPACopacker } from "@/features/pa-copacker/page/register-pa-copacker.page";
+import { RequestPendingPage } from "@/features/request-pending/page/request-pending.page";
 import { RegisterPAUnitary } from "@/features/pa-unitary/page/register-pa-unitary.page";
+import { RequestChangePage } from "@/features/request-change/page/request-change.page";
+import { RequestDeniedPage } from "@/features/request-denied/page/request-denied.page";
 import { RegisterPABurden } from "@/features/pa-burden/page/register-pa-burden.page";
 import { RegisterSupplier } from "@/features/suppliers/page/register-supplier.page";
 import { RegisterPAThird } from "@/features/pa-third/page/register-pa-third.page";
@@ -26,11 +31,11 @@ export const privateRoutes = [
     {path: "/cadastro/pa-unitario", element: RegisterPAUnitary},
     {path: "/cadastro/produtos-indiretos", element: RegisterIndirectProducts},
     {path: "/cadastro/unidade-medida", element: RegisterUnitMeasure},
-    {path: "/solicitar-alteracao", element: "teste-altercao"},
-    {path: "/solicitacoes/pendentes", element: "teste"},
-    {path: "/solicitacoes/em-revisao", element: "teste"},
-    {path: "/solicitacoes/negadas", element: "teste"},
-    {path: "/solicitacoes/aprovadas", element: "teste"}
+    {path: "/solicitar-alteracao", element: RequestChangePage},
+    {path: "/solicitacoes/pendentes", element: RequestPendingPage},
+    {path: "/solicitacoes/em-revisao", element: RequestRevisionPage},
+    {path: "/solicitacoes/negadas", element: RequestDeniedPage},
+    {path: "/solicitacoes/aprovadas", element: RequestApprovedPage}
 ];
 
 export const publicRoutes = [

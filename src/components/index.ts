@@ -1,6 +1,7 @@
 // Centralizador dos componentes 
 
 export * from "./menu/menu-desktop.components";
+export * from "./loading-skelleton.components";
 export * from "./full-page-loader.components";
 export * from "./menu/menu-mobile.components";
 export * from "./loading-modals.components";
