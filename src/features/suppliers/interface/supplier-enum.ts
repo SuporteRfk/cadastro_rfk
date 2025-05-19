@@ -1,0 +1,15 @@
+export enum SupplierTpj {
+    MICRO_EMPRESA =  "1 - ME MICRO EMPRESA",
+    PEQUENO_PORTE =  "2 - EPP EMPRESA PEQUENO PORTE",
+    MEI = "3 - MEI MICROEMPREENDEDOR INDIVIDUAL",
+    COOPERATIVA = "4 - COOPERATIVA",
+    NAO_OPTANTE = "5 - NAO OPTANTE"
+};
+ 
+export enum SupplierType {
+    JURIDICA = "J - JURIDICA" ,
+    FISICA = "F - FISICA",
+    OUTROS = "X - OUTROS"
+};
+ 
+ 

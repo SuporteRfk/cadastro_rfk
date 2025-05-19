@@ -13,6 +13,7 @@ export const NavMenu = () => {
     
     
     const handleLogout = async() => {
+        console.log('alo')
         await logoutService({
             type: "success",
             message: "Sessão encerrada com sucesso"
@@ -130,16 +131,19 @@ export const NavMenu = () => {
             ))}
 
             
-            <motion.div layout className={`flex-1 flex items-end cursor-pointer w-full mt-1 pt-2 ${isMobileOpenMenu ? "border-neutral/30" : "border-border"} border-t-2`}>
+            <motion.div 
+                layout 
+                className={`flex-1 flex items-end w-full mt-1 pt-2 ${isMobileOpenMenu ? "border-neutral/30" : "border-border"} border-t-2`}
+                onClick={() => handleLogout()}
+            >
                 <button
-                    onClick={() => handleLogout}
-                    className={`flex items-center w-full p-2 gap-1 rounded hover:bg-neutral/20 text-sm text-error/80 font-semibold 
+                    className={`flex items-center w-full cursor-pointer p-2 gap-1 rounded hover:bg-neutral/20 text-sm text-error/80 font-semibold 
                          ${isMobileOpenMenu && 'justify-between pr-4'}
                          ${isSidebarOpen ? "lg:gap-2" : "lg:justify-center"}
                     `}
                     title="Logout"
                 >
-                    <motion.span layout>
+                    <motion.span layout className="cursor-pointer">
                         <LogoutIcon className="w-4 h-4" strokeWidth={3}/>
                     </motion.span>
                     {(isMobileOpenMenu || isSidebarOpen) && (

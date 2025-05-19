@@ -9,7 +9,7 @@ import {
     Box as UnitaryIcon,
     Building as PAThirdIcon,
     Blocks as MaterialsIcon,
-    Droplet as InputIcon,
+    Droplet as InsumoIcon,
     PackageCheck as IndirectProductsIcon,
     Settings as SettingsDefaultIcon,
     Banknote as PaymentCoonditionIcon,
@@ -48,7 +48,7 @@ export const menuCommon:MenuItem[] =[
         icon: MaterialsIcon,
         children: [
             {label: "Cad. Produtos Indiretos", path: "/cadastro/produtos-indiretos", icon: IndirectProductsIcon},
-            {label: "Cad. Insumos", path: "/cadastro/insumos", icon: InputIcon}
+            {label: "Cad. Insumos", path: "/cadastro/insumos", icon: InsumoIcon}
         ]
     },
     {

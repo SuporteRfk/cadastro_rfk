@@ -1,8 +1,9 @@
 import { createContext, ReactNode, useContext, useEffect, useState } from "react";
-import { getCountersRequest } from "@/services/supabase";
+import { getCountersRequest, getRequestService } from "@/services/supabase";
 import { AuthContext } from "./auth.context";
 import { handleApiError } from "@/utils";
 import { useSupabaseRealtime } from "@/hooks/use-supabase-realtime.hooks";
+import { IQueryRequest, IViewRequest } from "@/interfaces";
 
 type Counters = {
     total: number;
@@ -13,6 +14,11 @@ type Counters = {
 
 interface IRequestContext {
     counters: Counters
+    loadingSkelleton: boolean;
+    filter: IQueryRequest | null;
+    setFilter: React.Dispatch<React.SetStateAction<IQueryRequest | null>>;
+    request: IViewRequest[];
+    totalRequest: number;
 }
 
 
@@ -22,11 +28,20 @@ export const RequestContext = createContext<IRequestContext>({
         pending: 0,
         review: 0,
     },
-
+    loadingSkelleton: false,
+    filter: null,
+    setFilter: () => null,
+    request: [],
+    totalRequest: 0
 });
 
 export const RequestProvider = ({children}:{children: ReactNode}) => {
-    const [counters, setCounters] = useState<Counters>({total: 0,pending: 0,review: 0})
+    const [counters, setCounters] = useState<Counters>({total: 0,pending: 0,review: 0}) 
+    const [loadingSkelleton, setLoadingSkelleton] = useState<boolean>(false); // controlar o loading do skelleton
+    const [filter, setFilter] = useState<IQueryRequest | null>(null); // controle dos filtros e paginação 
+    const [request, setRequest] = useState<IViewRequest[]>([]);  
+    const [totalRequest, setTotalRequest] = useState<number>(0);
+
     const {user} = useContext(AuthContext);
 
     const isApprover = user?.access_approver; // Verifica se o usuário é um aprovador/controladoria
@@ -49,8 +64,16 @@ export const RequestProvider = ({children}:{children: ReactNode}) => {
     },[isApprover]);
 
 
-     // Hook supabase para escutar as mudanças em tempo real na tabela de solicitações
-     useSupabaseRealtime({
+    //Sempre que o filtro mudar, faz nova requisição  trazendo as solicitações
+    useEffect(() => {
+        if (!filter) return
+        console.log('useEffet filtro:', filter)
+        getRequest(filter)
+
+    },[filter])
+
+    // Hook supabase para escutar as mudanças em tempo real na tabela de solicitações
+    useSupabaseRealtime({
         table: "solicitacoes",
         event: "*",
         schema: "public",
@@ -60,11 +83,32 @@ export const RequestProvider = ({children}:{children: ReactNode}) => {
                 await getCountersService()
             }
         }
-     });
+    });
+
+
+    const getRequest = async (filter?: IQueryRequest):Promise<void> => {
+        try {
+            setLoadingSkelleton(true);
+            const {data, count} = await getRequestService(filter);
+            setRequest(data);
+            setTotalRequest(!count ? 0 : count);
+            console.log('solicitacoes:', data)
+            console.log("total solicitacoes:", totalRequest,count)
+        } catch (error) {
+            handleApiError(error, "Erro na busca das solicitações");
+        } finally {
+            setLoadingSkelleton(false);
+        }
+    };
 
     return (
         <RequestContext.Provider value={{
-            counters
+            counters,
+            loadingSkelleton,
+            filter,
+            setFilter,
+            request,
+            totalRequest
         }}>
             {children}
         </RequestContext.Provider>

@@ -11,7 +11,7 @@ export interface ISubTitleFormProps {
 export const SubTitleForm = ({title, styleLine, icon:Icon}:ISubTitleFormProps) => {
     return (
         <div className={`${styleLine} flex gap-2 items-center`}>
-            {Icon ? <Icon/> : <ClipboardList size={24}/>}
+            {Icon ? <Icon size={20}/> : <ClipboardList size={20}/>}
             <h3 className="my-4 font-bold text-text-strong">{title}</h3>
         </div>
     );

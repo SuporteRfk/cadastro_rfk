@@ -1,4 +1,4 @@
-import {AuthProvider, NavigationProvider, RequestProvider} from "./context";
+import {AuthProvider, NavigationProvider, RequestProvider, ModalProvider} from "./context";
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from "react-router";
 import { Toaster } from 'react-hot-toast';
@@ -13,12 +13,14 @@ createRoot(document.getElementById('root')!).render(
   <BrowserRouter>
     <StrictMode>
       <AuthProvider>
-        <NavigationProvider>
-          <RequestProvider>
-            <Toaster/>
-            <App/>
-          </RequestProvider>
-        </NavigationProvider>
+        <ModalProvider>
+          <NavigationProvider>
+            <RequestProvider>
+              <Toaster/>
+              <App/>
+            </RequestProvider>
+          </NavigationProvider>
+        </ModalProvider>
       </AuthProvider>
     </StrictMode>
   </BrowserRouter>

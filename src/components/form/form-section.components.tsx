@@ -1,5 +1,3 @@
-
-
 interface FormSectionProps {
     children: React.ReactNode;
     className?: string;

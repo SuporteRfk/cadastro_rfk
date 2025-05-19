@@ -4,3 +4,4 @@ export * from "./scroll-area";
 export * from "./select";
 export * from "./skeleton";
 export * from "./table";
+export * from "./dialog";

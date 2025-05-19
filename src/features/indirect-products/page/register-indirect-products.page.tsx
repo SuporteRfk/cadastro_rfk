@@ -1,0 +1,106 @@
+import { FormLayout, FormProductAttributes, FormProductCategorySelector, FormProductDescription, PageLayout, SubTitleForm, Toastify } from "@/components";
+import { insertIndirectProductsService } from "../service/insert-indirect-products.service";
+import { indirectProductsRegisterSchema } from "../schema/indirect-products.schema";
+import { IIndirectProductsRegister } from "../interface/indirect-products";
+import { PackageCheck as IndirectProductsIcon } from "lucide-react";
+import { yupResolver } from "@hookform/resolvers/yup";
+import {
+    GroupCodeIndirectProducts_30, 
+    GroupCodeIndirectProducts_31, 
+    GroupCodeIndirectProducts_32, 
+    GroupCodeIndirectProducts_33, 
+    GroupCodeIndirectProducts_36, 
+    GroupCodeIndirectProducts_37, 
+    GroupCodeIndirectProducts_39,
+    FamilyCodeIndirectProducts,
+    TypeCodeIndirectProducts
+} from "../interface/indirect-products-enum";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { handleApiError } from "@/utils";
+
+
+export const RegisterIndirectProducts = () => {
+    const [loading, setLoading] = useState(false);
+
+    const [group, setGroup] = useState<
+        | typeof GroupCodeIndirectProducts_30
+        | typeof GroupCodeIndirectProducts_31 
+        | typeof GroupCodeIndirectProducts_32
+        | typeof GroupCodeIndirectProducts_33
+        | typeof GroupCodeIndirectProducts_36
+        | typeof GroupCodeIndirectProducts_37
+        | typeof GroupCodeIndirectProducts_39
+        | ["Selecione uma família"]
+    > (["Selecione uma família"]);
+
+    const methods = useForm<IIndirectProductsRegister>({
+        resolver: yupResolver(indirectProductsRegisterSchema),
+    });
+
+
+    const codeFamilyValue = methods.watch("codigo_familia");
+
+    const groupFamily = {
+        [FamilyCodeIndirectProducts.IMOBILIZADO]: GroupCodeIndirectProducts_37,
+        [FamilyCodeIndirectProducts.INSUMOS_NAO_PRODUTIVOS]: GroupCodeIndirectProducts_30,
+        [FamilyCodeIndirectProducts.MATERIAL_CONSUMO]: GroupCodeIndirectProducts_31,
+        [FamilyCodeIndirectProducts.MERCADORIA_REVENDA]: GroupCodeIndirectProducts_39,
+        [FamilyCodeIndirectProducts.PRODUTO_MANUTENCAO_FROTAS]: GroupCodeIndirectProducts_33,
+        [FamilyCodeIndirectProducts.PRODUTO_MANUTENCAO_INDUSTRIAL]: GroupCodeIndirectProducts_32,
+        [FamilyCodeIndirectProducts.SUBPRODUTO]: GroupCodeIndirectProducts_36,
+    };
+
+
+    useEffect(()=> {
+        const family = groupFamily[codeFamilyValue] ;
+        setGroup(family || ["Selecione uma família"])
+        
+    },[codeFamilyValue])
+
+    const onSubmit = async (data: IIndirectProductsRegister) => {
+        try {
+            setLoading(true);
+            await insertIndirectProductsService(data);
+            Toastify({
+                type: "success",
+                message: "Solicitação realizada com sucesso!",
+            });
+            methods.reset();
+        } catch (error) {
+            handleApiError(error, "Erro ao cadastrar produto indireto")
+        }finally{
+            setLoading(false);
+        }
+    };
+
+    return(
+        <PageLayout>
+            <FormLayout 
+                titleForm="Produtos Indiretos" 
+                iconForm={IndirectProductsIcon} 
+                showSector
+                loading={loading}
+                methods={methods}
+                onSubmit={onSubmit}
+            >
+                <SubTitleForm title="Dados do Produto Indireto"  styleLine="border-t-3 border-dashed border-strong/10 mt-4" icon={IndirectProductsIcon}/>
+                
+                {/* Sessão de descrição do produto */}
+                <FormProductDescription methods={methods} viewKeyUseProduct viewKeyNameScientific={false}/>
+                             
+                {/* Sessão do tipo, familia e grupo do PA */}
+                <FormProductCategorySelector 
+                    family={Object.values(FamilyCodeIndirectProducts)}
+                    group={Object.values(group)}
+                    type={Object.values(TypeCodeIndirectProducts)}
+                    methods={methods}
+                />
+
+                {/* Sessão de atributos (unidades de medida e ncm) */}
+                <FormProductAttributes methods={methods}/>
+
+            </FormLayout>
+        </PageLayout>
+    );
+};

@@ -4,7 +4,8 @@
 `src/components/inputs/input-with-mask.components.tsx`
 
 ## 📊 Visão Geral
-Componente reutilizável de **input com máscara** integrado ao **React Hook Form**, com suporte a vários formatos (CPF, CNPJ, telefone, WhatsApp e customizado). É responsável por controlar a digitação do usuário dentro de um formato específico e comunicar essas alterações ao estado do formulário.
+Componente reutilizável de **input com máscara** integrado ao **React Hook Form**, com suporte a vários formatos (CPF, CNPJ, telefone, WhatsApp e customizado).  Utiliza a biblioteca `remask` para aplicação das máscaras e manipulação dos valores. O componente oferece flexibilidade para personalizar máscaras e funciona bem em formulários com dados formatados.
+
 
 
 ## 🔎 Detalhamento Linha a Linha e Funcionamento
@@ -12,15 +13,15 @@ Componente reutilizável de **input com máscara** integrado ao **React Hook For
 ### Importações
 ```ts
 import { UseFormRegisterReturn, useFormContext } from "react-hook-form";
-import InputMask from "react-input-mask-next";
+import { mask as applyMask, unMask } from 'remask';
 import { LucideIcon } from "lucide-react";
 import { IconType } from "react-icons";
 import { forwardRef } from "react";
 ```
 - `useFormContext`: Hook do React Hook Form que permite acessar funções como `setValue`, `watch`, `trigger`, etc., sem passar props manualmente.
-- `InputMask`: Biblioteca que permite aplicar máscaras visuais ao campo de input.
+- `remask`: Biblioteca utilizada para aplicar e remover máscaras de entrada.
+- `mask` e `unMask`: Funções da biblioteca remask para aplicar e remover a máscara do valor do campo.
 - `LucideIcon` / `IconType`: Para uso de ícones decorativos.
-- `forwardRef`: Permite que o componente aceite refs externas, necessário para interoperação com RHF e bibliotecas externas.
 
 ---
 
@@ -30,7 +31,7 @@ import { forwardRef } from "react";
 interface InputMaskProps {
   name: string;
   label?: string;
-  maskType?: "whatsapp" | "cpf" | "cnpj" | "phone" | "custom";
+  maskType?: "whatsapp" | "cpf" | "cnpj" | "phone" | "custom"  | "dynamic";;
   customMask?: string;
   error?: string;
   Icon: LucideIcon | IconType;
@@ -68,32 +69,51 @@ const value = watch(name) ?? "";
 const masks: Record<string, string> = { ... }
 const placeholders: Record<string, string> = { ... }
 ```
-- Ambos os objetos associam o `maskType` escolhido a um valor de máscara ou placeholder.
-- Ex: `maskType: "cpf"` gera máscara `999.999.999-99`.
+- O objeto `masks` associa cada tipo de máscara (`maskType`) a uma string ou um array de strings, dependendo da necessidade (ex: `whatsapp`, `phone`, `cpf`).
+- O objeto `placeholders` define os placeholders a serem exibidos no campo de entrada, baseado no tipo de máscara selecionado.
+
+---
+
+### Aplicação das máscara 
+```tsx
+const mask = masks[maskType] || customMask;
+const placeholder = placeholders[maskType] || customMask;
+
+const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const originalValue = unMask(e.target.value);
+  const maskedValue = applyMask(originalValue, mask);
+  setValue(name, maskedValue);
+};
+
+```
+- `mask`: Seleciona a máscara apropriada para o tipo de dado.
+- `placeholder`: Define o placeholder com base no tipo de máscara.
+- `handleChange`: A função que é chamada a cada mudança no campo de input. 
+  - Ela utiliza `unMask` para remover a máscara do valor.
+  - E o `applyMask` para aplicar a máscara selecionada.
+  - Depois então atualiza o valor no formulário com `setValue`.
 
 ---
 
 ### Renderização
 ```tsx
-<InputMask
+<input
   id={name}
-  mask={mask}
   value={value}
-  onChange={(e) => setValue(name, e.target.value)}
-  onBlur={onBlur}
-  readOnly={readOnly}
-  placeholder={placeholder}
-  ref={ref as any}
+  onChange={handleChange}
   className="..."
+  placeholder={placeholder}
+  readOnly={readOnly}
+  onKeyDown={(e) => e.key === "Enter" && e.preventDefault()}
 />
 ```
 
-- `mask`: Máscara usada.
 - `value`: Valor do campo (controlado via `watch`).
-- `onChange`: Quando o usuário digita, RHF é atualizado com `setValue`.
+- `onChange`: Chama a função `handleChange` para atualizar o valor com a máscara.
 - `onBlur`: Pode ser usado para trigger de validação ou formatação externa.
-- `ref={ref as any}`: Necessário para compatibilidade com o `forwardRef` e evitar erros de tipo com InputMask.
+- `readOnly`:  Se `true`, o campo será somente leitura e não permitirá alterações..
 - `className`: Classe do Tailwind com estados dinâmicos baseados em `error` e `readOnly`.
+- `onKeyDown`: Impede que o usuário submeta o formulário ao pressionar **"Enter"** dentro do campo.
 
 ---
 
@@ -106,7 +126,7 @@ Renderiza a mensagem de erro, se existir.
 
 
 ## ⚖️ Regras de Uso
-- Sempre utilize `name` igual ao campo do `useForm()`.
+- Utilize `name` igual ao nome do campo no `useForm()` para que o componente funcione corretamente com o **React Hook Form**.
 - Ideal para uso com formulários que exigem dados formatados (telefone, cpf, cnpj).
 - Não usar `register` nesse componente, pois ele é controlado manualmente via `setValue` e `watch`.
 - Para inicializações vindas de banco ou API, apenas certifique-se que `defaultValues` esteja preenchido corretamente no `useForm()`.
