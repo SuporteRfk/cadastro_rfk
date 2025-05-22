@@ -17,7 +17,7 @@ export const FormProductCategorySelector = <T extends FieldValues>({mode, family
         <FormSection className="mt-2 md:mt-3 md:flex-row gap-4">
              {/* Familia */}
                 <InputSelect
-                    label="Família do Fardo" 
+                    label="Família do produto" 
                     name="codigo_familia"
                     error={methods.formState.errors.codigo_familia?.message as string | undefined} 
                     placeholder="Selecione a família"
@@ -27,7 +27,7 @@ export const FormProductCategorySelector = <T extends FieldValues>({mode, family
                 />
                 {/* Grupo */}
                 <InputSelect
-                    label="Grupo do Fardo" 
+                    label="Grupo do produto" 
                     name="codigo_grupo"
                     error={methods.formState.errors.codigo_grupo?.message as string | undefined} 
                     placeholder="Selecione o grupo"
@@ -37,7 +37,7 @@ export const FormProductCategorySelector = <T extends FieldValues>({mode, family
                 />
                 {/* Tipo */}
                 <InputSelect
-                    label="Tipo de Fardo"
+                    label="Tipo do produto"
                     selectLabel="Tipos"
                     options={Object.values(type)}
                     name="tipo"
