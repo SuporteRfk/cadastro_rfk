@@ -7,6 +7,7 @@ import { PABurdenFormManager } from "@/features/pa-burden/components/pa-burden-f
 import { InsumoFormManager } from "@/features/insumos/components/insumos-form-manager";
 import { ModalRequestWrapper } from "./modal-request-wrapper.components";
 import { FormStateType, IViewRequest } from "@/interfaces";
+import { PAThirdFormManager } from "@/features/pa-third/components/pa-third-form-manager";
 
 
 interface ModalRequestRouterProps {
@@ -72,8 +73,16 @@ export const ModalRequestRouter = ( {request, mode, setLoadingModal,isTheRouteOf
                         loadingModal={loadingModal}
                         setMode={setMode}
                     />
-        case "cad_pa_terceiro":
-            return <DummyForm/>
+        case "cad_pa_terceiro": 
+            return <ModalRequestWrapper
+                        request={request}
+                        FormComponent={PAThirdFormManager}
+                        mode={mode} 
+                        isTheRouteOfChange={isTheRouteOfChange} 
+                        setLoadingModal={setLoadingModal}
+                        loadingModal={loadingModal}
+                        setMode={setMode}
+                    />
         case "cad_pa_copacker":
             return <ModalRequestWrapper
                         request={request}

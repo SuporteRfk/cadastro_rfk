@@ -17,7 +17,7 @@ import { updatePAUnitaryService } from "../service/update-pa-unitary.service";
 
 
 
-interface PABurdenFormManagerProps{
+interface PAUnitaryFormManagerProps{
     defaultValue: IPAUnitary;
     mode: FormStateType;
     isChange: boolean;
@@ -30,7 +30,7 @@ interface PABurdenFormManagerProps{
     viewRequestId: number;
 }
 
-export const PAUnitaryFormManager = ({defaultValue, mode, isChange, loadingModal, setReasonFieldReview, reasonFieldReview, setLoadingModal, status, setMode, viewRequestId}:PABurdenFormManagerProps) => {
+export const PAUnitaryFormManager = ({defaultValue, mode, isChange, loadingModal, setReasonFieldReview, reasonFieldReview, setLoadingModal, status, setMode, viewRequestId}:PAUnitaryFormManagerProps) => {
         
     if(loadingModal){
         return <LoadingModal/> 

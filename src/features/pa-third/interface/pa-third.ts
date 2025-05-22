@@ -14,7 +14,7 @@ export interface IPAThird {
     codigo_grupo: GroupCodePAThird,
     tipo: TypeCodePAThird,
     unidade_medida: string;
-    segunda_undiade_medida: string;
+    segunda_unidade_medida: string;
     fator_conversor: number;
     tipo_conversor: ConverterType;
     armazem_padrao: '055 - REVENDA';
