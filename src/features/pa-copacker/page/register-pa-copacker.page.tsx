@@ -4,13 +4,13 @@ import { insertPACopackerService } from "../service/insert-pa-copacker.service";
 import { paCopackerRegisterSchema } from "../schema/pa-copacker.schema";
 import { IPACopackerRegister } from "../interface/pa-copacker";
 import { yupResolver } from "@hookform/resolvers/yup";
-import {PackageOpen as PAIcon} from "lucide-react";
 import { useForm } from "react-hook-form";
 import { handleApiError } from "@/utils";
 import { useState } from "react";
 import {
     Weight as KgIcon,
     Warehouse as StorageIcon,
+    PackageOpen as PAIcon
 } from "lucide-react";
 import { FormProductPackagingInfo } from "@/components/form/form-product-packaging-info.components";
 

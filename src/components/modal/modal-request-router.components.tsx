@@ -1,6 +1,7 @@
 import { PaymentConditionFormManager } from "@/features/payment-condition/components/payment-condition-form-manager";
 import { IndirectProductsFormManager } from "@/features/indirect-products/components/indirect-products-form-manager";
 import { UnitMeasureFormManager } from "@/features/unit-measure/components/unit-measure-form-manager";
+import { PACopackerFormManager } from "@/features/pa-copacker/components/pa-copacker-form-manager";
 import { InsumoFormManager } from "@/features/insumos/components/insumos-form-manager";
 import { ModalRequestWrapper } from "./modal-request-wrapper.components";
 import { FormStateType, IViewRequest } from "@/interfaces";
@@ -56,7 +57,15 @@ export const ModalRequestRouter = ( {request, mode, setLoadingModal,isTheRouteOf
         case "cad_pa_terceiro":
             return <DummyForm/>
         case "cad_pa_copacker":
-            return <DummyForm/>
+            return <ModalRequestWrapper
+                        request={request}
+                        FormComponent={PACopackerFormManager}
+                        mode={mode} 
+                        isTheRouteOfChange={isTheRouteOfChange} 
+                        setLoadingModal={setLoadingModal}
+                        loadingModal={loadingModal}
+                        setMode={setMode}
+                    />
         case "cad_insumos":
             return <ModalRequestWrapper
                         request={request}
