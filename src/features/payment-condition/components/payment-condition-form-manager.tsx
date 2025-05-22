@@ -1,18 +1,18 @@
-import { Button, FormLayout, FormSection, Input, LoadingModal, SubTitleForm } from "@/components";
 import { IPaymentCondition, IPaymentConditionRegister } from "../interface/payment-condition";
 import { updatePaymentConditionService } from "../service/update-payment-condition.service";
+import { FormActionsButtonsRequest } from "@/components/form/form-actions-buttons-request";
+import { FormLayout, FormSection, Input, LoadingModal, SubTitleForm } from "@/components";
 import { PaymentConditionSchema } from "../schema/payment-condition.shema";
+import { useEditRequest } from "@/hooks/use-edit-request.hooks";
 import { FormStateType, StatusRequest } from "@/interfaces";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
-import { ModalContext} from "@/context";
 import {
     Landmark as TitleFormIcon,
     CircleDollarSign as PaymentIcon,
     Banknote as PaymentCoonditionIcon
 } from "lucide-react";
-import { useContext} from "react";
-import { useEditRequest } from "@/hooks/use-edit-request.hooks";
+
 
 
 
@@ -30,7 +30,6 @@ interface PaymentConditionFormManagerProps{
 }
 
 export const PaymentConditionFormManager = ({defaultValue, mode, isChange, loadingModal, setReasonFieldReview, reasonFieldReview, setLoadingModal, status, setMode, viewRequestId}:PaymentConditionFormManagerProps) => {
-    const {openModal} = useContext(ModalContext);
     if(loadingModal){
         return <LoadingModal/> 
     }
@@ -76,33 +75,13 @@ export const PaymentConditionFormManager = ({defaultValue, mode, isChange, loadi
                 />
             </FormSection>
 
-            {mode !== "viewing" &&
-                <div className="w-full flex my-2 gap-3 justify-end ">
-                    <Button
-                        text="Cancelar"
-                        variant="secondary"
-                        sizeWidth="w-[120px]"
-                        onClick={() => setMode("viewing")}
-                    />
-                    <Button
-                        text="Salvar"
-                        variant="primary"
-                        sizeWidth="w-[120px]"
-                        onClick={methods.handleSubmit((validatedData) => {
-                                    openModal(
-                                        "MANAGER_FORM",
-                                        {
-                                            message: "Você tem certeza que deseja salvar essa parada?",
-                                            onConfirm: () => {                                                
-                                                handleEdit(defaultValue.id,validatedData as IPaymentConditionRegister);
-                                            },
-                                        
-                                        }
-                                    )
-                                })}
-                    />
-                </div>
-            }
+            {/* Botões de salvar / cancelar */}
+            <FormActionsButtonsRequest
+                methods={methods}
+                mode={mode}
+                setMode={setMode}
+                onConfirm={(data) => handleEdit(defaultValue.id, data)}
+            />
         </FormLayout>
         
     );

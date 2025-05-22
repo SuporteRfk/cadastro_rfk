@@ -1,20 +1,16 @@
-import { Button, FormLayout, FormProductAttributes, FormProductCategorySelector, FormProductDescription, LoadingModal, SubTitleForm } from "@/components";
+import { FormLayout, FormProductAttributes, FormProductCategorySelector, FormProductDescription, LoadingModal, SubTitleForm } from "@/components";
+import { FamilyCodeIndirectProducts, TypeCodeIndirectProducts } from "../interface/indirect-products-enum";
+import { useGroupSelectorIndirectProduct } from "../hook/use-group-selector-indirect-product";
 import { IIndirectProducts, IIndirectProductsRegister } from "../interface/indirect-products";
+import { updateIndirectProductsService } from "../service/update-indirect-produtcs.service";
+import { FormActionsButtonsRequest } from "@/components/form/form-actions-buttons-request";
 import { indirectProductsRegisterSchema } from "../schema/indirect-products.schema";
-import { FormStateType, StatusRequest } from "@/interfaces";
 import { PackageCheck as IndirectProductsIcon } from "lucide-react";
-
-
-
 import { useEditRequest } from "@/hooks/use-edit-request.hooks";
-
+import { FormStateType, StatusRequest } from "@/interfaces";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
-import { ModalContext} from "@/context";
-import { useContext} from "react";
-import { updateIndirectProductsService } from "../service/update-indirect-produtcs.service";
-import { useGroupSelectorIndirectProduct } from "../hook/use-group-selector-indirect-product";
-import { FamilyCodeIndirectProducts, TypeCodeIndirectProducts } from "../interface/indirect-products-enum";
+
 
 
 
@@ -32,8 +28,7 @@ interface IndirectProductsFormManagerProps{
 }
 
 export const IndirectProductsFormManager = ({defaultValue, mode, isChange, loadingModal, setReasonFieldReview, reasonFieldReview, setLoadingModal, status, setMode, viewRequestId}:IndirectProductsFormManagerProps) => {
-    const {openModal} = useContext(ModalContext);
-    
+        
     if(loadingModal){
         return <LoadingModal/> 
     }
@@ -86,33 +81,13 @@ export const IndirectProductsFormManager = ({defaultValue, mode, isChange, loadi
             {/* Sessão de atributos (unidades de medida e ncm) */}
             <FormProductAttributes methods={methods} mode={mode}/>
 
-            {mode !== "viewing" &&
-                <div className="w-full flex my-2 gap-3 justify-end ">
-                    <Button
-                        text="Cancelar"
-                        variant="secondary"
-                        sizeWidth="w-[120px]"
-                        onClick={() => setMode("viewing")}
-                    />
-                    <Button
-                        text="Salvar"
-                        variant="primary"
-                        sizeWidth="w-[120px]"
-                        onClick={methods.handleSubmit((validatedData) => {
-                                    openModal(
-                                        "MANAGER_FORM",
-                                        {
-                                            message: "Você tem certeza que deseja editar a solicitação?",
-                                            onConfirm: () => {
-                                                handleEdit(defaultValue.id,validatedData as IIndirectProductsRegister);
-                                            },
-                                        
-                                        }
-                                    )
-                                })}
-                    />
-                </div>
-            }
+            {/* Botões de salvar / cancelar */}
+            <FormActionsButtonsRequest
+                methods={methods}
+                mode={mode}
+                setMode={setMode}
+                onConfirm={(data) => handleEdit(defaultValue.id, data)}
+            />
         </FormLayout>
         
     );

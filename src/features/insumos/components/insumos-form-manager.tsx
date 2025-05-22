@@ -1,4 +1,4 @@
-import { Button, FormLayout, FormPalletizingTrackingConversion, FormProductAttributes, FormProductCategorySelector, FormProductCode, FormProductDescription, FormSection, FormWeights, Input, InputDecimal, InputSelect, LoadingModal, SubTitleForm } from "@/components";
+import { FormLayout, FormPalletizingTrackingConversion, FormProductAttributes, FormProductCategorySelector, FormProductCode, FormProductDescription, FormSection, FormWeights, Input, InputDecimal, InputSelect, LoadingModal, SubTitleForm } from "@/components";
 import { FamilyCodeInsumos, GroupCodeInsumos, TypeCodeoInsumos } from "../interface/insumos-enum";
 import { ConverterType, FormStateType, StatusRequest } from "@/interfaces";
 import { updateInsumosService } from "../service/update-insumo.service";
@@ -7,8 +7,6 @@ import { useEditRequest } from "@/hooks/use-edit-request.hooks";
 import { IInsumo, IInsumoRegister } from "../interface/insumos";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
-import { ModalContext} from "@/context";
-import { useContext} from "react";
 import {
     Droplet as InsumoIcon,
     NotebookText as InsumoSubTitleIcon,
@@ -18,6 +16,7 @@ import {
     Building2 as EnterpriseIcon,
     Variable as ConverterIcon,
 } from "lucide-react";
+import { FormActionsButtonsRequest } from "@/components/form/form-actions-buttons-request";
 
 
 
@@ -35,8 +34,7 @@ interface PaymentConditionFormManagerProps{
 }
 
 export const InsumoFormManager = ({defaultValue, mode, isChange, loadingModal, setReasonFieldReview, reasonFieldReview, setLoadingModal, status, setMode, viewRequestId}:PaymentConditionFormManagerProps) => {
-    const {openModal} = useContext(ModalContext);
-    
+        
     if(loadingModal){
         return <LoadingModal/> 
     }
@@ -165,33 +163,13 @@ export const InsumoFormManager = ({defaultValue, mode, isChange, loadingModal, s
                 />
             </FormSection>
 
-            {mode !== "viewing" &&
-                <div className="w-full flex my-2 gap-3 justify-end ">
-                    <Button
-                        text="Cancelar"
-                        variant="secondary"
-                        sizeWidth="w-[120px]"
-                        onClick={() => setMode("viewing")}
-                    />
-                    <Button
-                        text="Salvar"
-                        variant="primary"
-                        sizeWidth="w-[120px]"
-                        onClick={methods.handleSubmit((validatedData) => {
-                                    openModal(
-                                        "MANAGER_FORM",
-                                        {
-                                            message: "Você tem certeza que deseja editar a solicitação?",
-                                            onConfirm: () => {
-                                                handleEdit(defaultValue.id,validatedData as IInsumoRegister);
-                                            },
-                                        
-                                        }
-                                    )
-                                })}
-                    />
-                </div>
-            }
+           {/* Botões de salvar / cancelar */}
+            <FormActionsButtonsRequest
+                methods={methods}
+                mode={mode}
+                setMode={setMode}
+                onConfirm={(data) => handleEdit(defaultValue.id, data)}
+            />
         </FormLayout>
         
     );
