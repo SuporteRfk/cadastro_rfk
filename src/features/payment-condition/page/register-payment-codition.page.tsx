@@ -17,7 +17,7 @@ export const RegisterPaymentCondition = () => {
     const [loading, setLoading] = useState<boolean>(false);
 
     const methods= useForm<IPaymentConditionRegister>({
-        resolver: yupResolver(PaymentConditionSchema),       
+        resolver: yupResolver(PaymentConditionSchema),      
     });
 
   

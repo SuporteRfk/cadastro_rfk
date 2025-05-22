@@ -13,11 +13,6 @@ export interface IModal {
     [key: string]: ModalConfig;
 }
 
-export enum ModalKeysEnum {
-    LOGOUT = "logoutModal",
-    SUBMIT_FORM = "SubmitFormModal"
-}
-
 export interface IModalContext {
     modals: IModal;
     openModal: (modalKey: string, modalConfig: ModalConfig) => void;

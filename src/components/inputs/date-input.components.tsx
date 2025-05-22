@@ -13,9 +13,9 @@ interface DateInputProps {
 
 export const DateInput = ({name,label,register,error,mode = "visualizacao"}: DateInputProps) => {
     const [currentDate, setCurrentDate] = useState<string>("");
-    const {watch, trigger} = useFormContext();
+    const {watch} = useFormContext();
     const value = watch(name);
-
+        
        
     useEffect(() => {
             if (mode === "cadastro" && !value) {
@@ -30,8 +30,8 @@ export const DateInput = ({name,label,register,error,mode = "visualizacao"}: Dat
                 const formatted = iso.slice(0, 16);
                 setCurrentDate(formatted);
             }
-            trigger(name)
-        }, [mode, trigger]);
+          
+        }, [mode, value]);
     
     return(
         <div className="w-full max-w-full flex flex-col gap-1 my-1.5 sm:max-w-[200px] relative ">

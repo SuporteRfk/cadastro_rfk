@@ -22,7 +22,7 @@ import {
 interface BaseFormProps<T extends FieldValues> {
     onSubmit?: (data: T) => void;
     children: ReactNode;
-    formState?: FormStateType;
+    mode?: FormStateType;
     showSector?: boolean;
     titleForm : string;
     iconForm : LucideIcon;
@@ -36,12 +36,11 @@ interface BaseFormProps<T extends FieldValues> {
     loading: boolean;
 }
 
-export const FormLayout = <T extends FieldValues> ({methods, onSubmit, children, formState, showSector, titleForm, iconForm:IconForm, showButtonsDefault=true, modalQuestion, onResetStates, loading }: BaseFormProps<T>) => {
+export const FormLayout = <T extends FieldValues> ({methods, onSubmit, children, mode, showSector, titleForm, iconForm:IconForm, showButtonsDefault=true, modalQuestion, onResetStates, loading }: BaseFormProps<T>) => {
     const {user} = useContext(AuthContext);
     const {openModal} = useContext(ModalContext);
     
 
-   
 
     const handleReset = () => {
         methods.reset();
@@ -75,7 +74,7 @@ export const FormLayout = <T extends FieldValues> ({methods, onSubmit, children,
                         <DateInput
                             label="Data Solicitação"
                             name="criado_em"
-                            mode="cadastro"
+                            mode={mode ? "visualizacao" : "cadastro"}
                             register={methods.register("criado_em" as Path<T>)}
                             error={methods.formState.errors.criado_em?.message as string | undefined}
                         />
@@ -100,7 +99,7 @@ export const FormLayout = <T extends FieldValues> ({methods, onSubmit, children,
                                 placeholder="Escolhe o seu setor" 
                                 label="Setor"
                                 selectLabel="Setores"
-                                disabled={formState === 'viewing' || formState === 'reviewing'}
+                                disabled={(mode === 'viewing' || mode === 'reviewing')}
                                 error={methods.formState.errors.setor?.message as string | undefined}
                             />
                         }
@@ -126,7 +125,7 @@ export const FormLayout = <T extends FieldValues> ({methods, onSubmit, children,
                             error={methods.formState.errors.whatsapp?.message as string | undefined}
                             Icon={WhatsAppIcon}
                             label="WhatsApp"
-                            readOnly={formState === 'viewing' || formState === 'reviewing'}
+                            readOnly={(mode === 'viewing' || mode === 'reviewing')}
                         />
                     </FormSection>
                     {/* Elementos filhos dinâmicos */}

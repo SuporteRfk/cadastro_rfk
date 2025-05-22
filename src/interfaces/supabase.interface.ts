@@ -63,3 +63,25 @@ export enum TypeRequest {
     INDIRECT_PRODUCTS="Produtos Indiretos",
     UNIT_MEASURE="Unidade de Medida"
 };
+
+
+export interface IUpdateRequest {
+    solicitacao_id: number;
+    status: StatusRequest,
+    novo_solicitante?:{
+        nome: string;
+        data: string;
+        departamento: string;
+        operacao: string;
+    },
+    observacao?: string;
+    motivo_recusa?: {
+        [key: string]: string;
+    },
+    alteracao?: {
+         [key:string]:{
+            of: string;
+            to: string;
+        }
+    }
+};

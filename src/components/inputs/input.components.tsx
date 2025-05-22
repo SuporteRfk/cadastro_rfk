@@ -1,4 +1,4 @@
-import { UseFormRegisterReturn } from "react-hook-form";
+import { useFormContext, UseFormRegisterReturn } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { LucideIcon } from "lucide-react";
 import {IconType} from "react-icons";
@@ -17,13 +17,15 @@ interface InputProps {
     widthContainer?: string;
   }
 
-export const Input = ({name,label,placeholder,type = "text",register,error,icon: Icon,valueInitial = "", maxCaractere,readOnly = false,widthContainer="w-full"}:InputProps) => {
+export const Input = ({name,label,placeholder,type = "text",register,error,icon: Icon,valueInitial="", maxCaractere,readOnly = false,widthContainer="w-full"}:InputProps) => {
     const [value, setValue] = useState(valueInitial);
+    const { watch } = useFormContext();
+    const valueInputForm = watch(name) ?? "";
     
     // Atualiza o state interno quando muda o valor inicial (ex: reset de formulário)
     useEffect(() => {
-        setValue(valueInitial);
-    }, [valueInitial]);  
+        setValue(valueInitial);    
+    }, [valueInitial, valueInputForm]);  
 
     return(
         <div className={`${widthContainer} flex flex-col gap-1 relative my-1.5`}>

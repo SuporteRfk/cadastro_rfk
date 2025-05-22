@@ -10,7 +10,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     size?: number;
     color?: string;
   };
-  variant?: "primary" | "secondary" | "ghost" | "danger" | "outline";
+  variant?: "primary" | "secondary" | "ghost" | "danger" | "outline" | "active";
   title?:string;
   roudend?: string;
 }
@@ -30,11 +30,12 @@ export const Button = ({
 }: ButtonProps) => {
     
     const variantStyles = {
-        primary: "bg-accent text-white-default hover:bg-accent-hover",
+        primary: "bg-accent/80 text-white-default hover:bg-accent ",
         secondary: "bg-medium/50 text-text-medium hover:bg-gray-300 border-transparent",
         ghost: "bg-transparent text-text-strong hover:bg-neutral/10",
         danger: "bg-error text-white-default hover:bg-red-600",
         outline: "bg-transparent hover:bg-accent border-2 border-accent text-accent hover:text-white-default",
+        active: "bg-[#138496] text-white-default border-2 border-[#138496]"
     };
     
     const style = variantStyles[variant];
@@ -42,7 +43,7 @@ export const Button = ({
   return (
     <button
       onClick={onClick}
-      className={`flex items-center justify-center gap-2 ${roudend} px-4 py-2 text-sm font-semibold transition duration-200 ${
+      className={` flex items-center cursor-pointer justify-center outline-none gap-2 ${roudend} px-4 py-2 text-sm font-semibold transition duration-200 ${
         disabled || isLoading ? "bg-gray-300 text-gray-500 cursor-not-allowed" : style
       } ${sizeWidth}`}
       title={title}
