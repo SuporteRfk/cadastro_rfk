@@ -21,8 +21,7 @@ export const InputDecimal =({Icon, name, error, label, placeholder, decimalScale
     const [internalValue, setInternalValue] = useState<string>("");
 
     const watchedValue = watch( name );
-    console.log(watchedValue)
-
+    
     useEffect(() => {
         if (watchedValue !== undefined && watchedValue !== null) {
             const normalized = watchedValue.toString().replace(".", ",");

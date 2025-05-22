@@ -12,6 +12,6 @@ export const updatePACopackerService = async (id:number, data:IPACopackerRegiste
 
         
     if(error){
-        throw new Error(`Erro na atualização do produto indireto: ${error.message}`);
+        throw new Error(`Erro na atualização do copacker: ${error.message}`);
     }
 }

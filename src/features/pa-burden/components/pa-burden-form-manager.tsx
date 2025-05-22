@@ -1,23 +1,24 @@
-import { FormLayout, FormPalletizingTrackingConversion, FormProductAttributes, FormProductCategorySelector, FormProductCode, FormProductDescription, FormProductDimensions, FormProductPackagingInfo, FormWeights, LoadingModal, SubTitleForm } from "@/components";
-import { FamilyCodePACopacker, GroupCodePACopacker, TypeCodeoPACopacker } from "../interface/pa-copacker-enum";
+import { FormLayout, FormPalletizingTrackingConversion, FormProductAttributes, FormProductCategorySelector, FormProductCode, FormProductDescription, FormProductDimensions, FormProductPackagingInfo, FormValidity, FormWeights, LoadingModal, SubTitleForm } from "@/components";
+import { FamilyCodePABurden, GroupCodePABurden, TypeCodeoPABurden } from "../interface/pa-burden-enum";
 import { FormActionsButtonsRequest } from "@/components/form/form-actions-buttons-request";
-import { updatePACopackerService } from "../service/update-pa-copacker.service";
-import { IPACopackerRegister, IPACopacker } from "../interface/pa-copacker";
-import { paCopackerRegisterSchema } from "../schema/pa-copacker.schema";
+import { updatePABurdenService } from "../service/update-pa-burden.service";
+import { IPABurden, IPABurdenRegister } from "../interface/pa-burden";
+import { paBurdenRegisterSchema } from "../schema/pa-burden.schema";
 import { useEditRequest } from "@/hooks/use-edit-request.hooks";
 import { FormStateType, StatusRequest } from "@/interfaces";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import {
+    Boxes as BurdenIcon,
     Weight as KgIcon,
     Warehouse as StorageIcon,
-    PackageOpen as PAIcon
+    Clock as ValidityIcon,
 } from "lucide-react";
 
 
 
-interface PACopackerFormManagerProps{
-    defaultValue: IPACopacker;
+interface PABurdenFormManagerProps{
+    defaultValue: IPABurden;
     mode: FormStateType;
     isChange: boolean;
     loadingModal: boolean;
@@ -29,25 +30,25 @@ interface PACopackerFormManagerProps{
     viewRequestId: number;
 }
 
-export const PACopackerFormManager = ({defaultValue, mode, isChange, loadingModal, setReasonFieldReview, reasonFieldReview, setLoadingModal, status, setMode, viewRequestId}:PACopackerFormManagerProps) => {
+export const PABurdenFormManager = ({defaultValue, mode, isChange, loadingModal, setReasonFieldReview, reasonFieldReview, setLoadingModal, status, setMode, viewRequestId}:PABurdenFormManagerProps) => {
         
     if(loadingModal){
         return <LoadingModal/> 
     }
-  
-    const methods= useForm<IPACopackerRegister>({
+    console.log(defaultValue)
+    const methods= useForm<IPABurdenRegister>({
         defaultValues: defaultValue,
-        resolver: yupResolver(paCopackerRegisterSchema)
+        resolver: yupResolver(paBurdenRegisterSchema)
     });
 
     
     // Hook para lidar com editar a form
-    const { handleEdit } = useEditRequest<IPACopackerRegister>({
+    const { handleEdit } = useEditRequest<IPABurdenRegister>({
         setLoadingModal,
         setMode,
         status,
         viewRequestId,
-        updateFunction: updatePACopackerService
+        updateFunction: updatePABurdenService
     });
 
 
@@ -55,28 +56,28 @@ export const PACopackerFormManager = ({defaultValue, mode, isChange, loadingModa
         <FormLayout 
             methods={methods} 
             loading={loadingModal} 
-            titleForm={`P.A Copacker - #${defaultValue?.id}`} 
-            iconForm={PAIcon}
+            titleForm={`P.A Fardo - #${defaultValue?.id}`} 
+            iconForm={BurdenIcon}
             mode={mode}
             showButtonsDefault={false}            
         >
             {/* Sessão dos dados do produto indireto */}
-            <SubTitleForm title="Dados do P.A Copacker"  styleLine="border-t-3 border-dashed border-strong/10 mt-4" icon={PAIcon}/>
-            {/* Sessão de descrição/nome Científico do P.A */}
+            <SubTitleForm title="Dados do P.A Fardo"  styleLine="border-t-3 border-dashed border-strong/10 mt-4" icon={BurdenIcon}/>
+            {/* Sessão de descrição do P.A */}
             <FormProductDescription methods={methods} mode={mode}/>
 
-            {/* Sessão do código saib e código de barras*/}
-            <FormProductCode methods={methods} mode={mode}/>
+            {/* Sessão do código saib e códigos de barras */}
+            <FormProductCode methods={methods} showSecondCodeBar configSecondCodeBar="formPABurden"/>
 
             {/* Sessão do tipo, familia e grupo do PA */}
             <FormProductCategorySelector 
-                family={Object.values(FamilyCodePACopacker)}
-                group={Object.values(GroupCodePACopacker)}
-                type={Object.values(TypeCodeoPACopacker)}
+                family={Object.values(FamilyCodePABurden)}
+                group={Object.values(GroupCodePABurden)}
+                type={Object.values(TypeCodeoPABurden)}
                 methods={methods}
                 mode={mode}
             />
-
+        
             {/* Sessão de atributos (unidades de medida, ncm, sabor, marca, grupo tributário e cest) */}
             <FormProductAttributes methods={methods} showFlavorAndMark showCestAndTax labelMarkAndFlavor="Copacker" mode={mode}/>
 
@@ -88,20 +89,24 @@ export const PACopackerFormManager = ({defaultValue, mode, isChange, loadingModa
 
             {/* Sessão Pesos */}
             <FormWeights methods={methods} mode={mode}/>
-            
+
             {/* Sessão de dimenssões (peso, altura e largura) */}
-            <FormProductDimensions methods={methods} configSecondDimensions="formCopacker" mode={mode}/>
-                            
+            <FormProductDimensions methods={methods} configSecondDimensions="formPABurden" mode={mode}/>
+            
             {/* Sessão Armazenagem */}
             <SubTitleForm title="Armazenagem e Embalagem"  styleLine="border-t-3 border-dashed border-strong/10 mt-4" icon={StorageIcon}/>
             <FormProductPackagingInfo methods={methods} mode={mode}/>
+
+            {/* Sessão Validade */}
+            <SubTitleForm title="Validade e Lote"  styleLine="border-t-3 border-dashed border-strong/10 mt-4" icon={ValidityIcon}/>
+            <FormValidity methods={methods} mode={mode}/>
 
             {/* Botões de salvar / cancelar */}
             <FormActionsButtonsRequest
                 methods={methods}
                 mode={mode}
                 setMode={setMode}
-                onConfirm={(data) => handleEdit(defaultValue.id, data as IPACopackerRegister)}
+                onConfirm={(data) => handleEdit(defaultValue.id, data as IPABurdenRegister)}
             />
         </FormLayout>
         

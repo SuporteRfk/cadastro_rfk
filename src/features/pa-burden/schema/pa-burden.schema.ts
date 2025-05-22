@@ -104,7 +104,7 @@ export const paBurdenRegisterSchema: yup.ObjectSchema<IPABurdenRegister> = yup.o
             originalValue === "" ? null : value
         )   
         .required("Por favor, informe a largura do fardo"),
-    ncm: yup.string()
+     ncm: yup.string()
         .transform((value) => value.replace(/[\s.]/g, ""))
         .matches(/^\d{8}$/, "Informe um NCM válido de 8 dígitos. Ex: 8430.10.80")
         .required("Por favor, informe o NCM"),
@@ -116,8 +116,8 @@ export const paBurdenRegisterSchema: yup.ObjectSchema<IPABurdenRegister> = yup.o
             originalValue === "" ? null : value
         )
         .required("Por favor, informe a validade de acordo com o tipo de prazo"), 
-    cest:yup.string()
-        .transform((value) => value.replace(/[\s.]/g, null))
+   cest:yup.string()
+        .transform((value) => value.replace(/[\s.]/g, ""))
         .matches(/^\d{7}$/, "Informe um CEST válido de 7 dígitos. Ex: 84.301.80")
         .notRequired(),
     grupo_tributario: yup.number()

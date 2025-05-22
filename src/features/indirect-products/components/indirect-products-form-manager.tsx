@@ -86,7 +86,7 @@ export const IndirectProductsFormManager = ({defaultValue, mode, isChange, loadi
                 methods={methods}
                 mode={mode}
                 setMode={setMode}
-                onConfirm={(data) => handleEdit(defaultValue.id, data)}
+                onConfirm={(data) => handleEdit(defaultValue.id, data as IIndirectProductsRegister)}
             />
         </FormLayout>
         

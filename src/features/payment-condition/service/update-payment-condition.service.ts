@@ -13,6 +13,6 @@ export const updatePaymentConditionService =async(id:number,dataUpdate:IPaymentC
         .eq("id", id)
 
     if(error){
-        throw new Error(`Erro no service update Payment Condition: ${error.message}`);
+        throw new Error(`Erro na atualização da condição de pagamento: ${error.message}`);
     }
 }

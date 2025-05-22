@@ -168,7 +168,7 @@ export const InsumoFormManager = ({defaultValue, mode, isChange, loadingModal, s
                 methods={methods}
                 mode={mode}
                 setMode={setMode}
-                onConfirm={(data) => handleEdit(defaultValue.id, data)}
+                onConfirm={(data) => handleEdit(defaultValue.id, data as IInsumoRegister)}
             />
         </FormLayout>
         
