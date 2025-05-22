@@ -25,6 +25,7 @@ interface ModalRequestWrapperProps{
         setLoadingModal: React.Dispatch<React.SetStateAction<boolean>>;
         status: StatusRequest;
         setMode:React.Dispatch<React.SetStateAction<FormStateType>>
+        viewRequestId: number;
     }>;
     request: IViewRequest;
     mode: FormStateType;
@@ -81,6 +82,7 @@ export const ModalRequestWrapper = ({FormComponent, request, mode, isTheRouteOfC
             setLoadingModal={setLoadingModal}
             status={request.status}
             setMode={setMode}
+            viewRequestId={request.id}
         />
     );
 };

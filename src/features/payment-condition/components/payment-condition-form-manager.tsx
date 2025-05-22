@@ -1,19 +1,18 @@
-import { Button, FormLayout, FormSection, Input, LoadingModal, SubTitleForm, Toastify } from "@/components";
+import { Button, FormLayout, FormSection, Input, LoadingModal, SubTitleForm } from "@/components";
 import { IPaymentCondition, IPaymentConditionRegister } from "../interface/payment-condition";
 import { updatePaymentConditionService } from "../service/update-payment-condition.service";
-import { updateRequestService } from "@/services/supabase/update-request.service";
 import { PaymentConditionSchema } from "../schema/payment-condition.shema";
 import { FormStateType, StatusRequest } from "@/interfaces";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { formatText, handleApiError } from "@/utils";
 import { useForm } from "react-hook-form";
-import { AuthContext, ModalContext} from "@/context";
+import { ModalContext} from "@/context";
 import {
     Landmark as TitleFormIcon,
     CircleDollarSign as PaymentIcon,
     Banknote as PaymentCoonditionIcon
 } from "lucide-react";
 import { useContext} from "react";
+import { useEditRequest } from "@/hooks/use-edit-request.hooks";
 
 
 
@@ -27,10 +26,10 @@ interface PaymentConditionFormManagerProps{
     setLoadingModal: React.Dispatch<React.SetStateAction<boolean>>;
     status: StatusRequest;
     setMode:React.Dispatch<React.SetStateAction<FormStateType>>
+    viewRequestId:number;
 }
 
-export const PaymentConditionFormManager = ({defaultValue, mode, isChange, loadingModal, setReasonFieldReview, reasonFieldReview, setLoadingModal, status, setMode}:PaymentConditionFormManagerProps) => {
-    const {user} = useContext(AuthContext);
+export const PaymentConditionFormManager = ({defaultValue, mode, isChange, loadingModal, setReasonFieldReview, reasonFieldReview, setLoadingModal, status, setMode, viewRequestId}:PaymentConditionFormManagerProps) => {
     const {openModal} = useContext(ModalContext);
     if(loadingModal){
         return <LoadingModal/> 
@@ -43,33 +42,14 @@ export const PaymentConditionFormManager = ({defaultValue, mode, isChange, loadi
     });
 
 
-    const handleEditRequet = async (data:IPaymentConditionRegister) => {
-        console.log(data)
-        try {
-            setLoadingModal(true);
-            await updatePaymentConditionService(defaultValue.id,data);
-            await updateRequestService({
-                solicitacao_id: defaultValue.id,
-                status: status,
-                novo_solicitante: {
-                    data: formatText(new Date(),"data"),
-                    departamento: user?.departaments || 'departamento',
-                    nome: user?.fullName || "usuario padrão",
-                    operacao: "Editar solicitação"
-                }
-            })
-            Toastify({
-                type: "success",
-                message: "Solicitação atualizada!"
-            })
-            setMode("viewing");
-        } catch (error) {
-            handleApiError(error,"Erro para atualizar a edição");
-        } finally {
-            setLoadingModal(false);
-        }
-    };
-
+    //Hook para lidar com ediçao do formulário
+    const {handleEdit} = useEditRequest<IPaymentConditionRegister>({
+        setLoadingModal,
+        setMode,
+        status,
+        viewRequestId,
+        updateFunction: updatePaymentConditionService
+    })
     
 
 
@@ -113,10 +93,8 @@ export const PaymentConditionFormManager = ({defaultValue, mode, isChange, loadi
                                         "MANAGER_FORM",
                                         {
                                             message: "Você tem certeza que deseja salvar essa parada?",
-                                            onConfirm: () => {
-                                                
-                                                    handleEditRequet(validatedData as IPaymentConditionRegister);
-                                                
+                                            onConfirm: () => {                                                
+                                                handleEdit(defaultValue.id,validatedData as IPaymentConditionRegister);
                                             },
                                         
                                         }

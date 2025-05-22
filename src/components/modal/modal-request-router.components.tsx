@@ -1,6 +1,7 @@
 import { PaymentConditionFormManager } from "@/features/payment-condition/components/payment-condition-form-manager";
 import { ModalRequestWrapper } from "./modal-request-wrapper.components";
 import { FormStateType, IViewRequest } from "@/interfaces";
+import { UnitMeasureFormManager } from "@/features/unit-measure/components/unit-measure-form-manager";
 
 
 interface ModalRequestRouterProps {
@@ -27,7 +28,15 @@ export const ModalRequestRouter = ( {request, mode, setLoadingModal,isTheRouteOf
                         setMode={setMode}
                     />
         case "cad_unidade_medida":
-            return <DummyForm/>
+            return <ModalRequestWrapper
+                        request={request}
+                        FormComponent={UnitMeasureFormManager}
+                        mode={mode} 
+                        isTheRouteOfChange={isTheRouteOfChange} 
+                        setLoadingModal={setLoadingModal}
+                        loadingModal={loadingModal}
+                        setMode={setMode}
+                    />
         case "cad_produtos_indiretos":
             return <DummyForm/>
         case "cad_pa_unitario":
