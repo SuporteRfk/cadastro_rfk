@@ -26,8 +26,8 @@ export const ModalRequest = ({ onClose, request, isTheRouteOfChange }: ModalRequ
     return (
         <div className="fixed inset-0 z-50 bg-neutral/40 flex items-center justify-center">
             
-                <div className="bg-white w-full max-w-5xl rounded-md shadow-lg h-full max-h-[90vh] relative ">
-                    <div className="flex flex-col space-y-1.5 text-center sm:text-left p-4">
+                <div className="bg-white w-full max-w-6xl rounded-md shadow-lg h-full max-h-[95vh] relative overflow-auto">
+                    <div className="flex flex-col text-center sm:text-left p-4">
                         {/* Header */}
                         <div className="flex items-center justify-between w-full ">
                             {/* Título */}

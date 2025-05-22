@@ -43,7 +43,8 @@ export const ModalRequestActions = ({ request, mode, setMode, isTheRouteOfChange
   
  
   return (
-    <div className="flex items-center justify-end gap-2 w-full absolute z-10 bottom-0 p-4">
+    // <div className="flex items-center justify-end gap-2 w-full absolute z-10 bottom-0 p-4">
+    <div className="flex items-center justify-end gap-2 w-full p-4">
 
             
                 {handleReleaseEdit() &&

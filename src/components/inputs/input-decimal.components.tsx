@@ -21,13 +21,16 @@ export const InputDecimal =({Icon, name, error, label, placeholder, decimalScale
     const [internalValue, setInternalValue] = useState<string>("");
 
     const watchedValue = watch( name );
+    console.log(watchedValue)
 
     useEffect(() => {
-        // Se o valor do campo no formulário for vazio ou undefined, reseta o input
-        if (watchedValue === "" || watchedValue === undefined || watchedValue === null)  {
-            setInternalValue(""); 
+        if (watchedValue !== undefined && watchedValue !== null) {
+            const normalized = watchedValue.toString().replace(".", ",");
+            setInternalValue(normalized);
+        } else {
+            setInternalValue("");
         }
-      }, [watchedValue]);
+    }, [watchedValue]);
 
     return (
         <div className="w-full flex flex-col gap-1 relative my-1.5">
