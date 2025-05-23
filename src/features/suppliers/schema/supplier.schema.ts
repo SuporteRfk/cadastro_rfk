@@ -18,7 +18,7 @@ export const supplierRegisterSchema:yup.ObjectSchema<ISupplierRegisterForm> = yu
         .required("Por favor informe o número do whatsapp com o DDD"),
     nome_solicitante: yup.string()
         .required("Por favor informe seu nome"),
-    fisico_juridico: yup.string()
+    fisica_juridica: yup.string()
         .oneOf(Object.values(PfOrPj))
         .required("Por favor selecione o tipo de cadastro"),
     cnpj_cpf: yup.string()
@@ -82,32 +82,31 @@ export const supplierRegisterSchema:yup.ObjectSchema<ISupplierRegisterForm> = yu
         .notRequired(),
     telefone_1: yup.string()
         .transform((value) => value.replace(/[\s()-]/g, ""))
-        .min(14, 'Por favor insira um número válido, Ex: +55 (11) 9 9999-0000')
-        .matches(/^\+?\d{12,13}$/, "Número inválido")
+        .matches(/^\+?\d{10,13}$/, "Por favor insira um número válido, Ex: +55 (11) 9 9999-0000")
         .required("Por favor informe um número de telefone/whatsapp principal"),
     telefone_2: yup.string()
         .notRequired()
         .nullable()
-        .transform((value) => value.replace(/[\s()-]/g, null))
+        .transform((value) => value.replace(/[\s()-]/g, ""))
         .test("valid-telefone_2", "Por favor insira um número válido, Ex: +55 (11) 9 9999-0000", (value) => {
-            if (!value) return true; // Se for null ou vazio, passa | If it's null or empty, pass
-            return /^\+?\d{12,13}$/.test(value); // Valida apenas se houver um valor | Validate only if there is a value
+            if (!value) return true; // Se for null ou vazio, passa 
+            return /^\+?\d{10,13}$/.test(value);// Valida apenas se houver um valor 
         }),
     telefone_3: yup.string()
         .notRequired()
         .nullable()
-        .transform((value) => value.replace(/[\s()-]/g, null))
+        .transform((value) => value.replace(/[\s()-]/g, ""))
         .test("valid-telefone_3", "Por favor insira um telefone fixo válido, Ex: (11) 3456-7890", (value) => {
-            if (!value) return true; // Se for null ou vazio, passa | If it's null or empty, pass
-            return /^\d{10}$/.test(value); // Valida apenas se houver um valor | Validate only if there is a value
+            if (!value) return true; // Se for null ou vazio, passa 
+            return /^\+?\d{10,13}$/.test(value);// Valida apenas se houver um valor 
         }),
     telefone_4: yup.string()
         .notRequired()
         .nullable()
-        .transform((value) => value.replace(/[\s()-]/g, null))
+        .transform((value) => value.replace(/[\s()-]/g, ""))
         .test("valid-telefone_4", "Por favor insira um telefone fixo válido, Ex: (11) 3456-7890", (value) => {
-            if (!value) return true; // Se for null ou vazio, passa | If it's null or empty, pass
-            return /^\d{10}$/.test(value); // Valida apenas se houver um valor | Validate only if there is a value
+            if (!value) return true; // Se for null ou vazio, passa
+            return /^\+?\d{10,13}$/.test(value);// Valida apenas se houver um valor 
         }),
     endereco: yup.string()
         .required("Por favor informe o endereço"),

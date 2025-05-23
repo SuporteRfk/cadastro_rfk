@@ -98,7 +98,6 @@ export const RequestProvider = ({children}:{children: ReactNode}) => {
     const getRequest = async (filter?: IQueryRequest):Promise<void> => {
         try {
             setLoadingSkelleton(true);
-            console.log('funcao getRequest: ',filter?.status)
             const {data, count} = await getRequestService(filter);
             setRequest(data);
             setTotalRequest(!count ? 0 : count);

@@ -1,4 +1,5 @@
 import { FormLayout, FormPalletizingTrackingConversion, FormProductAttributes, FormProductCategorySelector, FormProductCode, FormProductDescription, FormProductDimensions, FormProductPackagingInfo, FormValidity, FormWeights, Input, LoadingModal, SubTitleForm } from "@/components";
+import { FamilyCodePAThird, GroupCodePAThird, TypeCodePAThird } from "../interface/pa-third-enum";
 import { FormActionsButtonsRequest } from "@/components/form/form-actions-buttons-request";
 import { updatePAThirdService } from "../service/update-pa-third.service";
 import { IPAThird , IPAThirdRegister} from "../interface/pa-third";
@@ -13,7 +14,6 @@ import {
     Group as SubGroupIcon,
     Building as PAThirdIcon
 } from "lucide-react";
-import { FamilyCodePAThird, GroupCodePAThird, TypeCodePAThird } from "../interface/pa-third-enum";
 
 
 

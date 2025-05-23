@@ -2,7 +2,7 @@ import { IPaymentCondition } from "@/features/payment-condition/interface/paymen
 import { IIndirectProducts } from "@/features/indirect-products/interface/indirect-products";
 import { IUnitMeasure } from "@/features/unit-measure/interface/unit-measure";
 import { IPACopacker } from "@/features/pa-copacker/interface/pa-copacker";
-import { FormStateType, IViewRequest, StatusRequest } from "@/interfaces";
+import { FormStateType, IViewRequest, PfOrPj, StatusRequest } from "@/interfaces";
 import { IPAUnitary } from "@/features/pa-unitary/interface/pa-unitary";
 import { IPABurden } from "@/features/pa-burden/interface/pa-burden";
 import { ISupplier } from "@/features/suppliers/interface/supplier";
@@ -12,6 +12,22 @@ import { IInsumo } from "@/features/insumos/interface/insumos";
 import { IClient } from "@/features/client/interface/client";
 import { handleApiError, applyMasks } from "@/utils";
 import { useEffect, useState } from "react";
+import { setPjOrPfSuppliers } from "@/features/suppliers/utils/set-pj-or-pf";
+
+type EntityTypes =
+  | IClient 
+  | IPaymentCondition
+  | ISupplier
+  | IUnitMeasure
+  | IInsumo
+  | IIndirectProducts
+  | IPACopacker
+  | IPABurden
+  | IPAThird
+  | IPAUnitary;
+
+
+type Extended<T> = T & Record<string, any>;
 
 
 interface ModalRequestWrapperProps{
@@ -37,19 +53,9 @@ interface ModalRequestWrapperProps{
 
 export const ModalRequestWrapper = ({FormComponent, request, mode, isTheRouteOfChange, setLoadingModal,loadingModal, setMode}:ModalRequestWrapperProps) => {
     
-    const [defaultValuesRequest, setDefaultValuesRequest] = useState<
-            | IClient 
-            | IPaymentCondition
-            | ISupplier
-            | IUnitMeasure
-            | IInsumo
-            | IIndirectProducts
-            | IPACopacker
-            | IPABurden
-            | IPAThird
-            | IPAUnitary
-            | null
-    >(null);
+    const [defaultValuesRequest, setDefaultValuesRequest] = useState<Extended<EntityTypes> | null>(null)
+            
+    
 
     const [reasonFieldReview, setReasonFieldReview] = useState<{ [key: string]: string }>(request.motivo_recusa ? request.motivo_recusa : {});
 
@@ -57,7 +63,18 @@ export const ModalRequestWrapper = ({FormComponent, request, mode, isTheRouteOfC
         try {
             setLoadingModal(true);
             const response = await getRequestDetailsService(request.id_fk, request.tabela_origem);
-            const processedResponse = applyMasks(response);
+            let processedResponse = applyMasks(response);
+            
+            // condição para adicionar no form do fornecedor o tipo de pessoa , na hora da solicitação
+            if(request.tabela_origem === "cad_fornecedores"){
+                const supplier = processedResponse as ISupplier;
+                const typePjOrPf = setPjOrPfSuppliers(supplier.cnpj_cpf);
+                
+                processedResponse = {
+                    ...supplier,
+                    fisica_juridica: typePjOrPf
+                } as ISupplier & { fisica_juridica: PfOrPj };
+            }
             setDefaultValuesRequest(processedResponse);
         } catch (error) {
             handleApiError(error, "Erro a buscar detalhes da solicitação")
