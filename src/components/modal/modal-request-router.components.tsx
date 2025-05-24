@@ -7,6 +7,7 @@ import { SuppliersFormManager } from "@/features/suppliers/components/suppliers-
 import { PABurdenFormManager } from "@/features/pa-burden/components/pa-burden-form-manager";
 import { PAThirdFormManager } from "@/features/pa-third/components/pa-third-form-manager";
 import { InsumoFormManager } from "@/features/insumos/components/insumos-form-manager";
+import { ClientFormManager } from "@/features/client/components/client-form-manager";
 import { ModalRequestWrapper } from "./modal-request-wrapper.components";
 import { FormStateType, IViewRequest } from "@/interfaces";
 
@@ -19,7 +20,6 @@ interface ModalRequestRouterProps {
     loadingModal:boolean;
     setMode:React.Dispatch<React.SetStateAction<FormStateType>>;
 }
-const DummyForm = () => <div>Teste Dummy</div>;
 
 export const ModalRequestRouter = ( {request, mode, setLoadingModal,isTheRouteOfChange, loadingModal, setMode}:ModalRequestRouterProps) => {
     
@@ -105,7 +105,15 @@ export const ModalRequestRouter = ( {request, mode, setLoadingModal,isTheRouteOf
                         setMode={setMode}
                     />
         case "cad_clientes":
-            return <DummyForm/>
+            return <ModalRequestWrapper
+                        request={request}
+                        FormComponent={ClientFormManager}
+                        mode={mode} 
+                        isTheRouteOfChange={isTheRouteOfChange} 
+                        setLoadingModal={setLoadingModal}
+                        loadingModal={loadingModal}
+                        setMode={setMode}
+                    />
         case "cad_fornecedores": 
             return <ModalRequestWrapper
                         request={request}

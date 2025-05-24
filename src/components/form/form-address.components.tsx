@@ -150,7 +150,7 @@ export const FormAddress = <T extends FieldValues>({mode, methods, isBillingAddr
                     register={methods.register(fieldConfig.number.name as Path<T>)}
                     error={fieldConfig.number.error} 
                     placeholder="Nº"
-                    type="number"
+                    type="text"
                     icon={AddressIcon}
                     readOnly={mode === 'viewing' || mode === 'reviewing'} 
                     widthContainer="w-[150px]"

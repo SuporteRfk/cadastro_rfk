@@ -19,5 +19,6 @@ const formatResponseCep = (response:IResponseViaCep) => {
         bairro: response.bairro,
         municipio: response.localidade,
         estado: response.uf,
+        numero: response.gia
     }
 };

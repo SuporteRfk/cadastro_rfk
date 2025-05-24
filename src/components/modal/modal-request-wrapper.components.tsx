@@ -75,6 +75,15 @@ export const ModalRequestWrapper = ({FormComponent, request, mode, isTheRouteOfC
                     fisica_juridica: typePjOrPf
                 } as ISupplier & { fisica_juridica: PfOrPj };
             }
+
+            if(request.tabela_origem === "cad_clientes"){
+                const client = processedResponse as IClient;
+                const hasBillingAddress = client.cep_cobranca !== null;
+                processedResponse = {
+                    ...client,
+                    mesmo_endereco_cobranca:  hasBillingAddress ? "não" : "sim"
+                } as IClient & {mesmo_endereco_cobranca: "sim" | "não"}
+            }
             setDefaultValuesRequest(processedResponse);
         } catch (error) {
             handleApiError(error, "Erro a buscar detalhes da solicitação")
