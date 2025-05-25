@@ -1,9 +1,9 @@
-import { FormActionsButtonsRequest } from "@/components/form/form-actions-buttons-request";
-import { FormLayout, FormSection, Input, LoadingModal, SubTitleForm } from "@/components";
+import { FormActionsButtonsRequest, FormLayout, FormSection, SubTitleForm, FormObservationDeniedFild } from "@/components/form";
 import { updateUnitMeasureService } from "../service/update-unit-measure.service";
+import { useDeniedRequest, useEditRequest, useObservationDenied } from "@/hooks";
+import { Input, LoadingModal, RequestDeniedInfo, Toastify } from "@/components";
 import { IUnitMeasure, IUnitMeasureRegister } from "../interface/unit-measure";
 import { unitMeasureSchema } from "../schema/unit-measure.schema";
-import { useEditRequest } from "@/hooks/use-edit-request.hooks";
 import { FormStateType, StatusRequest } from "@/interfaces";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
@@ -11,8 +11,6 @@ import {
     Ruler as UnitMeasureIcon,
     PencilRuler as UnitMeasureSubTitleIcon
 } from "lucide-react";
-
-
 
 
 interface PaymentConditionFormManagerProps{
@@ -26,14 +24,15 @@ interface PaymentConditionFormManagerProps{
     status: StatusRequest;
     setMode:React.Dispatch<React.SetStateAction<FormStateType>>
     viewRequestId: number;
+    obervationRequest: string | null;
 }
 
-export const UnitMeasureFormManager = ({defaultValue, mode, isChange, loadingModal, setReasonFieldReview, reasonFieldReview, setLoadingModal, status, setMode, viewRequestId}:PaymentConditionFormManagerProps) => {   
+export const UnitMeasureFormManager = ({defaultValue, mode, isChange, loadingModal, setReasonFieldReview, reasonFieldReview, setLoadingModal, status, setMode, viewRequestId, obervationRequest}:PaymentConditionFormManagerProps) => {   
     if(loadingModal){
         return <LoadingModal/> 
     }
   
-  
+    
     const methods= useForm<IUnitMeasureRegister>({
         defaultValues: defaultValue,
         resolver: yupResolver(unitMeasureSchema)
@@ -49,11 +48,32 @@ export const UnitMeasureFormManager = ({defaultValue, mode, isChange, loadingMod
         updateFunction: updateUnitMeasureService
     });
 
-
+    // Hooks para lidar com negar a solicitação
+    const denyRequest = useDeniedRequest(); // salvar no supabase
+    const { errorObservation, observationDenied, reset ,setObservationDenied ,validate} = useObservationDenied(); // lidar com a observação, salvar/apagar
     
-
-
-    
+    const handleConfirm = async (data: IUnitMeasureRegister) => {
+        if(mode === "editing"){
+            await handleEdit(defaultValue.id, data);
+        } else if (mode === "denied"){
+            if(!validate()){
+                Toastify({
+                    type: "warning",
+                    message:"Informa o motivo"
+                })
+            };
+            await denyRequest({
+                viewRequestId,
+                setLoadingModal,
+                setMode,
+                observation: observationDenied
+            })
+            reset();
+        } else {
+            console.warn("Modo não tratado: ", mode)
+        }
+    };
+        
     return(
         <FormLayout 
             methods={methods} 
@@ -62,7 +82,14 @@ export const UnitMeasureFormManager = ({defaultValue, mode, isChange, loadingMod
             iconForm={UnitMeasureSubTitleIcon}
             mode={mode}
             showButtonsDefault={false}            
-        >
+        >   
+
+            {(mode === "viewing" && status === StatusRequest.NEGADO && obervationRequest) && (
+                <RequestDeniedInfo
+                    observation={obervationRequest}
+                />
+            )}
+
             <SubTitleForm title="Dados da Unidade de Medida"  styleLine="border-t-3 border-dashed border-strong/10 mt-4" icon={UnitMeasureSubTitleIcon}/>
             <FormSection className="sm:flex-row gap-4 pb-2">
                     <Input    
@@ -87,12 +114,20 @@ export const UnitMeasureFormManager = ({defaultValue, mode, isChange, loadingMod
                     />
             </FormSection>
 
-           {/* Botões de salvar / cancelar */}
+            {mode === "denied" && (
+                <FormObservationDeniedFild
+                    observation={observationDenied}
+                    setObservation={setObservationDenied}
+                    error={errorObservation}
+                />
+            )}
+
+            {/* Botões de salvar / cancelar */}
             <FormActionsButtonsRequest
                 methods={methods}
                 mode={mode}
                 setMode={setMode}
-                onConfirm={(data) => handleEdit(defaultValue.id, data as IUnitMeasureRegister)}
+                onConfirm={(data) => handleConfirm(data)}
             />
         </FormLayout>
         

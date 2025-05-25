@@ -56,7 +56,7 @@ export const ModalRequest = ({ onClose, request, isTheRouteOfChange }: ModalRequ
                     />
                         
                     {/* Ações (editar, aprovar, etc.) */}
-                    {!loadingModal && 
+                    {(!loadingModal && mode === "viewing") && 
                         <ModalRequestActions request={request} mode={mode} setMode={setMode} isTheRouteOfChange={isTheRouteOfChange}/>
                     }
                 </div>

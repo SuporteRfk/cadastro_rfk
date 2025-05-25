@@ -1,5 +1,6 @@
 // Centralizador dos componentes 
 
+export * from "./request-denied-info.components";
 export * from "./menu/menu-desktop.components";
 export * from "./loading-skelleton.components";
 export * from "./full-page-loader.components";

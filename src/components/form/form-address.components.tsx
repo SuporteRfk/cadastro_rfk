@@ -72,6 +72,11 @@ export const FormAddress = <T extends FieldValues>({mode, methods, isBillingAddr
                 methods.setValue(fieldConfig.complement.name as Path<T>, address.complemento as PathValue<T, Path<T>>);
                 methods.setValue(fieldConfig.state.name as Path<T>, address.estado as PathValue<T, Path<T>>);
                 methods.setValue(fieldConfig.city.name as Path<T>, address.municipio as PathValue<T, Path<T>>);
+                
+                const number = methods.getValues(fieldConfig.number.name as Path<T>);
+                if(!number){
+                    methods.setValue(fieldConfig.number.name as Path<T>, address.numero as PathValue<T, Path<T>>);
+                }
             }
 
         } catch (error) {
@@ -81,9 +86,10 @@ export const FormAddress = <T extends FieldValues>({mode, methods, isBillingAddr
         }
 
     }
+
+    
     
     useEffect(() => {
-      
         if (zipCodeWithoutMask?.length === 8) {
             getAddressData(zipCodeWithoutMask)
         }

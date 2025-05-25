@@ -1,7 +1,7 @@
 
 import { useFormContext, UseFormRegisterReturn } from "react-hook-form";
 import { CalendarDays as CalendarIcon } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface DateInputProps {
     name: string;
@@ -15,9 +15,10 @@ export const DateInput = ({name,label,register,error,mode = "visualizacao"}: Dat
     const [currentDate, setCurrentDate] = useState<string>("");
     const {watch} = useFormContext();
     const value = watch(name);
-        
+    const initialized = useRef(false);        
        
     useEffect(() => {
+        if (!initialized.current) {
             if (mode === "cadastro" && !value) {
                 const now = new Date();
                 // Ajuste para o fuso horário local
@@ -30,8 +31,9 @@ export const DateInput = ({name,label,register,error,mode = "visualizacao"}: Dat
                 const formatted = iso.slice(0, 16);
                 setCurrentDate(formatted);
             }
-          
-        }, [mode, value]);
+            initialized.current = true;
+        }
+    }, [mode, value]);
     
     return(
         <div className="w-full max-w-full flex flex-col gap-1 my-1.5 sm:max-w-[200px] relative ">

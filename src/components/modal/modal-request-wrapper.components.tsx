@@ -42,6 +42,7 @@ interface ModalRequestWrapperProps{
         status: StatusRequest;
         setMode:React.Dispatch<React.SetStateAction<FormStateType>>
         viewRequestId: number;
+        obervationRequest: string | null;
     }>;
     request: IViewRequest;
     mode: FormStateType;
@@ -109,6 +110,7 @@ export const ModalRequestWrapper = ({FormComponent, request, mode, isTheRouteOfC
             status={request.status}
             setMode={setMode}
             viewRequestId={request.id}
+            obervationRequest={request.observacao}
         />
     );
 };
