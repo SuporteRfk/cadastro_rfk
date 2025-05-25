@@ -52,6 +52,7 @@ export const UnitMeasureFormManager = ({defaultValue, mode, isChange, loadingMod
     const denyRequest = useDeniedRequest(); // salvar no supabase
     const { errorObservation, observationDenied, reset ,setObservationDenied ,validate} = useObservationDenied(); // lidar com a observação, salvar/apagar
     
+    // Função para saber qual função irá chamar no botão de salvar, dependendo o modo.
     const handleConfirm = async (data: IUnitMeasureRegister) => {
         if(mode === "editing"){
             await handleEdit(defaultValue.id, data);
@@ -61,6 +62,7 @@ export const UnitMeasureFormManager = ({defaultValue, mode, isChange, loadingMod
                     type: "warning",
                     message:"Informa o motivo"
                 })
+                return;
             };
             await denyRequest({
                 viewRequestId,
@@ -83,7 +85,7 @@ export const UnitMeasureFormManager = ({defaultValue, mode, isChange, loadingMod
             mode={mode}
             showButtonsDefault={false}            
         >   
-
+            {/* Sessão para mostrar a obervação quando a solicitação for negada */}
             {(mode === "viewing" && status === StatusRequest.NEGADO && obervationRequest) && (
                 <RequestDeniedInfo
                     observation={obervationRequest}
@@ -114,6 +116,7 @@ export const UnitMeasureFormManager = ({defaultValue, mode, isChange, loadingMod
                     />
             </FormSection>
 
+            {/* Sessão para informar o motivo que está negando a solicitação */}
             {mode === "denied" && (
                 <FormObservationDeniedFild
                     observation={observationDenied}

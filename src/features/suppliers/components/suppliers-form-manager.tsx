@@ -1,4 +1,4 @@
-import { FormAddress, FormBusinessNames, FormLayout, FormRegistrationIdentification, FormTaxIdentification, FormTelephone, LoadingModal, SubTitleForm } from "@/components";
+import { FormAddress, FormBusinessNames, FormLayout, FormObservationDeniedFild, FormRegistrationIdentification, FormTaxIdentification, FormTelephone, LoadingModal, RequestDeniedInfo, SubTitleForm, Toastify } from "@/components";
 import { FormActionsButtonsRequest } from "@/components/form/form-actions-buttons-request";
 import { ISupplier, ISupplierRegisterForm } from "../interface/supplier";
 import { supplierRegisterSchema } from "../schema/supplier.schema";
@@ -13,6 +13,7 @@ import {
 import { upsertSupplierService } from "../service/update-supplier.service";
 import { SupplierTpj, SupplierType } from "../interface/supplier-enum";
 import { useState } from "react";
+import { useDeniedRequest, useObservationDenied } from "@/hooks";
 
 
 
@@ -28,9 +29,10 @@ interface SuppliersFormManagerProps{
     status: StatusRequest;
     setMode:React.Dispatch<React.SetStateAction<FormStateType>>
     viewRequestId: number;
+    obervationRequest: string | null;
 }
 
-export const SuppliersFormManager = ({defaultValue, mode, isChange, loadingModal, setReasonFieldReview, reasonFieldReview, setLoadingModal, status, setMode, viewRequestId}:SuppliersFormManagerProps) => {
+export const SuppliersFormManager = ({defaultValue, mode, isChange, loadingModal, setReasonFieldReview, reasonFieldReview, setLoadingModal, status, setMode, viewRequestId, obervationRequest}:SuppliersFormManagerProps) => {
     
     if(loadingModal){
         return <LoadingModal/> 
@@ -54,7 +56,36 @@ export const SuppliersFormManager = ({defaultValue, mode, isChange, loadingModal
         updateFunction: upsertSupplierService
     });
 
+    // Hooks para lidar com negar a solicitação
+    const denyRequest = useDeniedRequest(); // salvar no supabase
+    const { errorObservation, observationDenied, reset ,setObservationDenied ,validate} = useObservationDenied(); // lidar com a observação, salvar/apagar
 
+    // Função para saber qual função irá chamar no botão de salvar, dependendo o modo.
+    const handleConfirm = async (data: ISupplierRegisterForm) => {
+        if(mode === "editing"){
+            const {fisica_juridica, ...dataRegister} = data;
+            await handleEdit(defaultValue.id, dataRegister as ISupplierRegisterForm);
+        } else if (mode === "denied"){
+            if(!validate()){
+                Toastify({
+                    type: "warning",
+                    message:"Informa o motivo"
+                })
+                return;
+            };
+            await denyRequest({
+                viewRequestId,
+                setLoadingModal,
+                setMode,
+                observation: observationDenied
+            })
+            reset();
+        } else {
+            console.warn("Modo não tratado: ", mode)
+        }
+    };
+
+    
     return(
         <FormLayout 
             methods={methods} 
@@ -63,7 +94,15 @@ export const SuppliersFormManager = ({defaultValue, mode, isChange, loadingModal
             iconForm={SuppliersIcon}
             mode={mode}
             showButtonsDefault={false}            
-        >
+        >   
+
+            {/* Sessão para mostrar a obervação quando a solicitação for negada */}
+            {(mode === "viewing" && status === StatusRequest.NEGADO && obervationRequest) && (
+                <RequestDeniedInfo
+                    observation={obervationRequest}
+                />
+            )}
+
             {/* SubTitulo Dados do fornecedor */}
             <SubTitleForm title="Dados do Fornecedor"  styleLine="border-t-3 border-dashed border-strong/10 mt-4" icon={SuppliersIcon}/>
          
@@ -96,15 +135,20 @@ export const SuppliersFormManager = ({defaultValue, mode, isChange, loadingModal
             {/* Sessão endereço */}
             <FormAddress methods={methods} setLoading={setLoadingLocal} mode={mode}/>
 
+            {/* Sessão para informar o motivo que está negando a solicitação */}
+            {mode === "denied" && (
+                <FormObservationDeniedFild
+                    observation={observationDenied}
+                    setObservation={setObservationDenied}
+                    error={errorObservation}
+                />
+            )}
             {/* Botões de salvar / cancelar */}
             <FormActionsButtonsRequest
                 methods={methods}
                 mode={mode}
                 setMode={setMode}
-                onConfirm={(data) => {
-                    const {fisica_juridica, ...dataRegister} = data;
-                    handleEdit(defaultValue.id, dataRegister as ISupplierRegisterForm)
-                }}
+                onConfirm={(data) => handleConfirm(data as ISupplierRegisterForm)}
             />
         </FormLayout>
         
