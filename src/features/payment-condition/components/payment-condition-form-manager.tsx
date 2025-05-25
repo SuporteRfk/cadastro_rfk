@@ -1,9 +1,10 @@
+import { FormLayout, FormSection, SubTitleForm, FormActionsButtonsRequest, FormObservationDeniedFild } from "@/components/form";
 import { IPaymentCondition, IPaymentConditionRegister } from "../interface/payment-condition";
 import { updatePaymentConditionService } from "../service/update-payment-condition.service";
-import { FormActionsButtonsRequest } from "@/components/form/form-actions-buttons-request";
-import { FormLayout, FormSection, Input, LoadingModal, SubTitleForm } from "@/components";
+import { useEditRequest, useDeniedRequest, useObservationDenied } from "@/hooks";
+import { Input, LoadingModal, RequestDeniedInfo, Toastify } from "@/components";
 import { PaymentConditionSchema } from "../schema/payment-condition.shema";
-import { useEditRequest } from "@/hooks/use-edit-request.hooks";
+import {  } from "@/components/form/form-actions-buttons-request";
 import { FormStateType, StatusRequest } from "@/interfaces";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
@@ -27,9 +28,10 @@ interface PaymentConditionFormManagerProps{
     status: StatusRequest;
     setMode:React.Dispatch<React.SetStateAction<FormStateType>>
     viewRequestId:number;
+    obervationRequest: string | null;
 }
 
-export const PaymentConditionFormManager = ({defaultValue, mode, isChange, loadingModal, setReasonFieldReview, reasonFieldReview, setLoadingModal, status, setMode, viewRequestId}:PaymentConditionFormManagerProps) => {
+export const PaymentConditionFormManager = ({defaultValue, mode, isChange, loadingModal, setReasonFieldReview, reasonFieldReview, setLoadingModal, status, setMode, viewRequestId, obervationRequest}:PaymentConditionFormManagerProps) => {
     if(loadingModal){
         return <LoadingModal/> 
     }
@@ -50,7 +52,33 @@ export const PaymentConditionFormManager = ({defaultValue, mode, isChange, loadi
         updateFunction: updatePaymentConditionService
     })
     
-
+    // Hooks para lidar com negar a solicitação
+        const denyRequest = useDeniedRequest(); // salvar no supabase
+        const { errorObservation, observationDenied, reset ,setObservationDenied ,validate} = useObservationDenied(); // lidar com a observação, salvar/apagar
+        
+    // Função para saber qual função irá chamar no botão de salvar, dependendo o modo.
+    const handleConfirm = async (data: IPaymentConditionRegister) => {
+        if(mode === "editing"){
+            await handleEdit(defaultValue.id, data);
+        } else if (mode === "denied"){
+            if(!validate()){
+                Toastify({
+                    type: "warning",
+                    message:"Informa o motivo"
+                })
+                return;
+            };
+            await denyRequest({
+                viewRequestId,
+                setLoadingModal,
+                setMode,
+                observation: observationDenied
+            })
+            reset();
+        } else {
+            console.warn("Modo não tratado: ", mode)
+        }
+    };
 
     
     return(
@@ -62,6 +90,13 @@ export const PaymentConditionFormManager = ({defaultValue, mode, isChange, loadi
             mode={mode}
             showButtonsDefault={false}            
         >
+            {/* Sessão para mostrar a obervação quando a solicitação for negada */}
+            {(mode === "viewing" && status === StatusRequest.NEGADO && obervationRequest) && (
+                <RequestDeniedInfo
+                    observation={obervationRequest}
+                />
+            )}
+            
             <SubTitleForm title="Nova Condição de Pagamento"  styleLine="border-t-3 border-dashed border-strong/10 mt-4" icon={TitleFormIcon}/>
             <FormSection className="sm:flex-row gap-4 pb-2">
                 <Input
@@ -75,12 +110,21 @@ export const PaymentConditionFormManager = ({defaultValue, mode, isChange, loadi
                 />
             </FormSection>
 
+            {/* Sessão para informar o motivo que está negando a solicitação */}
+            {mode === "denied" && (
+                <FormObservationDeniedFild
+                    observation={observationDenied}
+                    setObservation={setObservationDenied}
+                    error={errorObservation}
+                />
+            )}
+
             {/* Botões de salvar / cancelar */}
             <FormActionsButtonsRequest
                 methods={methods}
                 mode={mode}
                 setMode={setMode}
-                onConfirm={(data) => handleEdit(defaultValue.id, data as IPaymentConditionRegister)}
+                onConfirm={(data) => handleConfirm(data as IPaymentConditionRegister)}
             />
         </FormLayout>
         
