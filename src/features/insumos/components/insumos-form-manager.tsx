@@ -1,9 +1,10 @@
-import { FormLayout, FormPalletizingTrackingConversion, FormProductAttributes, FormProductCategorySelector, FormProductCode, FormProductDescription, FormSection, FormWeights, Input, InputDecimal, InputSelect, LoadingModal, SubTitleForm } from "@/components";
+import { FormActionsButtonsRequest, FormLayout, FormObservationDeniedFild, FormPalletizingTrackingConversion, FormProductAttributes, FormProductCategorySelector, FormProductCode, FormProductDescription, FormSection, FormWeights, SubTitleForm } from "@/components/form";
+import { Input, InputDecimal, InputSelect, LoadingModal, RequestDeniedInfo, Toastify } from "@/components";
 import { FamilyCodeInsumos, GroupCodeInsumos, TypeCodeoInsumos } from "../interface/insumos-enum";
+import { useDeniedRequest, useObservationDenied, useEditRequest } from "@/hooks";
 import { ConverterType, FormStateType, StatusRequest } from "@/interfaces";
 import { updateInsumosService } from "../service/update-insumo.service";
 import { insumosRegisterSchema } from "../schema/insumos.schema";
-import { useEditRequest } from "@/hooks/use-edit-request.hooks";
 import { IInsumo, IInsumoRegister } from "../interface/insumos";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
@@ -16,7 +17,6 @@ import {
     Building2 as EnterpriseIcon,
     Variable as ConverterIcon,
 } from "lucide-react";
-import { FormActionsButtonsRequest } from "@/components/form/form-actions-buttons-request";
 
 
 
@@ -31,15 +31,15 @@ interface PaymentConditionFormManagerProps{
     status: StatusRequest;
     setMode:React.Dispatch<React.SetStateAction<FormStateType>>
     viewRequestId: number;
+    obervationRequest: string | null;
 }
 
-export const InsumoFormManager = ({defaultValue, mode, isChange, loadingModal, setReasonFieldReview, reasonFieldReview, setLoadingModal, status, setMode, viewRequestId}:PaymentConditionFormManagerProps) => {
+export const InsumoFormManager = ({defaultValue, mode, isChange, loadingModal, setReasonFieldReview, reasonFieldReview, setLoadingModal, status, setMode, viewRequestId, obervationRequest}:PaymentConditionFormManagerProps) => {
         
     if(loadingModal){
         return <LoadingModal/> 
     }
   
-    console.log(defaultValue)
     const methods= useForm<IInsumoRegister>({
         defaultValues: defaultValue,
         resolver: yupResolver(insumosRegisterSchema)
@@ -56,7 +56,33 @@ export const InsumoFormManager = ({defaultValue, mode, isChange, loadingModal, s
     });
 
 
+    // Hooks para lidar com negar a solicitação
+    const denyRequest = useDeniedRequest(); // salvar no supabase
+    const { errorObservation, observationDenied, reset ,setObservationDenied ,validate} = useObservationDenied(); // lidar com a observação, salvar/apagar
     
+    // Função para saber qual função irá chamar no botão de salvar, dependendo o modo.
+    const handleConfirm = async (data: IInsumoRegister) => {
+        if(mode === "editing"){
+            await handleEdit(defaultValue.id, data);
+        } else if (mode === "denied"){
+            if(!validate()){
+                Toastify({
+                    type: "warning",
+                    message:"Informa o motivo"
+                })
+                return;
+            };
+            await denyRequest({
+                viewRequestId,
+                setLoadingModal,
+                setMode,
+                observation: observationDenied
+            })
+            reset();
+        } else {
+            console.warn("Modo não tratado: ", mode)
+        }
+    };
 
 
     
@@ -68,7 +94,14 @@ export const InsumoFormManager = ({defaultValue, mode, isChange, loadingModal, s
             iconForm={InsumoIcon}
             mode={mode}
             showButtonsDefault={false}            
-        >
+        >   
+            {/* Sessão para mostrar a obervação quando a solicitação for negada */}
+            {(mode === "viewing" && status === StatusRequest.NEGADO && obervationRequest) && (
+                <RequestDeniedInfo
+                    observation={obervationRequest}
+                />
+            )}
+
             {/* Sessão dos dados do insumo */}
             <SubTitleForm title="Dados do Insumo"  styleLine="border-t-3 border-dashed border-strong/10 mt-4" icon={InsumoSubTitleIcon}/>
             {/* sessão da descrição do insumo e nome Científico*/}
@@ -163,12 +196,21 @@ export const InsumoFormManager = ({defaultValue, mode, isChange, loadingModal, s
                 />
             </FormSection>
 
+            {/* Sessão para informar o motivo que está negando a solicitação */}
+                {mode === "denied" && (
+                    <FormObservationDeniedFild 
+                        observation={observationDenied}
+                        setObservation={setObservationDenied}
+                        error={errorObservation}
+                    />
+                )}
+
            {/* Botões de salvar / cancelar */}
             <FormActionsButtonsRequest
                 methods={methods}
                 mode={mode}
                 setMode={setMode}
-                onConfirm={(data) => handleEdit(defaultValue.id, data as IInsumoRegister)}
+                onConfirm={(data) => handleConfirm(data as IInsumoRegister)}
             />
         </FormLayout>
         

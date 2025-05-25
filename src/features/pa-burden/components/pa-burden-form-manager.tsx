@@ -1,10 +1,10 @@
-import { FormLayout, FormPalletizingTrackingConversion, FormProductAttributes, FormProductCategorySelector, FormProductCode, FormProductDescription, FormProductDimensions, FormProductPackagingInfo, FormValidity, FormWeights, LoadingModal, SubTitleForm } from "@/components";
+import { FormLayout, FormActionsButtonsRequest, FormPalletizingTrackingConversion, FormProductAttributes, FormProductCategorySelector, FormProductCode, FormProductDescription, FormProductDimensions, FormProductPackagingInfo, FormValidity, FormWeights, SubTitleForm, FormObservationDeniedFild } from "@/components/form";
 import { FamilyCodePABurden, GroupCodePABurden, TypeCodeoPABurden } from "../interface/pa-burden-enum";
-import { FormActionsButtonsRequest } from "@/components/form/form-actions-buttons-request";
+import { useEditRequest, useDeniedRequest, useObservationDenied } from "@/hooks";
 import { updatePABurdenService } from "../service/update-pa-burden.service";
+import { LoadingModal, RequestDeniedInfo, Toastify } from "@/components";
 import { IPABurden, IPABurdenRegister } from "../interface/pa-burden";
 import { paBurdenRegisterSchema } from "../schema/pa-burden.schema";
-import { useEditRequest } from "@/hooks/use-edit-request.hooks";
 import { FormStateType, StatusRequest } from "@/interfaces";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
@@ -28,9 +28,10 @@ interface PABurdenFormManagerProps{
     status: StatusRequest;
     setMode:React.Dispatch<React.SetStateAction<FormStateType>>
     viewRequestId: number;
+    obervationRequest: string | null;
 }
 
-export const PABurdenFormManager = ({defaultValue, mode, isChange, loadingModal, setReasonFieldReview, reasonFieldReview, setLoadingModal, status, setMode, viewRequestId}:PABurdenFormManagerProps) => {
+export const PABurdenFormManager = ({defaultValue, mode, isChange, loadingModal, setReasonFieldReview, reasonFieldReview, setLoadingModal, status, setMode, viewRequestId, obervationRequest}:PABurdenFormManagerProps) => {
         
     if(loadingModal){
         return <LoadingModal/> 
@@ -51,6 +52,33 @@ export const PABurdenFormManager = ({defaultValue, mode, isChange, loadingModal,
         updateFunction: updatePABurdenService
     });
 
+    // Hooks para lidar com negar a solicitação
+    const denyRequest = useDeniedRequest(); // salvar no supabase
+    const { errorObservation, observationDenied, reset ,setObservationDenied ,validate} = useObservationDenied(); // lidar com a observação, salvar/apagar
+    
+    // Função para saber qual função irá chamar no botão de salvar, dependendo o modo.
+    const handleConfirm = async (data: IPABurdenRegister) => {
+        if(mode === "editing"){
+            await handleEdit(defaultValue.id, data);
+        } else if (mode === "denied"){
+            if(!validate()){
+                Toastify({
+                    type: "warning",
+                    message:"Informa o motivo"
+                })
+                return;
+            };
+            await denyRequest({
+                viewRequestId,
+                setLoadingModal,
+                setMode,
+                observation: observationDenied
+            })
+            reset();
+        } else {
+            console.warn("Modo não tratado: ", mode)
+        }
+    };
 
     return(
         <FormLayout 
@@ -61,6 +89,13 @@ export const PABurdenFormManager = ({defaultValue, mode, isChange, loadingModal,
             mode={mode}
             showButtonsDefault={false}            
         >
+            {/* Sessão para mostrar a obervação quando a solicitação for negada */}
+            {(mode === "viewing" && status === StatusRequest.NEGADO && obervationRequest) && (
+                <RequestDeniedInfo
+                    observation={obervationRequest}
+                />
+            )}
+
             {/* Sessão dos dados do produto indireto */}
             <SubTitleForm title="Dados do P.A Fardo"  styleLine="border-t-3 border-dashed border-strong/10 mt-4" icon={BurdenIcon}/>
             {/* Sessão de descrição do P.A */}
@@ -101,12 +136,22 @@ export const PABurdenFormManager = ({defaultValue, mode, isChange, loadingModal,
             <SubTitleForm title="Validade e Lote"  styleLine="border-t-3 border-dashed border-strong/10 mt-4" icon={ValidityIcon}/>
             <FormValidity methods={methods} mode={mode}/>
 
+            {/* Sessão para informar o motivo que está negando a solicitação */}
+            {mode === "denied" && (
+                <FormObservationDeniedFild
+                    observation={observationDenied}
+                    setObservation={setObservationDenied}
+                    error={errorObservation}
+                />
+            )}
+            
+            
             {/* Botões de salvar / cancelar */}
             <FormActionsButtonsRequest
                 methods={methods}
                 mode={mode}
                 setMode={setMode}
-                onConfirm={(data) => handleEdit(defaultValue.id, data as IPABurdenRegister)}
+                onConfirm={(data) => handleConfirm(data as IPABurdenRegister)}
             />
         </FormLayout>
         

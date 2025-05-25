@@ -1,12 +1,12 @@
-import { FormLayout, FormProductAttributes, FormProductCategorySelector, FormProductDescription, LoadingModal, SubTitleForm } from "@/components";
+import { FormLayout, FormActionsButtonsRequest, FormProductAttributes, FormProductCategorySelector, FormProductDescription, SubTitleForm, FormObservationDeniedFild} from "@/components/form";
 import { FamilyCodeIndirectProducts, TypeCodeIndirectProducts } from "../interface/indirect-products-enum";
 import { useGroupSelectorIndirectProduct } from "../hook/use-group-selector-indirect-product";
 import { IIndirectProducts, IIndirectProductsRegister } from "../interface/indirect-products";
 import { updateIndirectProductsService } from "../service/update-indirect-produtcs.service";
-import { FormActionsButtonsRequest } from "@/components/form/form-actions-buttons-request";
 import { indirectProductsRegisterSchema } from "../schema/indirect-products.schema";
+import { useDeniedRequest, useObservationDenied, useEditRequest } from "@/hooks";
+import { LoadingModal, RequestDeniedInfo, Toastify } from "@/components";
 import { PackageCheck as IndirectProductsIcon } from "lucide-react";
-import { useEditRequest } from "@/hooks/use-edit-request.hooks";
 import { FormStateType, StatusRequest } from "@/interfaces";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
@@ -25,9 +25,10 @@ interface IndirectProductsFormManagerProps{
     status: StatusRequest;
     setMode:React.Dispatch<React.SetStateAction<FormStateType>>
     viewRequestId: number;
+    obervationRequest: string | null;
 }
 
-export const IndirectProductsFormManager = ({defaultValue, mode, isChange, loadingModal, setReasonFieldReview, reasonFieldReview, setLoadingModal, status, setMode, viewRequestId}:IndirectProductsFormManagerProps) => {
+export const IndirectProductsFormManager = ({defaultValue, mode, isChange, loadingModal, setReasonFieldReview, reasonFieldReview, setLoadingModal, status, setMode, viewRequestId, obervationRequest}:IndirectProductsFormManagerProps) => {
         
     if(loadingModal){
         return <LoadingModal/> 
@@ -52,7 +53,34 @@ export const IndirectProductsFormManager = ({defaultValue, mode, isChange, loadi
 
     const group = useGroupSelectorIndirectProduct(methods);
 
-
+    // Hooks para lidar com negar a solicitação
+    const denyRequest = useDeniedRequest(); // salvar no supabase
+    const { errorObservation, observationDenied, reset ,setObservationDenied ,validate} = useObservationDenied(); // lidar com a observação, salvar/apagar
+    
+    // Função para saber qual função irá chamar no botão de salvar, dependendo o modo.
+    const handleConfirm = async (data: IIndirectProductsRegister) => {
+        if(mode === "editing"){
+            await handleEdit(defaultValue.id, data);
+        } else if (mode === "denied"){
+            if(!validate()){
+                Toastify({
+                    type: "warning",
+                    message:"Informa o motivo"
+                })
+                return;
+            };
+            await denyRequest({
+                viewRequestId,
+                setLoadingModal,
+                setMode,
+                observation: observationDenied
+            })
+            reset();
+        } else {
+            console.warn("Modo não tratado: ", mode)
+        }
+    };
+    
     
     return(
         <FormLayout 
@@ -64,6 +92,12 @@ export const IndirectProductsFormManager = ({defaultValue, mode, isChange, loadi
             showSector
             showButtonsDefault={false}            
         >
+            {/* Sessão para mostrar a obervação quando a solicitação for negada */}
+            {(mode === "viewing" && status === StatusRequest.NEGADO && obervationRequest) && (
+                <RequestDeniedInfo
+                    observation={obervationRequest}
+                />
+            )}
             {/* Sessão dos dados do produto indireto */}
             <SubTitleForm title="Dados do Produto Indireto"  styleLine="border-t-3 border-dashed border-strong/10 mt-4" icon={IndirectProductsIcon}/>
             {/* Sessão de descrição do produto */}
@@ -81,12 +115,21 @@ export const IndirectProductsFormManager = ({defaultValue, mode, isChange, loadi
             {/* Sessão de atributos (unidades de medida e ncm) */}
             <FormProductAttributes methods={methods} mode={mode}/>
 
+            {/* Sessão para informar o motivo que está negando a solicitação */}
+            {mode === "denied" && (
+                <FormObservationDeniedFild
+                    observation={observationDenied}
+                    setObservation={setObservationDenied}
+                    error={errorObservation}
+                />
+            )}
+
             {/* Botões de salvar / cancelar */}
             <FormActionsButtonsRequest
                 methods={methods}
                 mode={mode}
                 setMode={setMode}
-                onConfirm={(data) => handleEdit(defaultValue.id, data as IIndirectProductsRegister)}
+                onConfirm={(data) => handleConfirm( data as IIndirectProductsRegister)}
             />
         </FormLayout>
         

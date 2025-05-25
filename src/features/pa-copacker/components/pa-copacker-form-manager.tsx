@@ -1,10 +1,10 @@
-import { FormLayout, FormPalletizingTrackingConversion, FormProductAttributes, FormProductCategorySelector, FormProductCode, FormProductDescription, FormProductDimensions, FormProductPackagingInfo, FormWeights, LoadingModal, SubTitleForm } from "@/components";
+import { FormLayout, FormActionsButtonsRequest, FormPalletizingTrackingConversion, FormProductAttributes, FormProductCategorySelector, FormProductCode, FormProductDescription, FormProductDimensions, FormProductPackagingInfo, FormWeights, SubTitleForm, FormObservationDeniedFild } from "@/components/form";
 import { FamilyCodePACopacker, GroupCodePACopacker, TypeCodeoPACopacker } from "../interface/pa-copacker-enum";
-import { FormActionsButtonsRequest } from "@/components/form/form-actions-buttons-request";
+import { useDeniedRequest, useObservationDenied, useEditRequest } from "@/hooks";
 import { updatePACopackerService } from "../service/update-pa-copacker.service";
 import { IPACopackerRegister, IPACopacker } from "../interface/pa-copacker";
+import { LoadingModal, RequestDeniedInfo, Toastify } from "@/components";
 import { paCopackerRegisterSchema } from "../schema/pa-copacker.schema";
-import { useEditRequest } from "@/hooks/use-edit-request.hooks";
 import { FormStateType, StatusRequest } from "@/interfaces";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
@@ -27,9 +27,10 @@ interface PACopackerFormManagerProps{
     status: StatusRequest;
     setMode:React.Dispatch<React.SetStateAction<FormStateType>>
     viewRequestId: number;
+    obervationRequest: string | null;
 }
 
-export const PACopackerFormManager = ({defaultValue, mode, isChange, loadingModal, setReasonFieldReview, reasonFieldReview, setLoadingModal, status, setMode, viewRequestId}:PACopackerFormManagerProps) => {
+export const PACopackerFormManager = ({defaultValue, mode, isChange, loadingModal, setReasonFieldReview, reasonFieldReview, setLoadingModal, status, setMode, viewRequestId, obervationRequest}:PACopackerFormManagerProps) => {
         
     if(loadingModal){
         return <LoadingModal/> 
@@ -50,6 +51,33 @@ export const PACopackerFormManager = ({defaultValue, mode, isChange, loadingModa
         updateFunction: updatePACopackerService
     });
 
+    // Hooks para lidar com negar a solicitação
+    const denyRequest = useDeniedRequest(); // salvar no supabase
+    const { errorObservation, observationDenied, reset ,setObservationDenied ,validate} = useObservationDenied(); // lidar com a observação, salvar/apagar
+    
+    // Função para saber qual função irá chamar no botão de salvar, dependendo o modo.
+    const handleConfirm = async (data: IPACopackerRegister) => {
+        if(mode === "editing"){
+            await handleEdit(defaultValue.id, data);
+        } else if (mode === "denied"){
+            if(!validate()){
+                Toastify({
+                    type: "warning",
+                    message:"Informa o motivo"
+                })
+                return;
+            };
+            await denyRequest({
+                viewRequestId,
+                setLoadingModal,
+                setMode,
+                observation: observationDenied
+            })
+            reset();
+        } else {
+            console.warn("Modo não tratado: ", mode)
+        }
+        };
 
     return(
         <FormLayout 
@@ -60,6 +88,13 @@ export const PACopackerFormManager = ({defaultValue, mode, isChange, loadingModa
             mode={mode}
             showButtonsDefault={false}            
         >
+            {/* Sessão para mostrar a obervação quando a solicitação for negada */}
+            {(mode === "viewing" && status === StatusRequest.NEGADO && obervationRequest) && (
+                <RequestDeniedInfo
+                    observation={obervationRequest}
+                />
+            )}
+
             {/* Sessão dos dados do produto indireto */}
             <SubTitleForm title="Dados do P.A Copacker"  styleLine="border-t-3 border-dashed border-strong/10 mt-4" icon={PAIcon}/>
             {/* Sessão de descrição/nome Científico do P.A */}
@@ -96,12 +131,21 @@ export const PACopackerFormManager = ({defaultValue, mode, isChange, loadingModa
             <SubTitleForm title="Armazenagem e Embalagem"  styleLine="border-t-3 border-dashed border-strong/10 mt-4" icon={StorageIcon}/>
             <FormProductPackagingInfo methods={methods} mode={mode}/>
 
+            {/* Sessão para informar o motivo que está negando a solicitação */}
+            {mode === "denied" && (
+                <FormObservationDeniedFild
+                    observation={observationDenied}
+                    setObservation={setObservationDenied}
+                    error={errorObservation}
+                />
+            )}
+
             {/* Botões de salvar / cancelar */}
             <FormActionsButtonsRequest
                 methods={methods}
                 mode={mode}
                 setMode={setMode}
-                onConfirm={(data) => handleEdit(defaultValue.id, data as IPACopackerRegister)}
+                onConfirm={(data) => handleConfirm(data as IPACopackerRegister)}
             />
         </FormLayout>
         

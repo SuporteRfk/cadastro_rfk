@@ -1,21 +1,21 @@
-import { FormAddress, FormBusinessNames, FormLayout, FormRegistrationIdentification, FormTaxIdentification, FormTelephone, InputRadio, LoadingModal, SubTitleForm } from "@/components";
-import { FormActionsButtonsRequest } from "@/components/form/form-actions-buttons-request";
+import { FormAddress, FormActionsButtonsRequest, FormBusinessNames, FormLayout, FormRegistrationIdentification, FormTaxIdentification, FormTelephone, SubTitleForm, FormObservationDeniedFild } from "@/components/form";
+import { InputRadio, LoadingModal, RequestDeniedInfo, Toastify } from "@/components";
+import { useDeniedRequest, useEditRequest, useObservationDenied } from "@/hooks";
 import { upsertClientService } from "../service/update-client.service";
 import { clientRegisterFormSchema } from "../schema/client.schema";
 import { IClient, IClientRegisterForm } from "../interface/client";
-import { useEditRequest } from "@/hooks/use-edit-request.hooks";
+import { ClientTpj, ClientType } from "../interface/client-enum";
 import { FormStateType, StatusRequest } from "@/interfaces";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { handleIsPJ } from "../utils/handle-is-pj";
 import { useForm } from "react-hook-form";
 import {
     MapPinned as ZipCodeIcon,
     LocateFixed as BillingAddressIcon,
     Users as UsersIcon
 } from "lucide-react";
-
 import { useState } from "react";
-import { ClientTpj, ClientType } from "../interface/client-enum";
-import { handleIsPJ } from "../utils/handle-is-pj";
+
 
 
 
@@ -31,9 +31,10 @@ interface ClientFormManagerProps{
     status: StatusRequest;
     setMode:React.Dispatch<React.SetStateAction<FormStateType>>
     viewRequestId: number;
+    obervationRequest: string | null;
 }
 
-export const ClientFormManager = ({defaultValue, mode, isChange, loadingModal, setReasonFieldReview, reasonFieldReview, setLoadingModal, status, setMode, viewRequestId}:ClientFormManagerProps) => {
+export const ClientFormManager = ({defaultValue, mode, isChange, loadingModal, setReasonFieldReview, reasonFieldReview, setLoadingModal, status, setMode, viewRequestId, obervationRequest}:ClientFormManagerProps) => {
     
     if(loadingModal){
         return <LoadingModal/> 
@@ -62,7 +63,47 @@ export const ClientFormManager = ({defaultValue, mode, isChange, loadingModal, s
     const fisicaJuridicaValue = methods.watch("fisica_juridica");
 
 
-    console.log(defaultValue)
+    // Hooks para lidar com negar a solicitação
+    const denyRequest = useDeniedRequest(); // salvar no supabase
+    const { errorObservation, observationDenied, reset ,setObservationDenied ,validate} = useObservationDenied(); // lidar com a observação, salvar/apagar
+    
+    // Função para saber qual função irá chamar no botão de salvar, dependendo o modo.
+    const handleConfirm = async (data: IClientRegisterForm) => {
+        if(mode === "editing"){
+            if(data.mesmo_endereco_cobranca === "sim"){
+                data = {
+                    ...data,
+                    endereco_cobranca: null,
+                    numero_cobranca: null,
+                    bairro_cobranca: null,
+                    complemento_cobranca: null,
+                    estado_cobranca: null,
+                    municipio_cobranca: null,
+                    cep_cobranca: null,
+                };
+            }
+            const {mesmo_endereco_cobranca, ...dataRegister} = data;
+            await handleEdit(defaultValue.id, dataRegister as IClientRegisterForm);
+
+        } else if (mode === "denied"){
+            if(!validate()){
+                Toastify({
+                    type: "warning",
+                    message:"Informa o motivo"
+                })
+                return;
+            };
+            await denyRequest({
+                viewRequestId,
+                setLoadingModal,
+                setMode,
+                observation: observationDenied
+            })
+            reset();
+        } else {
+            console.warn("Modo não tratado: ", mode)
+        }
+    };
 
     return(
         <FormLayout 
@@ -73,6 +114,13 @@ export const ClientFormManager = ({defaultValue, mode, isChange, loadingModal, s
             mode={mode}
             showButtonsDefault={false}            
         >
+            {/* Sessão para mostrar a obervação quando a solicitação for negada */}
+            {(mode === "viewing" && status === StatusRequest.NEGADO && obervationRequest) && (
+                <RequestDeniedInfo
+                    observation={obervationRequest}
+                />
+            )}
+
             {/* SubTitulo Dados do cliente*/}
             <SubTitleForm title="Dados do Cliente"  styleLine="border-t-3 border-dashed border-strong/10 mt-4" icon={UsersIcon}/>
          
@@ -123,28 +171,21 @@ export const ClientFormManager = ({defaultValue, mode, isChange, loadingModal, s
                 </>
             }
 
+            {/* Sessão para informar o motivo que está negando a solicitação */}
+            {mode === "denied" && (
+                <FormObservationDeniedFild
+                    observation={observationDenied}
+                    setObservation={setObservationDenied}
+                    error={errorObservation}
+                />
+            )}
+
             {/* Botões de salvar / cancelar */}
             <FormActionsButtonsRequest
                 methods={methods}
                 mode={mode}
                 setMode={setMode}
-                onConfirm={(data) => {
-                    if(data.mesmo_endereco_cobranca === "sim"){
-                          data = {
-                            ...data,
-                            endereco_cobranca: null,
-                            numero_cobranca: null,
-                            bairro_cobranca: null,
-                            complemento_cobranca: null,
-                            estado_cobranca: null,
-                            municipio_cobranca: null,
-                            cep_cobranca: null,
-                        };
-                    }
-                    
-                    const {mesmo_endereco_cobranca, ...dataRegister} = data;
-                    handleEdit(defaultValue.id, dataRegister as IClientRegisterForm)
-                }}
+                onConfirm={(data) => handleConfirm(data as IClientRegisterForm)}
             />
         </FormLayout>
         

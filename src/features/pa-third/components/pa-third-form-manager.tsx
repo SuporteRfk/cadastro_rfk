@@ -1,10 +1,10 @@
-import { FormLayout, FormPalletizingTrackingConversion, FormProductAttributes, FormProductCategorySelector, FormProductCode, FormProductDescription, FormProductDimensions, FormProductPackagingInfo, FormValidity, FormWeights, Input, LoadingModal, SubTitleForm } from "@/components";
+import { FormLayout, FormActionsButtonsRequest, FormPalletizingTrackingConversion, FormProductAttributes, FormProductCategorySelector, FormProductCode, FormProductDescription, FormProductPackagingInfo, FormWeights, SubTitleForm, FormObservationDeniedFild } from "@/components/form";
 import { FamilyCodePAThird, GroupCodePAThird, TypeCodePAThird } from "../interface/pa-third-enum";
-import { FormActionsButtonsRequest } from "@/components/form/form-actions-buttons-request";
+import { useDeniedRequest, useObservationDenied, useEditRequest } from "@/hooks";
+import { Input, LoadingModal, RequestDeniedInfo, Toastify } from "@/components";
 import { updatePAThirdService } from "../service/update-pa-third.service";
 import { IPAThird , IPAThirdRegister} from "../interface/pa-third";
 import { paThirdRegisterSchema } from "../schema/pa-third.schema";
-import { useEditRequest } from "@/hooks/use-edit-request.hooks";
 import { FormStateType, StatusRequest } from "@/interfaces";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
@@ -28,9 +28,10 @@ interface PAThirdFormManagerProps{
     status: StatusRequest;
     setMode:React.Dispatch<React.SetStateAction<FormStateType>>
     viewRequestId: number;
+    obervationRequest: string | null;
 }
 
-export const PAThirdFormManager = ({defaultValue, mode, isChange, loadingModal, setReasonFieldReview, reasonFieldReview, setLoadingModal, status, setMode, viewRequestId}:PAThirdFormManagerProps) => {
+export const PAThirdFormManager = ({defaultValue, mode, isChange, loadingModal, setReasonFieldReview, reasonFieldReview, setLoadingModal, status, setMode, viewRequestId, obervationRequest}:PAThirdFormManagerProps) => {
         
     if(loadingModal){
         return <LoadingModal/> 
@@ -51,6 +52,33 @@ export const PAThirdFormManager = ({defaultValue, mode, isChange, loadingModal, 
         updateFunction: updatePAThirdService
     });
 
+    // Hooks para lidar com negar a solicitação
+    const denyRequest = useDeniedRequest(); // salvar no supabase
+    const { errorObservation, observationDenied, reset ,setObservationDenied ,validate} = useObservationDenied(); // lidar com a observação, salvar/apagar
+    
+    // Função para saber qual função irá chamar no botão de salvar, dependendo o modo.
+    const handleConfirm = async (data: IPAThirdRegister) => {
+        if(mode === "editing"){
+            await handleEdit(defaultValue.id, data);
+        } else if (mode === "denied"){
+            if(!validate()){
+                Toastify({
+                    type: "warning",
+                    message:"Informa o motivo"
+                })
+                return;
+            };
+            await denyRequest({
+                viewRequestId,
+                setLoadingModal,
+                setMode,
+                observation: observationDenied
+            })
+            reset();
+        } else {
+            console.warn("Modo não tratado: ", mode)
+        }
+    };
 
     return(
         <FormLayout 
@@ -61,9 +89,14 @@ export const PAThirdFormManager = ({defaultValue, mode, isChange, loadingModal, 
             mode={mode}
             showButtonsDefault={false}            
         >
-            <SubTitleForm title="Dados do P.A Terceiro"  styleLine="border-t-3 border-dashed border-strong/10 mt-4" icon={PAThirdIcon}/>
-         
-            
+            {/* Sessão para mostrar a obervação quando a solicitação for negada */}
+            {(mode === "viewing" && status === StatusRequest.NEGADO && obervationRequest) && (
+                <RequestDeniedInfo
+                    observation={obervationRequest}
+                />
+            )}
+
+            <SubTitleForm title="Dados do P.A Terceiro"  styleLine="border-t-3 border-dashed border-strong/10 mt-4" icon={PAThirdIcon}/>            
             {/* Sessão de descrição/nome Científico do P.A */}
             <FormProductDescription methods={methods} viewInstructions mode={mode}/>
             
@@ -107,12 +140,21 @@ export const PAThirdFormManager = ({defaultValue, mode, isChange, loadingModal, 
             <SubTitleForm title="Armazenagem e Embalagem"  styleLine="border-t-3 border-dashed border-strong/10 mt-4" icon={StorageIcon}/>
             <FormProductPackagingInfo methods={methods} valueInitialStorage="055 - REVENDA" mode={mode}/>
 
+            {/* Sessão para informar o motivo que está negando a solicitação */}
+            {mode === "denied" && (
+                <FormObservationDeniedFild
+                    observation={observationDenied}
+                    setObservation={setObservationDenied}
+                    error={errorObservation}
+                />
+            )}
+            
             {/* Botões de salvar / cancelar */}
             <FormActionsButtonsRequest
                 methods={methods}
                 mode={mode}
                 setMode={setMode}
-                onConfirm={(data) => handleEdit(defaultValue.id, data as IPAThirdRegister)}
+                onConfirm={(data) => handleConfirm( data as IPAThirdRegister)}
             />
         </FormLayout>
         
