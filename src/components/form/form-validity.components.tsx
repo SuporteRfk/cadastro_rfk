@@ -7,6 +7,7 @@ import {
     PackageMinus as BatchesMinimumIcon,
     Boxes as BatchesEconomicIcon
 } from "lucide-react";
+import { SafeReviewField } from "../review-field/safe-review-field.components";
 
 
 interface FormValidityProps<T extends FieldValues> {
@@ -18,48 +19,59 @@ export const FormValidity = <T extends FieldValues>({mode, methods}:FormValidity
     return(
         <FormSection className="mt-2 lg:mt-3 lg:flex-row gap-4">
             {/* Tipo do prazo */}
-            <InputSelect
-                label="Tipo de Prazo"
-                selectLabel="Prazos"
-                options={Object.values(ValidityPeriod)}
-                name="tipo_prazo"
-                error={methods.formState.errors.tipo_prazo?.message as string | undefined}
-                placeholder="Selecione o tipo de prazo"
-                disabled={mode === 'viewing' || mode === 'reviewing'}
-            />
+            <SafeReviewField field="tipo_prazo" mode={mode || "viewing"}>
+                <InputSelect
+                    label="Tipo de Prazo"
+                    selectLabel="Prazos"
+                    options={Object.values(ValidityPeriod)}
+                    name="tipo_prazo"
+                    error={methods.formState.errors.tipo_prazo?.message as string | undefined}
+                    placeholder="Selecione o tipo de prazo"
+                    disabled={mode === 'viewing' || mode === 'reviewing'}
+                />
+            </SafeReviewField>
+
             {/* Prazo Validade */}
-            <Input    
-                label="Prazo de validade" 
-                name="prazo_validade"
-                register={methods.register("prazo_validade" as Path<T>)}
-                error={methods.formState.errors.prazo_validade?.message as string | undefined} 
-                placeholder="Informe a validade"
-                type="number"
-                icon={ValidityIcon}
-                readOnly={mode === 'viewing' || mode === 'reviewing'}
-            />
+            <SafeReviewField field="prazo_validade" mode={mode || "viewing"}>
+                <Input    
+                    label="Prazo de validade" 
+                    name="prazo_validade"
+                    register={methods.register("prazo_validade" as Path<T>)}
+                    error={methods.formState.errors.prazo_validade?.message as string | undefined} 
+                    placeholder="Informe a validade"
+                    type="number"
+                    icon={ValidityIcon}
+                    readOnly={mode === 'viewing' || mode === 'reviewing'}
+                />
+            </SafeReviewField>
+
             {/* Lotes Economico*/}
-            <Input    
-                label="Lote econômico" 
-                name="lote_economico"
-                register={methods.register("lote_economico" as Path<T>)}
-                error={methods.formState.errors.lote_economico?.message  as string | undefined} 
-                placeholder="Informe o lote econômico"
-                type="text"
-                icon={BatchesEconomicIcon}
-                readOnly={mode === 'viewing' || mode === 'reviewing'}
-            />
+            <SafeReviewField field="lote_economico" mode={mode || "viewing"}>
+                <Input    
+                    label="Lote econômico" 
+                    name="lote_economico"
+                    register={methods.register("lote_economico" as Path<T>)}
+                    error={methods.formState.errors.lote_economico?.message  as string | undefined} 
+                    placeholder="Informe o lote econômico"
+                    type="text"
+                    icon={BatchesEconomicIcon}
+                    readOnly={mode === 'viewing' || mode === 'reviewing'}
+                />
+            </SafeReviewField>
+            
             {/* Lotes Minimo */}
-            <Input    
-                label="Lote mínimo" 
-                name="lote_minimo"
-                register={methods.register("lote_minimo" as Path<T>)}
-                error={methods.formState.errors.lote_minimo?.message  as string | undefined} 
-                placeholder="Informe o lote mínimo"
-                type="text"
-                icon={BatchesMinimumIcon}
-                readOnly={mode === 'viewing' || mode === 'reviewing'}
-            />
+            <SafeReviewField field="lote_minimo" mode={mode || "viewing"}>
+                <Input    
+                    label="Lote mínimo" 
+                    name="lote_minimo"
+                    register={methods.register("lote_minimo" as Path<T>)}
+                    error={methods.formState.errors.lote_minimo?.message  as string | undefined} 
+                    placeholder="Informe o lote mínimo"
+                    type="text"
+                    icon={BatchesMinimumIcon}
+                    readOnly={mode === 'viewing' || mode === 'reviewing'}
+                />
+            </SafeReviewField>
         </FormSection>
     );
 };

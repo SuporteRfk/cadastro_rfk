@@ -1,7 +1,7 @@
 import { FormLayout, FormActionsButtonsRequest, FormPalletizingTrackingConversion, FormProductAttributes, FormProductCategorySelector, FormProductCode, FormProductDescription, FormProductPackagingInfo, FormWeights, SubTitleForm, FormObservationDeniedFild } from "@/components/form";
 import { FamilyCodePAThird, GroupCodePAThird, TypeCodePAThird } from "../interface/pa-third-enum";
-import { useDeniedRequest, useObservationDenied, useEditRequest } from "@/hooks";
-import { Input, LoadingModal, RequestDeniedInfo, Toastify } from "@/components";
+import { useDeniedRequest, useObservationDenied, useEditRequest, useReviewRequest } from "@/hooks";
+import { Input, LoadingModal, RequestDeniedInfo, SafeReviewField, Toastify } from "@/components";
 import { updatePAThirdService } from "../service/update-pa-third.service";
 import { IPAThird , IPAThirdRegister} from "../interface/pa-third";
 import { paThirdRegisterSchema } from "../schema/pa-third.schema";
@@ -14,6 +14,7 @@ import {
     Group as SubGroupIcon,
     Building as PAThirdIcon
 } from "lucide-react";
+import { useReview } from "@/context";
 
 
 
@@ -22,8 +23,6 @@ interface PAThirdFormManagerProps{
     mode: FormStateType;
     isChange: boolean;
     loadingModal: boolean;
-    setReasonFieldReview:  React.Dispatch<React.SetStateAction<{[key: string]: string;}>>
-    reasonFieldReview: {[key: string]: string };
     setLoadingModal: React.Dispatch<React.SetStateAction<boolean>>;
     status: StatusRequest;
     setMode:React.Dispatch<React.SetStateAction<FormStateType>>
@@ -31,12 +30,12 @@ interface PAThirdFormManagerProps{
     obervationRequest: string | null;
 }
 
-export const PAThirdFormManager = ({defaultValue, mode, isChange, loadingModal, setReasonFieldReview, reasonFieldReview, setLoadingModal, status, setMode, viewRequestId, obervationRequest}:PAThirdFormManagerProps) => {
+export const PAThirdFormManager = ({defaultValue, mode, isChange, loadingModal, setLoadingModal, status, setMode, viewRequestId, obervationRequest}:PAThirdFormManagerProps) => {
         
     if(loadingModal){
         return <LoadingModal/> 
     }
-    console.log(defaultValue)
+   
     const methods= useForm<IPAThirdRegister>({
         defaultValues: defaultValue,
         resolver: yupResolver(paThirdRegisterSchema)
@@ -55,6 +54,11 @@ export const PAThirdFormManager = ({defaultValue, mode, isChange, loadingModal, 
     // Hooks para lidar com negar a solicitação
     const denyRequest = useDeniedRequest(); // salvar no supabase
     const { errorObservation, observationDenied, reset ,setObservationDenied ,validate} = useObservationDenied(); // lidar com a observação, salvar/apagar
+    
+    //Hook para lidar com o modo de revisão e contexto da revisão para lidar com campos vazios
+    const reviewRequest = useReviewRequest(); // salvar no supabase
+    const {hasEmptyReasons, setShowError} = useReview(); // funçao para verificar se existem campos vazios no modo revisão
+    
     
     // Função para saber qual função irá chamar no botão de salvar, dependendo o modo.
     const handleConfirm = async (data: IPAThirdRegister) => {
@@ -75,6 +79,22 @@ export const PAThirdFormManager = ({defaultValue, mode, isChange, loadingModal, 
                 observation: observationDenied
             })
             reset();
+        } else if (mode === "reviewing"){
+            // modo revisão
+            if (hasEmptyReasons()) {
+                setShowError(true);
+                Toastify({
+                   type: "warning",
+                    message: "Preencha todos os campos de revisão antes de salvar."
+                });
+                return;
+            }
+            setShowError(false);
+            await reviewRequest({
+                setLoadingModal,
+                setMode,
+                viewRequestId
+            })
         } else {
             console.warn("Modo não tratado: ", mode)
         }
@@ -113,19 +133,21 @@ export const PAThirdFormManager = ({defaultValue, mode, isChange, loadingModal, 
             />
 
             {/* Sessão de atributos (unidades de medida, ncm, sabor, marca, grupo tributário e cest) */}
-            <FormProductAttributes methods={methods} showSecondUnitMeasure showFlavorAndMark showCestAndTax/>
+            <FormProductAttributes methods={methods} showSecondUnitMeasure showFlavorAndMark showCestAndTax mode={mode}/>
 
             {/* SubGrupo do produto */}
-            <Input
-                register={methods.register("sub_grupo")}
-                name="sub_grupo"
-                error={methods.formState.errors.sub_grupo?.message}
-                label="Sub Grupo"
-                type="text"
-                placeholder="Fornecedor de quem compramos"
-                icon={SubGroupIcon}
-                readOnly={mode !== "editing"}
-            />
+            <SafeReviewField field="sub_grupo" mode={mode || "viewing"}>
+                <Input
+                    register={methods.register("sub_grupo")}
+                    name="sub_grupo"
+                    error={methods.formState.errors.sub_grupo?.message}
+                    label="Sub Grupo"
+                    type="text"
+                    placeholder="Fornecedor de quem compramos"
+                    icon={SubGroupIcon}
+                    readOnly={mode !== "editing"}
+                />
+            </SafeReviewField>
 
             {/* Sessão de pesos e medidas */}
             <SubTitleForm title="Peso e Medidas"  styleLine="border-t-3 border-dashed border-strong/10 mt-4" icon={KgIcon}/>

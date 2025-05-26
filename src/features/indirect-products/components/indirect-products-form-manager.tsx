@@ -4,12 +4,13 @@ import { useGroupSelectorIndirectProduct } from "../hook/use-group-selector-indi
 import { IIndirectProducts, IIndirectProductsRegister } from "../interface/indirect-products";
 import { updateIndirectProductsService } from "../service/update-indirect-produtcs.service";
 import { indirectProductsRegisterSchema } from "../schema/indirect-products.schema";
-import { useDeniedRequest, useObservationDenied, useEditRequest } from "@/hooks";
+import { useDeniedRequest, useObservationDenied, useEditRequest, useReviewRequest } from "@/hooks";
 import { LoadingModal, RequestDeniedInfo, Toastify } from "@/components";
 import { PackageCheck as IndirectProductsIcon } from "lucide-react";
 import { FormStateType, StatusRequest } from "@/interfaces";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
+import { useReview } from "@/context";
 
 
 
@@ -19,8 +20,6 @@ interface IndirectProductsFormManagerProps{
     mode: FormStateType;
     isChange: boolean;
     loadingModal: boolean;
-    setReasonFieldReview:  React.Dispatch<React.SetStateAction<{[key: string]: string;}>>
-    reasonFieldReview: {[key: string]: string };
     setLoadingModal: React.Dispatch<React.SetStateAction<boolean>>;
     status: StatusRequest;
     setMode:React.Dispatch<React.SetStateAction<FormStateType>>
@@ -28,7 +27,7 @@ interface IndirectProductsFormManagerProps{
     obervationRequest: string | null;
 }
 
-export const IndirectProductsFormManager = ({defaultValue, mode, isChange, loadingModal, setReasonFieldReview, reasonFieldReview, setLoadingModal, status, setMode, viewRequestId, obervationRequest}:IndirectProductsFormManagerProps) => {
+export const IndirectProductsFormManager = ({defaultValue, mode, isChange, loadingModal, setLoadingModal, status, setMode, viewRequestId, obervationRequest}:IndirectProductsFormManagerProps) => {
         
     if(loadingModal){
         return <LoadingModal/> 
@@ -57,6 +56,10 @@ export const IndirectProductsFormManager = ({defaultValue, mode, isChange, loadi
     const denyRequest = useDeniedRequest(); // salvar no supabase
     const { errorObservation, observationDenied, reset ,setObservationDenied ,validate} = useObservationDenied(); // lidar com a observação, salvar/apagar
     
+    //Hook para lidar com o modo de revisão e contexto da revisão para lidar com campos vazios
+    const reviewRequest = useReviewRequest(); // salvar no supabase
+    const {hasEmptyReasons, setShowError} = useReview(); // funçao para verificar se existem campos vazios no modo revisão
+
     // Função para saber qual função irá chamar no botão de salvar, dependendo o modo.
     const handleConfirm = async (data: IIndirectProductsRegister) => {
         if(mode === "editing"){
@@ -76,6 +79,22 @@ export const IndirectProductsFormManager = ({defaultValue, mode, isChange, loadi
                 observation: observationDenied
             })
             reset();
+         } else if (mode === "reviewing"){
+            // modo revisão
+            if (hasEmptyReasons()) {
+                setShowError(true);
+                Toastify({
+                   type: "warning",
+                    message: "Preencha todos os campos de revisão antes de salvar."
+                });
+                return;
+            }
+            setShowError(false);
+            await reviewRequest({
+                setLoadingModal,
+                setMode,
+                viewRequestId
+            })
         } else {
             console.warn("Modo não tratado: ", mode)
         }

@@ -1,5 +1,5 @@
 import { FormActionsButtonsRequest, FormAddress, FormBusinessNames, FormLayout, FormObservationDeniedFild, FormRegistrationIdentification, FormTaxIdentification, FormTelephone, SubTitleForm } from "@/components/form";
-import { useDeniedRequest, useEditRequest, useObservationDenied } from "@/hooks";
+import { useDeniedRequest, useEditRequest, useObservationDenied, useReviewRequest } from "@/hooks";
 import { upsertSupplierService } from "../service/update-supplier.service";
 import { LoadingModal, RequestDeniedInfo, Toastify } from "@/components";
 import { ISupplier, ISupplierRegisterForm } from "../interface/supplier";
@@ -13,6 +13,7 @@ import {
      Factory as SuppliersIcon
 } from "lucide-react";
 import { useState } from "react";
+import { useReview } from "@/context";
 
 
 interface SuppliersFormManagerProps{
@@ -20,8 +21,6 @@ interface SuppliersFormManagerProps{
     mode: FormStateType;
     isChange: boolean;
     loadingModal: boolean;
-    setReasonFieldReview:  React.Dispatch<React.SetStateAction<{[key: string]: string;}>>
-    reasonFieldReview: {[key: string]: string };
     setLoadingModal: React.Dispatch<React.SetStateAction<boolean>>;
     status: StatusRequest;
     setMode:React.Dispatch<React.SetStateAction<FormStateType>>
@@ -29,7 +28,7 @@ interface SuppliersFormManagerProps{
     obervationRequest: string | null;
 }
 
-export const SuppliersFormManager = ({defaultValue, mode, isChange, loadingModal, setReasonFieldReview, reasonFieldReview, setLoadingModal, status, setMode, viewRequestId, obervationRequest}:SuppliersFormManagerProps) => {
+export const SuppliersFormManager = ({defaultValue, mode, isChange, loadingModal, setLoadingModal, status, setMode, viewRequestId, obervationRequest}:SuppliersFormManagerProps) => {
     
     if(loadingModal){
         return <LoadingModal/> 
@@ -57,6 +56,11 @@ export const SuppliersFormManager = ({defaultValue, mode, isChange, loadingModal
     const denyRequest = useDeniedRequest(); // salvar no supabase
     const { errorObservation, observationDenied, reset ,setObservationDenied ,validate} = useObservationDenied(); // lidar com a observação, salvar/apagar
 
+    
+    //Hook para lidar com o modo de revisão e contexto da revisão para lidar com campos vazios
+    const reviewRequest = useReviewRequest(); // salvar no supabase
+    const {hasEmptyReasons, setShowError} = useReview(); // funçao para verificar se existem campos vazios no modo revisão
+    
     // Função para saber qual função irá chamar no botão de salvar, dependendo o modo.
     const handleConfirm = async (data: ISupplierRegisterForm) => {
         if(mode === "editing"){
@@ -77,6 +81,22 @@ export const SuppliersFormManager = ({defaultValue, mode, isChange, loadingModal
                 observation: observationDenied
             })
             reset();
+         } else if (mode === "reviewing"){
+            // modo revisão
+             if (hasEmptyReasons()) {
+                setShowError(true);
+                Toastify({
+                   type: "warning",
+                    message: "Preencha todos os campos de revisão antes de salvar."
+                });
+                return;
+            }
+            setShowError(false);
+            await reviewRequest({
+                setLoadingModal,
+                setMode,
+                viewRequestId
+            })
         } else {
             console.warn("Modo não tratado: ", mode)
         }

@@ -5,6 +5,7 @@ import {  InputDecimal } from "../inputs";
 import {
     Weight as KgIcon,
 } from "lucide-react";
+import { SafeReviewField } from "../review-field/safe-review-field.components";
 
 
 interface FormWeightsProps<T extends FieldValues> {
@@ -16,23 +17,27 @@ export const FormWeights = <T extends FieldValues>({mode, methods}:FormWeightsPr
     return(
         <FormSection className="mt-2 lg:mt-3 lg:flex-row gap-4">
             {/* Peso Bruto */}
-            <InputDecimal  
-                Icon={KgIcon}  
-                name="peso_bruto"
-                label="Peso Bruto" 
-                placeholder="Peso Bruto do insumo"
-                error={methods.formState.errors.peso_bruto?.message as string | undefined}
-                readOnly={mode === 'viewing' || mode === 'reviewing'}
-            />
+            <SafeReviewField field="peso_bruto" mode={mode || "viewing"}>
+                <InputDecimal  
+                    Icon={KgIcon}  
+                    name="peso_bruto"
+                    label="Peso Bruto" 
+                    placeholder="Peso Bruto do insumo"
+                    error={methods.formState.errors.peso_bruto?.message as string | undefined}
+                    readOnly={mode === 'viewing' || mode === 'reviewing'}
+                />
+            </SafeReviewField>
             {/* peso líquido*/}
-            <InputDecimal  
-                Icon={KgIcon}  
-                name="peso_liquido"
-                label="Peso Líquido" 
-                placeholder="Peso Líquido do insumo"
-                error={methods.formState.errors.peso_liquido?.message  as string | undefined} 
-                readOnly={mode === 'viewing' || mode === 'reviewing'}
-            />
+            <SafeReviewField field="peso_liquido" mode={mode || "viewing"}>
+                <InputDecimal  
+                    Icon={KgIcon}  
+                    name="peso_liquido"
+                    label="Peso Líquido" 
+                    placeholder="Peso Líquido do insumo"
+                    error={methods.formState.errors.peso_liquido?.message  as string | undefined} 
+                    readOnly={mode === 'viewing' || mode === 'reviewing'}
+                />
+            </SafeReviewField>
         </FormSection>
     );
 };

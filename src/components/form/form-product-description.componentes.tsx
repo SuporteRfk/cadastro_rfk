@@ -6,6 +6,7 @@ import {
     ClipboardPenLine as DescriptionIcon,
     Atom as ScientificIcon,
 } from "lucide-react";
+import { SafeReviewField } from "../review-field/safe-review-field.components";
 
 
 interface FormProductCategorySelectorProps<T extends FieldValues> {
@@ -20,16 +21,18 @@ export const FormProductDescription = <T extends FieldValues>({mode, methods, vi
     return(
         <FormSection className={viewInstructions? "flex-col" : "mt-2 md:mt-3 md:flex-row gap-4"}>
             {/* Descrição*/}
-            <Input    
-                label="Descrição Curta" 
-                name="descricao_curta"
-                register={methods.register("descricao_curta" as Path<T>)}
-                error={methods.formState.errors.descricao_curta?.message as string | undefined} 
-                placeholder="Descrição breve do fardo"
-                type="text"
-                icon={DescriptionIcon}
-                readOnly={mode === 'viewing' || mode === 'reviewing'}
-            />
+            <SafeReviewField field="descricao_curta" mode={mode || "viewing"}>
+                <Input    
+                    label="Descrição Curta" 
+                    name="descricao_curta"
+                    register={methods.register("descricao_curta" as Path<T>)}
+                    error={methods.formState.errors.descricao_curta?.message as string | undefined} 
+                    placeholder="Descrição breve do fardo"
+                    type="text"
+                    icon={DescriptionIcon}
+                    readOnly={mode === 'viewing' || mode === 'reviewing'}
+                />
+            </SafeReviewField>
            
            {/* Mostrar instruções para preencher a descrição */}
            {viewInstructions && 
@@ -48,31 +51,35 @@ export const FormProductDescription = <T extends FieldValues>({mode, methods, vi
 
             {/* Uso do produto*/}
             {viewKeyUseProduct &&
-                <Input    
-                    label="Uso do produto" 
-                    name="descricao_uso"
-                    register={methods.register("descricao_uso" as Path<T>)}
-                    error={methods.formState.errors.descricao_uso?.message as string | undefined} 
-                    placeholder="Para que o produto será utilizado"
-                    type="text"
-                    icon={DescriptionIcon}
-                    readOnly={mode === 'viewing' || mode === 'reviewing'}
-                />
+                <SafeReviewField field="descricao_uso" mode={mode || "viewing"}>
+                    <Input    
+                        label="Uso do produto" 
+                        name="descricao_uso"
+                        register={methods.register("descricao_uso" as Path<T>)}
+                        error={methods.formState.errors.descricao_uso?.message as string | undefined} 
+                        placeholder="Para que o produto será utilizado"
+                        type="text"
+                        icon={DescriptionIcon}
+                        readOnly={mode === 'viewing' || mode === 'reviewing'}
+                    />
+                </SafeReviewField>
             }
 
             {/* Nome Científico*/}
             {viewKeyNameScientific && (
                 <>
-                    <Input    
-                        label="Nome Científico" 
-                        name="nome_cientifico"
-                        register={methods.register("nome_cientifico" as Path<T>)}
-                        error={methods.formState.errors.nome_cientifico?.message as string | undefined} 
-                        placeholder="Descrição completa do nome cientifíco"
-                        type="text"
-                        icon={ScientificIcon}
-                        readOnly={mode === 'viewing' || mode === 'reviewing'}
-                    />
+                    <SafeReviewField field="nome_cientifico" mode={mode || "viewing"}>
+                        <Input    
+                            label="Nome Científico" 
+                            name="nome_cientifico"
+                            register={methods.register("nome_cientifico" as Path<T>)}
+                            error={methods.formState.errors.nome_cientifico?.message as string | undefined} 
+                            placeholder="Descrição completa do nome cientifíco"
+                            type="text"
+                            icon={ScientificIcon}
+                            readOnly={mode === 'viewing' || mode === 'reviewing'}
+                        />
+                    </SafeReviewField>
                     {/* mostrar instruções para preenchimento do nome científico */}
                     {viewInstructions && 
                         <div className="mb-3">

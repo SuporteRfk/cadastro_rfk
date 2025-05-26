@@ -1,6 +1,6 @@
 import { FormAddress, FormActionsButtonsRequest, FormBusinessNames, FormLayout, FormRegistrationIdentification, FormTaxIdentification, FormTelephone, SubTitleForm, FormObservationDeniedFild } from "@/components/form";
 import { InputRadio, LoadingModal, RequestDeniedInfo, Toastify } from "@/components";
-import { useDeniedRequest, useEditRequest, useObservationDenied } from "@/hooks";
+import { useDeniedRequest, useEditRequest, useObservationDenied, useReviewRequest } from "@/hooks";
 import { upsertClientService } from "../service/update-client.service";
 import { clientRegisterFormSchema } from "../schema/client.schema";
 import { IClient, IClientRegisterForm } from "../interface/client";
@@ -15,6 +15,7 @@ import {
     Users as UsersIcon
 } from "lucide-react";
 import { useState } from "react";
+import { useReview } from "@/context";
 
 
 
@@ -67,6 +68,11 @@ export const ClientFormManager = ({defaultValue, mode, isChange, loadingModal, s
     const denyRequest = useDeniedRequest(); // salvar no supabase
     const { errorObservation, observationDenied, reset ,setObservationDenied ,validate} = useObservationDenied(); // lidar com a observação, salvar/apagar
     
+    //Hook para lidar com o modo de revisão e contexto da revisão para lidar com campos vazios
+    const reviewRequest = useReviewRequest(); // salvar no supabase
+    const {hasEmptyReasons, setShowError} = useReview(); // funçao para verificar se existem campos vazios no modo revisão
+
+
     // Função para saber qual função irá chamar no botão de salvar, dependendo o modo.
     const handleConfirm = async (data: IClientRegisterForm) => {
         if(mode === "editing"){
@@ -100,6 +106,22 @@ export const ClientFormManager = ({defaultValue, mode, isChange, loadingModal, s
                 observation: observationDenied
             })
             reset();
+        } else if (mode === "reviewing"){
+            // modo revisão
+            if (hasEmptyReasons()) {
+                setShowError(true);
+                Toastify({
+                   type: "warning",
+                    message: "Preencha todos os campos de revisão antes de salvar."
+                });
+                return;
+            }
+            setShowError(false);
+            await reviewRequest({
+                setLoadingModal,
+                setMode,
+                viewRequestId
+            })
         } else {
             console.warn("Modo não tratado: ", mode)
         }

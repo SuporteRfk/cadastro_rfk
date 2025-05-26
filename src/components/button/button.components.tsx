@@ -10,7 +10,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     size?: number;
     color?: string;
   };
-  variant?: "primary" | "secondary" | "ghost" | "danger" | "outline" | "active";
+  variant?: "primary" | "secondary" | "ghost" | "danger" | "outline" | "active" | "outlineDanger";
   title?:string;
   roudend?: string;
 }
@@ -35,6 +35,7 @@ export const Button = ({
         ghost: "bg-transparent text-text-strong hover:bg-neutral/10",
         danger: "bg-error text-white-default hover:bg-red-600",
         outline: "bg-transparent hover:bg-accent border-2 border-accent text-accent hover:text-white-default",
+        outlineDanger: "bg-transparent hover:bg-error/80 border-2 border-error text-error hover:text-white-default",
         active: "bg-[#138496] text-white-default border-2 border-[#138496]"
     };
     

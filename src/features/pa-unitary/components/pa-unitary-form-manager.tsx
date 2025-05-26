@@ -1,7 +1,7 @@
 import { FormLayout, FormObservationDeniedFild, FormPalletizingTrackingConversion, FormProductAttributes, FormProductCategorySelector, FormProductCode, FormProductDescription, FormProductDimensions, FormProductPackagingInfo, FormValidity, FormWeights, SubTitleForm, } from "@/components/form";
 import { FamilyCodePAUnitary, GroupCodePAUnitary, TypeCodeoPAUnitary } from "../interface/pa-unitary-enum";
+import { useDeniedRequest, useObservationDenied, useEditRequest, useReviewRequest} from "@/hooks";
 import { FormActionsButtonsRequest } from "@/components/form/form-actions-buttons-request";
-import { useDeniedRequest, useObservationDenied, useEditRequest} from "@/hooks";
 import { updatePAUnitaryService } from "../service/update-pa-unitary.service";
 import { LoadingModal, RequestDeniedInfo, Toastify } from "@/components";
 import { IPAUnitary, IPAUnitaryRegister } from "../interface/pa-unitary";
@@ -15,6 +15,7 @@ import {
     Weight as KgIcon,
     Clock as ValidityIcon,
 } from "lucide-react";
+import { useReview } from "@/context";
 
 
 
@@ -23,8 +24,6 @@ interface PAUnitaryFormManagerProps{
     mode: FormStateType;
     isChange: boolean;
     loadingModal: boolean;
-    setReasonFieldReview:  React.Dispatch<React.SetStateAction<{[key: string]: string;}>>
-    reasonFieldReview: {[key: string]: string };
     setLoadingModal: React.Dispatch<React.SetStateAction<boolean>>;
     status: StatusRequest;
     setMode:React.Dispatch<React.SetStateAction<FormStateType>>
@@ -32,7 +31,7 @@ interface PAUnitaryFormManagerProps{
     obervationRequest: string | null;
 }
 
-export const PAUnitaryFormManager = ({defaultValue, mode, isChange, loadingModal, setReasonFieldReview, reasonFieldReview, setLoadingModal, status, setMode, viewRequestId, obervationRequest}:PAUnitaryFormManagerProps) => {
+export const PAUnitaryFormManager = ({defaultValue, mode, isChange, loadingModal, setLoadingModal, status, setMode, viewRequestId, obervationRequest}:PAUnitaryFormManagerProps) => {
         
     if(loadingModal){
         return <LoadingModal/> 
@@ -57,6 +56,11 @@ export const PAUnitaryFormManager = ({defaultValue, mode, isChange, loadingModal
     const denyRequest = useDeniedRequest(); // salvar no supabase
     const { errorObservation, observationDenied, reset ,setObservationDenied ,validate} = useObservationDenied(); // lidar com a observação, salvar/apagar
     
+
+    //Hook para lidar com o modo de revisão e contexto da revisão para lidar com campos vazios
+    const reviewRequest = useReviewRequest(); // salvar no supabase
+    const {hasEmptyReasons, setShowError} = useReview(); // funçao para verificar se existem campos vazios no modo revisão
+
     // Função para saber qual função irá chamar no botão de salvar, dependendo o modo.
     const handleConfirm = async (data: IPAUnitaryRegister) => {
         if(mode === "editing"){
@@ -76,6 +80,22 @@ export const PAUnitaryFormManager = ({defaultValue, mode, isChange, loadingModal
                 observation: observationDenied
             })
             reset();
+        } else if (mode === "reviewing"){
+            // modo revisão
+            if (hasEmptyReasons()) {
+                setShowError(true);
+                Toastify({
+                   type: "warning",
+                    message: "Preencha todos os campos de revisão antes de salvar."
+                });
+                return;
+            }
+            setShowError(false);
+            await reviewRequest({
+                setLoadingModal,
+                setMode,
+                viewRequestId
+            })
         } else {
             console.warn("Modo não tratado: ", mode)
         }

@@ -1,5 +1,6 @@
-import { FieldValues, Path, PathValue, UseFormReturn } from "react-hook-form";
+import { SafeReviewField } from "../review-field/safe-review-field.components";
 import { consultationCepService } from "@/services/viaCep-api/get-cep.service";
+import { FieldValues, Path, PathValue, UseFormReturn } from "react-hook-form";
 import { FormSection } from "./form-section.components";
 import { Input, InputWithMask } from "../inputs";
 import { FormStateType } from "@/interfaces";
@@ -101,94 +102,109 @@ export const FormAddress = <T extends FieldValues>({mode, methods, isBillingAddr
             <FormSection className="lg:flex-row gap-4">
                 {/* Telefone */}
                 {/* CEP */}
-                <InputWithMask    
-                    name={fieldConfig.zip.name}
-                    error={fieldConfig.zip.error}
-                    maskType="custom"
-                    customMask={"99999-999"}
-                    label="CEP"
-                    Icon={ZipCodeIcon}  
-                    readOnly={mode === 'viewing' || mode === 'reviewing'}                        
-                />
+                <SafeReviewField field={fieldConfig.zip.name} mode={mode || "viewing"}>
+                    <InputWithMask    
+                        name={fieldConfig.zip.name}
+                        error={fieldConfig.zip.error}
+                        maskType="custom"
+                        customMask={"99999-999"}
+                        label="CEP"
+                        Icon={ZipCodeIcon}  
+                        readOnly={mode === 'viewing' || mode === 'reviewing'}                        
+                    />
+                </SafeReviewField>
             
                 {/* Estado */}
-                <Input    
-                    label="Estado" 
-                    name={fieldConfig.state.name}
-                    register={methods.register(fieldConfig.state.name as Path<T>)}
-                    error={fieldConfig.state.error} 
-                    placeholder="Insira o estado"
-                    type="text"
-                    icon={StateIcon}
-                    readOnly={mode === 'viewing' || mode === 'reviewing'} 
-                />
+                <SafeReviewField field={fieldConfig.state.name} mode={mode || "viewing"}>
+                    <Input    
+                        label="Estado" 
+                        name={fieldConfig.state.name}
+                        register={methods.register(fieldConfig.state.name as Path<T>)}
+                        error={fieldConfig.state.error} 
+                        placeholder="Insira o estado"
+                        type="text"
+                        icon={StateIcon}
+                        readOnly={mode === 'viewing' || mode === 'reviewing'} 
+                    />
+                </SafeReviewField>
+                
                 {/* Munucípio */}
-                <Input    
-                    label="Municipio" 
-                    name={fieldConfig.city.name}
-                    register={methods.register(fieldConfig.city.name as Path<T>)}
-                    error={fieldConfig.city.error} 
-                    placeholder="Insira o municipio"
-                    type="text"
-                    icon={StateIcon}
-                    readOnly={mode === 'viewing' || mode === 'reviewing'} 
-                />
+                <SafeReviewField field={fieldConfig.city.name} mode={mode || "viewing"}>
+                    <Input    
+                        label="Municipio" 
+                        name={fieldConfig.city.name}
+                        register={methods.register(fieldConfig.city.name as Path<T>)}
+                        error={fieldConfig.city.error} 
+                        placeholder="Insira o municipio"
+                        type="text"
+                        icon={StateIcon}
+                        readOnly={mode === 'viewing' || mode === 'reviewing'} 
+                    />
+                </SafeReviewField>
             </FormSection>
             
             {/* Sessão endereço e número */}
             <FormSection className="lg:flex-row gap-4">
                 {/* Endereço */}
-                <Input    
-                    label="Endereço" 
-                    name={fieldConfig.address.name}
-                    register={methods.register(fieldConfig.address.name as Path<T>)}
-                    error={fieldConfig.address.error} 
-                    placeholder="Insira o endereço"
-                    type="text"
-                    icon={AddressIcon}
-                    maxCaractere={150}
-                    readOnly={mode === 'viewing' || mode === 'reviewing'} 
-                />
+                <SafeReviewField field={fieldConfig.address.name} mode={mode || "viewing"}>
+                    <Input    
+                        label="Endereço" 
+                        name={fieldConfig.address.name}
+                        register={methods.register(fieldConfig.address.name as Path<T>)}
+                        error={fieldConfig.address.error} 
+                        placeholder="Insira o endereço"
+                        type="text"
+                        icon={AddressIcon}
+                        maxCaractere={150}
+                        readOnly={mode === 'viewing' || mode === 'reviewing'} 
+                    />
+                </SafeReviewField>
                 {/* Número */}
-                <Input    
-                    label="Número" 
-                    name={fieldConfig.number.name}
-                    register={methods.register(fieldConfig.number.name as Path<T>)}
-                    error={fieldConfig.number.error} 
-                    placeholder="Nº"
-                    type="text"
-                    icon={AddressIcon}
-                    readOnly={mode === 'viewing' || mode === 'reviewing'} 
-                    widthContainer="w-[150px]"
-                />
+                <SafeReviewField field={fieldConfig.number.name} mode={mode || "viewing"}>
+                    <Input    
+                        label="Número" 
+                        name={fieldConfig.number.name}
+                        register={methods.register(fieldConfig.number.name as Path<T>)}
+                        error={fieldConfig.number.error} 
+                        placeholder="Nº"
+                        type="text"
+                        icon={AddressIcon}
+                        readOnly={mode === 'viewing' || mode === 'reviewing'} 
+                        widthContainer="w-[150px]"
+                    />
+                </SafeReviewField>
             </FormSection>
 
             {/* Sessão */}
             <FormSection className="lg:flex-row gap-4">
                 {/* Bairro */}
-                <Input    
-                    label="Bairro" 
-                    name={fieldConfig.district.name}
-                    register={methods.register(fieldConfig.district.name as Path<T>)}
-                    error={fieldConfig.district.error} 
-                    placeholder="Insira o bairro"
-                    type="text"
-                    icon={AddressIcon}
-                    readOnly={mode === 'viewing' || mode === 'reviewing'} 
-                    maxCaractere={100}
-                />
+                <SafeReviewField field={fieldConfig.district.name} mode={mode || "viewing"}>
+                    <Input    
+                        label="Bairro" 
+                        name={fieldConfig.district.name}
+                        register={methods.register(fieldConfig.district.name as Path<T>)}
+                        error={fieldConfig.district.error} 
+                        placeholder="Insira o bairro"
+                        type="text"
+                        icon={AddressIcon}
+                        readOnly={mode === 'viewing' || mode === 'reviewing'} 
+                        maxCaractere={100}
+                    />
+                </SafeReviewField>
                 {/* Complemento */}
-                <Input    
-                    label="Complemento" 
-                    name={fieldConfig.complement.name}
-                    register={methods.register(fieldConfig.complement.name as Path<T>)}
-                    error={fieldConfig.complement.error} 
-                    placeholder="Insira o complemento"
-                    type="text"
-                    icon={ComplementIcon}
-                    readOnly={mode === 'viewing' || mode === 'reviewing'} 
-                    maxCaractere={120}
-                />
+                <SafeReviewField field={fieldConfig.complement.name} mode={mode || "viewing"}>
+                    <Input    
+                        label="Complemento" 
+                        name={fieldConfig.complement.name}
+                        register={methods.register(fieldConfig.complement.name as Path<T>)}
+                        error={fieldConfig.complement.error} 
+                        placeholder="Insira o complemento"
+                        type="text"
+                        icon={ComplementIcon}
+                        readOnly={mode === 'viewing' || mode === 'reviewing'} 
+                        maxCaractere={120}
+                    />
+                </SafeReviewField>
             </FormSection>
         </div>
 

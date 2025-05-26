@@ -1,6 +1,6 @@
 import { FormLayout, FormActionsButtonsRequest, FormPalletizingTrackingConversion, FormProductAttributes, FormProductCategorySelector, FormProductCode, FormProductDescription, FormProductDimensions, FormProductPackagingInfo, FormValidity, FormWeights, SubTitleForm, FormObservationDeniedFild } from "@/components/form";
 import { FamilyCodePABurden, GroupCodePABurden, TypeCodeoPABurden } from "../interface/pa-burden-enum";
-import { useEditRequest, useDeniedRequest, useObservationDenied } from "@/hooks";
+import { useEditRequest, useDeniedRequest, useObservationDenied, useReviewRequest } from "@/hooks";
 import { updatePABurdenService } from "../service/update-pa-burden.service";
 import { LoadingModal, RequestDeniedInfo, Toastify } from "@/components";
 import { IPABurden, IPABurdenRegister } from "../interface/pa-burden";
@@ -14,6 +14,7 @@ import {
     Warehouse as StorageIcon,
     Clock as ValidityIcon,
 } from "lucide-react";
+import { useReview } from "@/context";
 
 
 
@@ -56,6 +57,10 @@ export const PABurdenFormManager = ({defaultValue, mode, isChange, loadingModal,
     const denyRequest = useDeniedRequest(); // salvar no supabase
     const { errorObservation, observationDenied, reset ,setObservationDenied ,validate} = useObservationDenied(); // lidar com a observação, salvar/apagar
     
+    //Hook para lidar com o modo de revisão e contexto da revisão para lidar com campos vazios
+    const reviewRequest = useReviewRequest(); // salvar no supabase
+    const {hasEmptyReasons, setShowError} = useReview(); // funçao para verificar se existem campos vazios no modo revisão
+
     // Função para saber qual função irá chamar no botão de salvar, dependendo o modo.
     const handleConfirm = async (data: IPABurdenRegister) => {
         if(mode === "editing"){
@@ -75,6 +80,22 @@ export const PABurdenFormManager = ({defaultValue, mode, isChange, loadingModal,
                 observation: observationDenied
             })
             reset();
+        } else if (mode === "reviewing"){
+            // modo revisão
+            if (hasEmptyReasons()) {
+                setShowError(true);
+                Toastify({
+                   type: "warning",
+                    message: "Preencha todos os campos de revisão antes de salvar."
+                });
+                return;
+            }
+            setShowError(false);
+            await reviewRequest({
+                setLoadingModal,
+                setMode,
+                viewRequestId
+            })
         } else {
             console.warn("Modo não tratado: ", mode)
         }

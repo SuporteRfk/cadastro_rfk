@@ -1,6 +1,6 @@
 import { FormLayout, FormActionsButtonsRequest, FormPalletizingTrackingConversion, FormProductAttributes, FormProductCategorySelector, FormProductCode, FormProductDescription, FormProductDimensions, FormProductPackagingInfo, FormWeights, SubTitleForm, FormObservationDeniedFild } from "@/components/form";
 import { FamilyCodePACopacker, GroupCodePACopacker, TypeCodeoPACopacker } from "../interface/pa-copacker-enum";
-import { useDeniedRequest, useObservationDenied, useEditRequest } from "@/hooks";
+import { useDeniedRequest, useObservationDenied, useEditRequest, useReviewRequest } from "@/hooks";
 import { updatePACopackerService } from "../service/update-pa-copacker.service";
 import { IPACopackerRegister, IPACopacker } from "../interface/pa-copacker";
 import { LoadingModal, RequestDeniedInfo, Toastify } from "@/components";
@@ -13,6 +13,7 @@ import {
     Warehouse as StorageIcon,
     PackageOpen as PAIcon
 } from "lucide-react";
+import { useReview } from "@/context";
 
 
 
@@ -21,8 +22,6 @@ interface PACopackerFormManagerProps{
     mode: FormStateType;
     isChange: boolean;
     loadingModal: boolean;
-    setReasonFieldReview:  React.Dispatch<React.SetStateAction<{[key: string]: string;}>>
-    reasonFieldReview: {[key: string]: string };
     setLoadingModal: React.Dispatch<React.SetStateAction<boolean>>;
     status: StatusRequest;
     setMode:React.Dispatch<React.SetStateAction<FormStateType>>
@@ -30,7 +29,7 @@ interface PACopackerFormManagerProps{
     obervationRequest: string | null;
 }
 
-export const PACopackerFormManager = ({defaultValue, mode, isChange, loadingModal, setReasonFieldReview, reasonFieldReview, setLoadingModal, status, setMode, viewRequestId, obervationRequest}:PACopackerFormManagerProps) => {
+export const PACopackerFormManager = ({defaultValue, mode, isChange, loadingModal, setLoadingModal, status, setMode, viewRequestId, obervationRequest}:PACopackerFormManagerProps) => {
         
     if(loadingModal){
         return <LoadingModal/> 
@@ -54,6 +53,10 @@ export const PACopackerFormManager = ({defaultValue, mode, isChange, loadingModa
     // Hooks para lidar com negar a solicitação
     const denyRequest = useDeniedRequest(); // salvar no supabase
     const { errorObservation, observationDenied, reset ,setObservationDenied ,validate} = useObservationDenied(); // lidar com a observação, salvar/apagar
+   
+    //Hook para lidar com o modo de revisão e contexto da revisão para lidar com campos vazios
+    const reviewRequest = useReviewRequest(); // salvar no supabase
+    const {hasEmptyReasons, setShowError} = useReview(); // funçao para verificar se existem campos vazios no modo revisão
     
     // Função para saber qual função irá chamar no botão de salvar, dependendo o modo.
     const handleConfirm = async (data: IPACopackerRegister) => {
@@ -74,10 +77,26 @@ export const PACopackerFormManager = ({defaultValue, mode, isChange, loadingModa
                 observation: observationDenied
             })
             reset();
+              } else if (mode === "reviewing"){
+            // modo revisão
+            if (hasEmptyReasons()) {
+                setShowError(true);
+                Toastify({
+                   type: "warning",
+                    message: "Preencha todos os campos de revisão antes de salvar."
+                });
+                return;
+            }
+            setShowError(false);
+            await reviewRequest({
+                setLoadingModal,
+                setMode,
+                viewRequestId
+            })
         } else {
             console.warn("Modo não tratado: ", mode)
         }
-        };
+    };
 
     return(
         <FormLayout 

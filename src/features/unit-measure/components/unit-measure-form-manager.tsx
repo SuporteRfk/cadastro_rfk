@@ -1,7 +1,7 @@
 import { FormActionsButtonsRequest, FormLayout, FormSection, SubTitleForm, FormObservationDeniedFild } from "@/components/form";
+import { useDeniedRequest, useEditRequest, useObservationDenied, useReviewRequest } from "@/hooks";
+import { Input, LoadingModal, RequestDeniedInfo, SafeReviewField, Toastify } from "@/components";
 import { updateUnitMeasureService } from "../service/update-unit-measure.service";
-import { useDeniedRequest, useEditRequest, useObservationDenied } from "@/hooks";
-import { Input, LoadingModal, RequestDeniedInfo, Toastify } from "@/components";
 import { IUnitMeasure, IUnitMeasureRegister } from "../interface/unit-measure";
 import { unitMeasureSchema } from "../schema/unit-measure.schema";
 import { FormStateType, StatusRequest } from "@/interfaces";
@@ -11,6 +11,7 @@ import {
     Ruler as UnitMeasureIcon,
     PencilRuler as UnitMeasureSubTitleIcon
 } from "lucide-react";
+import { useReview } from "@/context";
 
 
 interface PaymentConditionFormManagerProps{
@@ -18,8 +19,6 @@ interface PaymentConditionFormManagerProps{
     mode: FormStateType;
     isChange: boolean;
     loadingModal: boolean;
-    setReasonFieldReview:  React.Dispatch<React.SetStateAction<{[key: string]: string;}>>
-    reasonFieldReview: {[key: string]: string };
     setLoadingModal: React.Dispatch<React.SetStateAction<boolean>>;
     status: StatusRequest;
     setMode:React.Dispatch<React.SetStateAction<FormStateType>>
@@ -27,7 +26,7 @@ interface PaymentConditionFormManagerProps{
     obervationRequest: string | null;
 }
 
-export const UnitMeasureFormManager = ({defaultValue, mode, isChange, loadingModal, setReasonFieldReview, reasonFieldReview, setLoadingModal, status, setMode, viewRequestId, obervationRequest}:PaymentConditionFormManagerProps) => {   
+export const UnitMeasureFormManager = ({defaultValue, mode, isChange, loadingModal, setLoadingModal, status, setMode, viewRequestId, obervationRequest}:PaymentConditionFormManagerProps) => {   
     if(loadingModal){
         return <LoadingModal/> 
     }
@@ -52,11 +51,18 @@ export const UnitMeasureFormManager = ({defaultValue, mode, isChange, loadingMod
     const denyRequest = useDeniedRequest(); // salvar no supabase
     const { errorObservation, observationDenied, reset ,setObservationDenied ,validate} = useObservationDenied(); // lidar com a observação, salvar/apagar
     
+
+    //Hook para lidar com o modo de revisão e contexto da revisão para lidar com campos vazios
+    const reviewRequest = useReviewRequest(); // salvar no supabase
+    const {hasEmptyReasons, setShowError} = useReview(); // funçao para verificar se existem campos vazios no modo revisão
+
     // Função para saber qual função irá chamar no botão de salvar, dependendo o modo.
     const handleConfirm = async (data: IUnitMeasureRegister) => {
         if(mode === "editing"){
+            // modo edição da solicitação
             await handleEdit(defaultValue.id, data);
         } else if (mode === "denied"){
+            // modo negar solicitação
             if(!validate()){
                 Toastify({
                     type: "warning",
@@ -71,6 +77,22 @@ export const UnitMeasureFormManager = ({defaultValue, mode, isChange, loadingMod
                 observation: observationDenied
             })
             reset();
+        } else if (mode === "reviewing"){
+            // modo revisão
+             if (hasEmptyReasons()) {
+                setShowError(true);
+                Toastify({
+                   type: "warning",
+                    message: "Preencha todos os campos de revisão antes de salvar."
+                });
+                return;
+            }
+            setShowError(false);
+            await reviewRequest({
+                setLoadingModal,
+                setMode,
+                viewRequestId
+            })
         } else {
             console.warn("Modo não tratado: ", mode)
         }
@@ -94,26 +116,31 @@ export const UnitMeasureFormManager = ({defaultValue, mode, isChange, loadingMod
 
             <SubTitleForm title="Dados da Unidade de Medida"  styleLine="border-t-3 border-dashed border-strong/10 mt-4" icon={UnitMeasureSubTitleIcon}/>
             <FormSection className="sm:flex-row gap-4 pb-2">
-                    <Input    
-                        label="Unidade de Medida" 
-                        name="unidade_medida"
-                        register={methods.register("unidade_medida")}
-                        error={methods.formState.errors.unidade_medida?.message} 
-                        placeholder="Digita a unidade de medida"
-                        type="text"
-                        icon={UnitMeasureIcon}
-                        readOnly={mode !== "editing"}
-                    />
-                    <Input    
-                        label="Descrição da Unidade" 
-                        name="descricao_unidade"
-                        register={methods.register("descricao_unidade")}
-                        error={methods.formState.errors.descricao_unidade?.message} 
-                        placeholder="Descreva sobre ela"
-                        type="text"
-                        icon={UnitMeasureSubTitleIcon}
-                        readOnly={mode !== "editing"}
-                    />
+                    
+                    <SafeReviewField field="unidade_medida" mode={mode}>
+                        <Input    
+                            label="Unidade de Medida" 
+                            name="unidade_medida"
+                            register={methods.register("unidade_medida")}
+                            error={methods.formState.errors.unidade_medida?.message} 
+                            placeholder="Digita a unidade de medida"
+                            type="text"
+                            icon={UnitMeasureIcon}
+                            readOnly={mode !== "editing"}
+                        />
+                    </SafeReviewField>
+                    <SafeReviewField field="descricao_unidade" mode={mode}>
+                        <Input    
+                            label="Descrição da Unidade" 
+                            name="descricao_unidade"
+                            register={methods.register("descricao_unidade")}
+                            error={methods.formState.errors.descricao_unidade?.message} 
+                            placeholder="Descreva sobre ela"
+                            type="text"
+                            icon={UnitMeasureSubTitleIcon}
+                            readOnly={mode !== "editing"}
+                        />
+                    </SafeReviewField>
             </FormSection>
 
             {/* Sessão para informar o motivo que está negando a solicitação */}

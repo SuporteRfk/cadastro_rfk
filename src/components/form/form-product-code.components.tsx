@@ -6,6 +6,7 @@ import {
     Barcode as CodeBarIcon,
     Computer as CodeSaibIcon,
 } from "lucide-react";
+import { SafeReviewField } from "../review-field/safe-review-field.components";
 
 
 const ConfigSecondCodeBar = {
@@ -53,42 +54,49 @@ export const FormProductCode =<T extends FieldValues>({
             {/* código de barras */}
             {!showOnlyCodeSaib && 
                 <>
-                    <Input    
-                        label="Código de barras GTIN" 
-                        name="codigo_barras"
-                        register={methods.register("codigo_barras" as Path<T>)}
-                        error={methods.formState.errors.codigo_barras?.message as string | undefined} 
-                        placeholder="Código de barras da nota fiscal"
-                        type="number"
-                        icon={CodeBarIcon}
-                        readOnly={mode === 'viewing' || mode === 'reviewing'}
-                    />
-                    {/* segundo código de barras */}
-                    {showSecondCodeBar &&
+                    <SafeReviewField field="codigo_barras" mode={mode || "viewing"}>
                         <Input    
-                            label={config!.label} 
-                            name={config!.nameRegister}
-                            register={methods.register(config!.nameRegister as Path<T>)}
-                            error={methods.formState.errors[config!.nameRegister]?.message as string | undefined} 
-                            placeholder={config!.placeholder}
+                            label="Código de barras GTIN" 
+                            name="codigo_barras"
+                            register={methods.register("codigo_barras" as Path<T>)}
+                            error={methods.formState.errors.codigo_barras?.message as string | undefined} 
+                            placeholder="Código de barras da nota fiscal"
                             type="number"
                             icon={CodeBarIcon}
                             readOnly={mode === 'viewing' || mode === 'reviewing'}
                         />
+                    </SafeReviewField>
+
+                    {/* segundo código de barras */}
+                    {showSecondCodeBar &&
+                        <SafeReviewField field={config!.nameRegister} mode={mode || "viewing"}>
+                            <Input    
+                                label={config!.label} 
+                                name={config!.nameRegister}
+                                register={methods.register(config!.nameRegister as Path<T>)}
+                                error={methods.formState.errors[config!.nameRegister]?.message as string | undefined} 
+                                placeholder={config!.placeholder}
+                                type="number"
+                                icon={CodeBarIcon}
+                                readOnly={mode === 'viewing' || mode === 'reviewing'}
+                            />
+                        </SafeReviewField>
                     }
                 </>
             }
             {/* codido saib */}
-            <Input    
-                label="Código Saib (opcional)" 
-                name="codigo_saib"
-                register={methods.register("codigo_saib" as Path<T>) }
-                error={methods.formState.errors.codigo_saib?.message as string | undefined} 
-                placeholder="Código do saib"
-                type="number"
-                icon={CodeSaibIcon}
-                readOnly={mode === 'viewing' || mode === 'reviewing'}
-            />
+            <SafeReviewField field="codigo_saib" mode={mode || "viewing"}>
+                <Input    
+                    label="Código Saib (opcional)" 
+                    name="codigo_saib"
+                    register={methods.register("codigo_saib" as Path<T>) }
+                    error={methods.formState.errors.codigo_saib?.message as string | undefined} 
+                    placeholder="Código do saib"
+                    type="number"
+                    icon={CodeSaibIcon}
+                    readOnly={mode === 'viewing' || mode === 'reviewing'}
+                />
+            </SafeReviewField>
         </FormSection>
     );
 };  

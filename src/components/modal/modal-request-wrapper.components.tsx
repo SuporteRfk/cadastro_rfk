@@ -13,6 +13,7 @@ import { IClient } from "@/features/client/interface/client";
 import { handleApiError, applyMasks } from "@/utils";
 import { useEffect, useState } from "react";
 import { setPjOrPfSuppliers } from "@/features/suppliers/utils/set-pj-or-pf";
+import { ReviewProvider } from "@/context";
 
 type EntityTypes =
   | IClient 
@@ -36,8 +37,6 @@ interface ModalRequestWrapperProps{
         mode: FormStateType;
         isChange: boolean;
         loadingModal:boolean;
-        setReasonFieldReview:  React.Dispatch<React.SetStateAction<{[key: string]: string;}>>
-        reasonFieldReview: {[key: string]: string };
         setLoadingModal: React.Dispatch<React.SetStateAction<boolean>>;
         status: StatusRequest;
         setMode:React.Dispatch<React.SetStateAction<FormStateType>>
@@ -55,11 +54,7 @@ interface ModalRequestWrapperProps{
 export const ModalRequestWrapper = ({FormComponent, request, mode, isTheRouteOfChange, setLoadingModal,loadingModal, setMode}:ModalRequestWrapperProps) => {
     
     const [defaultValuesRequest, setDefaultValuesRequest] = useState<Extended<EntityTypes> | null>(null)
-            
     
-
-    const [reasonFieldReview, setReasonFieldReview] = useState<{ [key: string]: string }>(request.motivo_recusa ? request.motivo_recusa : {});
-
     const getDetailRequest = async() => {
         try {
             setLoadingModal(true);
@@ -99,18 +94,18 @@ export const ModalRequestWrapper = ({FormComponent, request, mode, isTheRouteOfC
 
 
     return(
-        <FormComponent 
-            defaultValue={defaultValuesRequest} 
-            mode={mode} 
-            isChange={isTheRouteOfChange} 
-            loadingModal={loadingModal}
-            setReasonFieldReview={setReasonFieldReview}
-            reasonFieldReview={reasonFieldReview}
-            setLoadingModal={setLoadingModal}
-            status={request.status}
-            setMode={setMode}
-            viewRequestId={request.id}
-            obervationRequest={request.observacao}
-        />
+        <ReviewProvider initialValue={request.motivo_recusa ?? undefined}>
+            <FormComponent 
+                defaultValue={defaultValuesRequest} 
+                mode={mode} 
+                isChange={isTheRouteOfChange} 
+                loadingModal={loadingModal}
+                setLoadingModal={setLoadingModal}
+                status={request.status}
+                setMode={setMode}
+                viewRequestId={request.id}
+                obervationRequest={request.observacao}
+            />
+        </ReviewProvider>
     );
 };
