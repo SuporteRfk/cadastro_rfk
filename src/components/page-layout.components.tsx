@@ -11,7 +11,7 @@ export const PageLayout = ({children}:{children:ReactNode}) => {
             {/* Menus */}
             <MenuMobile/>
             <MenuDesktop/>
-            <div className={`flex lg:justify-center w-full px-0 sm:px-2`}>
+            <div className={`flex h-full lg:justify-center w-full px-0 sm:px-2`}>
                 {children}
             </div>
         </main>

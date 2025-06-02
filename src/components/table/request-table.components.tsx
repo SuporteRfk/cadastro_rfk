@@ -54,7 +54,7 @@ export const RequestTable = ({titlePage, iconForm:IconForm, showFilterDash=true,
     })
 
     return(
-        <div className="flex flex-col w-full">
+        <div className="flex flex-col w-full h-screen max-h-[calc(100vh-124px)] lg:max-h-[calc(100vh-64px)]">
             {/* Titulo do Formulário */}
             <h1 className="p-3 text-xl text-text-strong font-bold mt-3 flex gap-2 items-center">
                 {<IconForm size={20}/>}
@@ -75,10 +75,10 @@ export const RequestTable = ({titlePage, iconForm:IconForm, showFilterDash=true,
                                     setSelectedRequest(null);
                                 }}/>
                         }
-                        <div className="h-full w-full flex flex-col justify-between bg-white-default rounded-lg border border-border">
+                        <div className="min-h-full w-full flex flex-col justify-between bg-white-default rounded-lg border border-border">
                             {showFilterDash && <RequestTableFilter fixedFilter={fixedFilter}/>}
-                            <div className="flex-1 overflow-y-auto rounded-sm bg-white">
-                                <Table className="min-w-ful">    
+                            <div className="flex-1 overflow-auto h-full rounded-sm bg-white">
+                                <Table className="min-w-full">    
                                     <RequestTableHeader table={table}/>
                                     <RequestTableBody table={table} observationOpenId={observationOpenId}/>
                                 </Table>

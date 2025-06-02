@@ -28,9 +28,10 @@ interface PAThirdFormManagerProps{
     setMode:React.Dispatch<React.SetStateAction<FormStateType>>
     viewRequestId: number;
     obervationRequest: string | null;
+    setStatusLocal: React.Dispatch<React.SetStateAction<StatusRequest>>;
 }
 
-export const PAThirdFormManager = ({defaultValue, mode, isChange, loadingModal, setLoadingModal, status, setMode, viewRequestId, obervationRequest}:PAThirdFormManagerProps) => {
+export const PAThirdFormManager = ({defaultValue, mode, isChange, loadingModal, setLoadingModal, status, setMode, viewRequestId, obervationRequest,setStatusLocal}:PAThirdFormManagerProps) => {
         
     if(loadingModal){
         return <LoadingModal/> 
@@ -48,7 +49,8 @@ export const PAThirdFormManager = ({defaultValue, mode, isChange, loadingModal, 
         setMode,
         status,
         viewRequestId,
-        updateFunction: updatePAThirdService
+        updateFunction: updatePAThirdService,
+        setStatusLocal
     });
 
     // Hooks para lidar com negar a solicitação
@@ -76,7 +78,8 @@ export const PAThirdFormManager = ({defaultValue, mode, isChange, loadingModal, 
                 viewRequestId,
                 setLoadingModal,
                 setMode,
-                observation: observationDenied
+                observation: observationDenied,
+                setStatusLocal
             })
             reset();
         } else if (mode === "reviewing"){
@@ -93,7 +96,8 @@ export const PAThirdFormManager = ({defaultValue, mode, isChange, loadingModal, 
             await reviewRequest({
                 setLoadingModal,
                 setMode,
-                viewRequestId
+                viewRequestId,
+                setStatusLocal
             })
         } else {
             console.warn("Modo não tratado: ", mode)

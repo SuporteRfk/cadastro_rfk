@@ -9,13 +9,14 @@ interface UseDeniedRequestParams {
   viewRequestId  : number;
   setLoadingModal:React.Dispatch<React.SetStateAction<boolean>>;
   setMode:React.Dispatch<React.SetStateAction<FormStateType>>;
+  setStatusLocal: React.Dispatch<React.SetStateAction<StatusRequest>>;
 };
 
 export const useReviewRequest = () => {
   const {user} = useContext(AuthContext);
   const {reviewFields} = useReview();
     
-    const handleReviewRequest = async ({setLoadingModal, setMode, viewRequestId }:UseDeniedRequestParams) => { 
+    const handleReviewRequest = async ({setLoadingModal, setMode, viewRequestId, setStatusLocal }:UseDeniedRequestParams) => { 
         try {
             setLoadingModal(true);
             await updateRequestService({
@@ -37,6 +38,7 @@ export const useReviewRequest = () => {
             })
 
             setMode("viewing");
+            setStatusLocal(StatusRequest.REVISAO);
         } catch (error) {
             handleApiError(error,"Erro para atualizar a solicitação");
         }finally{

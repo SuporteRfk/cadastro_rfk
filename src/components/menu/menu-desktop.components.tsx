@@ -1,12 +1,14 @@
-import { Twirl as Hamburger } from 'hamburger-react';
 import LogoSymbol from "@/assets/symbol_logo.png";
 import { NavMenu } from './nav-menu.components';
 import { NavigationContext } from "@/context";
+import { useContext, useRef } from "react";
+import { useClickAway } from "react-use";
 import {motion} from "framer-motion";
-import { useContext } from "react";
 
 export const MenuDesktop = () => {
-  const {isSidebarOpen , toggleSideBar , resetPathsMenusAndNavigateDashboard } = useContext(NavigationContext);
+  const {isSidebarOpen , toggleSideBar, setIsSidebarOpen  } = useContext(NavigationContext);
+  const ref = useRef(null);
+  useClickAway(ref, ()=> setIsSidebarOpen(false))
 
   return (
     <motion.aside 
@@ -15,25 +17,18 @@ export const MenuDesktop = () => {
         style={{
             width: isSidebarOpen ? "286px" : "80px"
         }}
-
+        ref={ref}
     >
         {/* Topo - Logo e Botão */}
         <div className="flex w-full items-start h-fit border-b border-border relative cursor-pointer">
             <motion.div 
                 layout
                 className="flex items-center"
-                onClick={resetPathsMenusAndNavigateDashboard}
+                onClick={() => toggleSideBar()}
             >
                 <motion.img layout src={LogoSymbol} alt="Logo" className="w-15 h-15" title="Ir para Dashboard"/>
                 {isSidebarOpen && <motion.span layout className="font-bold text-lg">Cadastro RFK</motion.span>}
-            </motion.div>
-            {/* bottao para abrir e fechar o sidebar */}
-            <motion.div 
-                className="absolute  right-[-20px] top-1"
-                layout
-            >
-                <Hamburger direction="right" toggled={isSidebarOpen} toggle={toggleSideBar} size={20} color={isSidebarOpen? "var(--color-error)" : "var(--color-medium)"}/>
-            </motion.div>
+            </motion.div>           
         </div>
        
         <NavMenu/>

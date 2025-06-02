@@ -25,15 +25,15 @@ interface IndirectProductsFormManagerProps{
     setMode:React.Dispatch<React.SetStateAction<FormStateType>>
     viewRequestId: number;
     obervationRequest: string | null;
+    setStatusLocal: React.Dispatch<React.SetStateAction<StatusRequest>>;
 }
 
-export const IndirectProductsFormManager = ({defaultValue, mode, isChange, loadingModal, setLoadingModal, status, setMode, viewRequestId, obervationRequest}:IndirectProductsFormManagerProps) => {
+export const IndirectProductsFormManager = ({defaultValue, mode, isChange, loadingModal, setLoadingModal, status, setMode, viewRequestId, obervationRequest, setStatusLocal}:IndirectProductsFormManagerProps) => {
         
     if(loadingModal){
         return <LoadingModal/> 
     }
   
-    console.log(defaultValue)
     const methods= useForm<IIndirectProductsRegister>({
         defaultValues: defaultValue,
         resolver: yupResolver(indirectProductsRegisterSchema)
@@ -46,7 +46,8 @@ export const IndirectProductsFormManager = ({defaultValue, mode, isChange, loadi
         setMode,
         status,
         viewRequestId,
-        updateFunction: updateIndirectProductsService
+        updateFunction: updateIndirectProductsService,
+        setStatusLocal
     });
 
 
@@ -76,7 +77,8 @@ export const IndirectProductsFormManager = ({defaultValue, mode, isChange, loadi
                 viewRequestId,
                 setLoadingModal,
                 setMode,
-                observation: observationDenied
+                observation: observationDenied,
+                setStatusLocal
             })
             reset();
          } else if (mode === "reviewing"){
@@ -93,7 +95,8 @@ export const IndirectProductsFormManager = ({defaultValue, mode, isChange, loadi
             await reviewRequest({
                 setLoadingModal,
                 setMode,
-                viewRequestId
+                viewRequestId,
+                setStatusLocal
             })
         } else {
             console.warn("Modo não tratado: ", mode)

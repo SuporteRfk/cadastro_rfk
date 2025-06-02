@@ -32,7 +32,7 @@ export interface IQueryRequest {
     tipo?: string | null;
     data?: string | null;
     operacao? : OperationRequest | null;
-    nome?:string | null;
+    nome_solicitante?:string | null;
     email?: string | null;
     indexLimit?: number | null;
     offset?: number | null;

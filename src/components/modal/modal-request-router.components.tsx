@@ -9,7 +9,7 @@ import { PAThirdFormManager } from "@/features/pa-third/components/pa-third-form
 import { InsumoFormManager } from "@/features/insumos/components/insumos-form-manager";
 import { ClientFormManager } from "@/features/client/components/client-form-manager";
 import { ModalRequestWrapper } from "./modal-request-wrapper.components";
-import { FormStateType, IViewRequest } from "@/interfaces";
+import { FormStateType, IViewRequest, StatusRequest } from "@/interfaces";
 
 
 interface ModalRequestRouterProps {
@@ -19,9 +19,10 @@ interface ModalRequestRouterProps {
     isTheRouteOfChange: boolean;
     loadingModal:boolean;
     setMode:React.Dispatch<React.SetStateAction<FormStateType>>;
+    setStatusLocal: React.Dispatch<React.SetStateAction<StatusRequest>>
 }
 
-export const ModalRequestRouter = ( {request, mode, setLoadingModal,isTheRouteOfChange, loadingModal, setMode}:ModalRequestRouterProps) => {
+export const ModalRequestRouter = ( {request, mode, setLoadingModal,isTheRouteOfChange, loadingModal, setMode, setStatusLocal}:ModalRequestRouterProps) => {
     
     switch (request.tabela_origem) {
         case "cad_condicao_pagamento":
@@ -33,6 +34,7 @@ export const ModalRequestRouter = ( {request, mode, setLoadingModal,isTheRouteOf
                         setLoadingModal={setLoadingModal}
                         loadingModal={loadingModal}
                         setMode={setMode}
+                        setStatusLocal={setStatusLocal}
                     />
         case "cad_unidade_medida":
             return <ModalRequestWrapper
@@ -43,6 +45,7 @@ export const ModalRequestRouter = ( {request, mode, setLoadingModal,isTheRouteOf
                         setLoadingModal={setLoadingModal}
                         loadingModal={loadingModal}
                         setMode={setMode}
+                        setStatusLocal={setStatusLocal}
                     />
         case "cad_produtos_indiretos": 
             return <ModalRequestWrapper
@@ -53,6 +56,7 @@ export const ModalRequestRouter = ( {request, mode, setLoadingModal,isTheRouteOf
                         setLoadingModal={setLoadingModal}
                         loadingModal={loadingModal}
                         setMode={setMode}
+                        setStatusLocal={setStatusLocal}
                     />
         case "cad_pa_unitario":
             return <ModalRequestWrapper
@@ -63,6 +67,7 @@ export const ModalRequestRouter = ( {request, mode, setLoadingModal,isTheRouteOf
                         setLoadingModal={setLoadingModal}
                         loadingModal={loadingModal}
                         setMode={setMode}
+                        setStatusLocal={setStatusLocal}
                     />
         case "cad_pa_fardo": 
             return <ModalRequestWrapper
@@ -73,6 +78,7 @@ export const ModalRequestRouter = ( {request, mode, setLoadingModal,isTheRouteOf
                         setLoadingModal={setLoadingModal}
                         loadingModal={loadingModal}
                         setMode={setMode}
+                        setStatusLocal={setStatusLocal}
                     />
         case "cad_pa_terceiro": 
             return <ModalRequestWrapper
@@ -83,6 +89,7 @@ export const ModalRequestRouter = ( {request, mode, setLoadingModal,isTheRouteOf
                         setLoadingModal={setLoadingModal}
                         loadingModal={loadingModal}
                         setMode={setMode}
+                        setStatusLocal={setStatusLocal}
                     />
         case "cad_pa_copacker":
             return <ModalRequestWrapper
@@ -93,6 +100,7 @@ export const ModalRequestRouter = ( {request, mode, setLoadingModal,isTheRouteOf
                         setLoadingModal={setLoadingModal}
                         loadingModal={loadingModal}
                         setMode={setMode}
+                        setStatusLocal={setStatusLocal}
                     />
         case "cad_insumos":
             return <ModalRequestWrapper
@@ -103,6 +111,7 @@ export const ModalRequestRouter = ( {request, mode, setLoadingModal,isTheRouteOf
                         setLoadingModal={setLoadingModal}
                         loadingModal={loadingModal}
                         setMode={setMode}
+                        setStatusLocal={setStatusLocal}
                     />
         case "cad_clientes":
             return <ModalRequestWrapper
@@ -113,6 +122,7 @@ export const ModalRequestRouter = ( {request, mode, setLoadingModal,isTheRouteOf
                         setLoadingModal={setLoadingModal}
                         loadingModal={loadingModal}
                         setMode={setMode}
+                        setStatusLocal={setStatusLocal}
                     />
         case "cad_fornecedores": 
             return <ModalRequestWrapper
@@ -123,6 +133,7 @@ export const ModalRequestRouter = ( {request, mode, setLoadingModal,isTheRouteOf
                         setLoadingModal={setLoadingModal}
                         loadingModal={loadingModal}
                         setMode={setMode}
+                        setStatusLocal={setStatusLocal}
                     />
         default:
             return (

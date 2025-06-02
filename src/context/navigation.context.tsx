@@ -6,18 +6,19 @@ import {MenuItem} from "@/interfaces";
 
 
 interface INavigationContextType {
-    isSidebarOpen: boolean;                                  // Indica se o sidebar está aberto
-    isMobileOpenMenu: boolean;                               // Indica se o mobile está aberto
-    setIsMobileOpenMenu: Dispatch<SetStateAction<boolean>>;  // Setar estado de abertuda do menu mobile
-    lengthMenuCommom: number;                                // Tamanho da lista de opções de menu do usuario padrão/comum 
-    menus: MenuItem[];                                       // Lista de items do menu
-    toggleSideBar: () => void;                               // Funcao para abrir/fechar o sidebar menu
-    toggleMenuMobile: () => void;                            // Funcao para abrir/fechar o menu mobile
-    resetPathsMenusAndNavigateDashboard: () => void;         // Funçao para voltar para dashboard e resetar os states de marcaçao/navegação
-    activeCategory: string | null;                           // Indica a categoria ativa/selecionada
-    handleCategoryClick: (categoryLabel:string) => void;     // Função para setar qual categoria está ativa
-    isMenuRouteActive:(path:string) => boolean;              // Função para ativar os botões do menu de acordo com rota da url
-    handleNavigate:(path:string) => void;                    // Funçao responsável por fazer a navegação  
+    isSidebarOpen: boolean;                                     // Indica se o sidebar está aberto
+    isMobileOpenMenu: boolean;                                  // Indica se o mobile está aberto
+    setIsMobileOpenMenu: Dispatch<SetStateAction<boolean>>;     // Setar estado de abertuda do menu mobile
+    lengthMenuCommom: number;                                   // Tamanho da lista de opções de menu do usuario padrão/comum 
+    menus: MenuItem[];                                          // Lista de items do menu
+    toggleSideBar: () => void;                                  // Funcao para abrir/fechar o sidebar menu
+    toggleMenuMobile: () => void;                               // Funcao para abrir/fechar o menu mobile
+    activeCategory: string | null;                              // Indica a categoria ativa/selecionada
+    handleCategoryClick: (categoryLabel:string) => void;        // Função para setar qual categoria está ativa
+    isMenuRouteActive:(path:string) => boolean;                 // Função para ativar os botões do menu de acordo com rota da url
+    handleNavigate:(path:string) => void;                       // Funçao responsável por fazer a navegação  
+    setActiveCategory: Dispatch<SetStateAction<string | null>>; // Função para setar a categoria ativa
+    setIsSidebarOpen: Dispatch<SetStateAction<boolean>>;        // Função para setar o estado do sidebar
  }
 
 
@@ -29,11 +30,12 @@ export const NavigationContext = createContext<INavigationContextType>({
    menus: menuCommon,
    toggleSideBar: () => {},
    toggleMenuMobile: () => {},
-   resetPathsMenusAndNavigateDashboard: () => {},
    activeCategory: null,
    handleCategoryClick: (_categoryLabel) => {},
    isMenuRouteActive:(_path) => false,
-   handleNavigate: (_path) => {}
+   handleNavigate: (_path) => {},
+   setActiveCategory: () => null,
+   setIsSidebarOpen: () => false,
 });
 
 export const NavigationProvider = ({children}:{children:ReactNode}) => {
@@ -55,13 +57,7 @@ export const NavigationProvider = ({children}:{children:ReactNode}) => {
     const lengthMenuCommom = menuCommon.length; //Pegar tamanho da lista de navegação do menu comum para adicionar uma borda de separação
 
 
-     // reseta os path setados e faz a navegação para dashboard
-     const resetPathsMenusAndNavigateDashboard = (): void => {
-        setActiveCategory(null);
-        navigate("/dashboard");
-    };
-
-    // Ao clicar em uma categoria (abre ou fecha submenu)
+     // Ao clicar em uma categoria (abre ou fecha submenu)
     const handleCategoryClick = (categoryLabel: string) => {
         if (activeCategory === categoryLabel) {
             setActiveCategory(null); // Fecha se já estiver aberto
@@ -90,11 +86,12 @@ export const NavigationProvider = ({children}:{children:ReactNode}) => {
                 menus,
                 toggleSideBar,
                 toggleMenuMobile,
-                resetPathsMenusAndNavigateDashboard,
                 activeCategory,
                 handleCategoryClick,
                 isMenuRouteActive,
-                handleNavigate
+                handleNavigate,
+                setActiveCategory,
+                setIsSidebarOpen
         }}  
         >
             {children}

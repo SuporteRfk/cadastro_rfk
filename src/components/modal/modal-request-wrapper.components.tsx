@@ -42,6 +42,7 @@ interface ModalRequestWrapperProps{
         setMode:React.Dispatch<React.SetStateAction<FormStateType>>
         viewRequestId: number;
         obervationRequest: string | null;
+        setStatusLocal: React.Dispatch<React.SetStateAction<StatusRequest>>
     }>;
     request: IViewRequest;
     mode: FormStateType;
@@ -49,9 +50,10 @@ interface ModalRequestWrapperProps{
     setLoadingModal: React.Dispatch<React.SetStateAction<boolean>>;
     loadingModal:boolean;
     setMode:React.Dispatch<React.SetStateAction<FormStateType>>
+    setStatusLocal: React.Dispatch<React.SetStateAction<StatusRequest>>
 }
 
-export const ModalRequestWrapper = ({FormComponent, request, mode, isTheRouteOfChange, setLoadingModal,loadingModal, setMode}:ModalRequestWrapperProps) => {
+export const ModalRequestWrapper = ({FormComponent, request, mode, isTheRouteOfChange, setLoadingModal,loadingModal, setMode, setStatusLocal}:ModalRequestWrapperProps) => {
     
     const [defaultValuesRequest, setDefaultValuesRequest] = useState<Extended<EntityTypes> | null>(null)
     
@@ -105,6 +107,7 @@ export const ModalRequestWrapper = ({FormComponent, request, mode, isTheRouteOfC
                 setMode={setMode}
                 viewRequestId={request.id}
                 obervationRequest={request.observacao}
+                setStatusLocal={setStatusLocal}
             />
         </ReviewProvider>
     );

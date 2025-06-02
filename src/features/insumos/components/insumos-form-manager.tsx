@@ -31,9 +31,10 @@ interface PaymentConditionFormManagerProps{
     setMode:React.Dispatch<React.SetStateAction<FormStateType>>
     viewRequestId: number;
     obervationRequest: string | null;
+    setStatusLocal: React.Dispatch<React.SetStateAction<StatusRequest>>;
 }
 
-export const InsumoFormManager = ({defaultValue, mode, isChange, loadingModal, setLoadingModal, status, setMode, viewRequestId, obervationRequest}:PaymentConditionFormManagerProps) => {
+export const InsumoFormManager = ({defaultValue, mode, isChange, loadingModal, setLoadingModal, status, setMode, viewRequestId, obervationRequest, setStatusLocal}:PaymentConditionFormManagerProps) => {
         
     if(loadingModal){
         return <LoadingModal/> 
@@ -51,7 +52,8 @@ export const InsumoFormManager = ({defaultValue, mode, isChange, loadingModal, s
         setMode,
         status,
         viewRequestId,
-        updateFunction: updateInsumosService
+        updateFunction: updateInsumosService,
+        setStatusLocal
     });
 
 
@@ -79,7 +81,8 @@ export const InsumoFormManager = ({defaultValue, mode, isChange, loadingModal, s
                 viewRequestId,
                 setLoadingModal,
                 setMode,
-                observation: observationDenied
+                observation: observationDenied,
+                setStatusLocal
             })
             reset();
         } else if (mode === "reviewing"){
@@ -96,7 +99,8 @@ export const InsumoFormManager = ({defaultValue, mode, isChange, loadingModal, s
             await reviewRequest({
                 setLoadingModal,
                 setMode,
-                viewRequestId
+                viewRequestId,
+                setStatusLocal
             })
         } else {
             console.warn("Modo não tratado: ", mode)

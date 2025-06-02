@@ -20,11 +20,17 @@ import {
     FilePenLine as RevisionRequestIcon,
     FileX2 as DeniedRequestIcon,
     FileCheck2 as ApprovedRequestIcon,
+    House as HomeIcon,
 } from "lucide-react";
 
 
 
 export const menuCommon:MenuItem[] =[
+    {
+        label: "Home",
+        icon: HomeIcon,
+        path: "/dashboard"
+    },
     {
         label: "Pessoas e Serviços",
         icon: PeopleServicesIcon,

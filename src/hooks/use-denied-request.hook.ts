@@ -10,12 +10,13 @@ interface UseDeniedRequestParams {
   setLoadingModal:React.Dispatch<React.SetStateAction<boolean>>;
   setMode:React.Dispatch<React.SetStateAction<FormStateType>>;
   observation: string;
+  setStatusLocal: React.Dispatch<React.SetStateAction<StatusRequest>>
 };
 
 export const useDeniedRequest = () => {
   const {user} = useContext(AuthContext);
     
-    const handleDenyRequest = async ({setLoadingModal, setMode, viewRequestId, observation }:UseDeniedRequestParams) => { 
+    const handleDenyRequest = async ({setLoadingModal, setMode, viewRequestId, observation, setStatusLocal}:UseDeniedRequestParams) => { 
         try {
             setLoadingModal(true);
             await updateRequestService({
@@ -36,6 +37,7 @@ export const useDeniedRequest = () => {
             })
 
             setMode("viewing");
+            setStatusLocal(StatusRequest.NEGADO);
         } catch (error) {
             handleApiError(error,"Erro para atualizar a edição");
         }finally{

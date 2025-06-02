@@ -1,19 +1,17 @@
 import { AuthContext, NavigationContext, RequestContext } from "@/context";
+import { BadgeCounter } from "../badge-counter.components";
 import {LogOut as LogoutIcon} from "lucide-react";
 import { motion } from "framer-motion";
 import { useContext } from "react";
-import { BadgeCounter } from "../badge-counter.components";
-
 
 export const NavMenu = () => {
-    const {menus, lengthMenuCommom, handleCategoryClick, activeCategory, isMenuRouteActive, isMobileOpenMenu, isSidebarOpen, handleNavigate} = useContext(NavigationContext);
+    const {menus, lengthMenuCommom, handleCategoryClick, activeCategory, isMenuRouteActive, isMobileOpenMenu, isSidebarOpen, handleNavigate, setActiveCategory} = useContext(NavigationContext);
     const {logoutService}   = useContext(AuthContext);
     const {counters}   = useContext(RequestContext);
 
-    
+ 
     
     const handleLogout = async() => {
-        console.log('alo')
         await logoutService({
             type: "success",
             message: "Sessão encerrada com sucesso"
@@ -37,7 +35,10 @@ export const NavMenu = () => {
                     {/* categoria ou item direto */}
                     {item.path ? (
                         <button
-                            onClick={() => handleNavigate(item.path!)}
+                            onClick={() => {
+                                item.path === "/dashboard" && setActiveCategory(null); // Resetar categoria ativa ao navegar para dashboard
+                                handleNavigate(item.path!)
+                            }}
                             title={item.label}
                             className={`
                                 flex items-center w-full p-2 rounded hover:bg-accent/30 text-[15px] cursor-pointer

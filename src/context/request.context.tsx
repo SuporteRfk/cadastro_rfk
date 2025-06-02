@@ -1,9 +1,9 @@
 import { createContext, ReactNode, useContext, useEffect, useState } from "react";
 import { getCountersRequest, getRequestService } from "@/services/supabase";
-import { AuthContext } from "./auth.context";
-import { handleApiError } from "@/utils";
 import { useSupabaseRealtime } from "@/hooks/use-supabase-realtime.hooks";
 import { IQueryRequest, IViewRequest } from "@/interfaces";
+import { AuthContext } from "./auth.context";
+import { handleApiError } from "@/utils";
 
 type Counters = {
     total: number;

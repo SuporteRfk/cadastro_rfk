@@ -1,9 +1,10 @@
 import { ModalRequestActions } from "./moda-request-actions.components";
 import { ModalRequestRouter } from "./modal-request-router.components";
-import { FormStateType, IViewRequest } from "@/interfaces";
+import { FormStateType, IViewRequest, StatusRequest } from "@/interfaces";
 import {X as CloseIcon} from "lucide-react";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Badge } from "../ui";
+import { RequestContext } from "@/context";
 
 interface ModalRequestProps {
   onClose: () => void;
@@ -21,23 +22,34 @@ const styleBadge = {
 export const ModalRequest = ({ onClose, request, isTheRouteOfChange }: ModalRequestProps) => {
     const [mode, setMode] = useState<FormStateType>("viewing");
     const [loadingModal, setLoadingModal] = useState<boolean>(false);
+    const [statusLocal,setStatusLocal] = useState<StatusRequest>(request.status);
+    const {getRequest, filter} = useContext(RequestContext);
+    
 
 
     return (
         <div className="fixed inset-0 z-50 bg-neutral/40 flex items-center justify-center">
             
-                <div className="bg-white w-full max-w-6xl rounded-md shadow-lg h-full max-h-[95vh] relative overflow-auto">
+                <div 
+                    className="bg-white w-full max-w-6xl rounded-md shadow-lg min-h-[80%] max-h-[95vh] relative flex flex-col"
+                    // style={{ minHeight: loadingModal ? "80%" : "auto" }}
+                >
                     <div className="flex flex-col text-center sm:text-left p-4">
                         {/* Header */}
                         <div className="flex items-center justify-between w-full ">
                             {/* Título */}
                             <p className="flex flex-row items-center gap-2 text-lg font-bold text-text-strong">
                                 Solicitação #{request.id}
-                                <Badge variant={styleBadge[request.status]} className="w-[100px] mr-4">{request.status}</Badge>
+                                <Badge variant={styleBadge[statusLocal]} className="w-[100px] mr-4">{statusLocal}</Badge>
                             </p>
                             
                             {/* Botão de fechar */}
-                            <div className="bg-error/40 p-1 rounded-lg cursor-pointer" onClick={onClose}>
+                            <div className="bg-error/40 p-1 rounded-lg cursor-pointer" onClick={()=>{
+                                onClose();
+                                if(statusLocal !== request.status){
+                                    getRequest(filter!); // Atualiza a lista de solicitações se o status foi alterado
+                                };
+                            }}>
                                 <CloseIcon className="text-error"/>
                             </div>
                         </div>
@@ -46,14 +58,17 @@ export const ModalRequest = ({ onClose, request, isTheRouteOfChange }: ModalRequ
                         </p>
                     </div>    
                     {/* Formulário dinâmico */}
-                    <ModalRequestRouter 
-                        request={request} 
-                        mode={mode} 
-                        setLoadingModal={setLoadingModal} 
-                        isTheRouteOfChange={isTheRouteOfChange} 
-                        loadingModal={loadingModal}
-                        setMode={setMode}
-                    />
+                    <div className="overflow-y-auto px-4 flex-1" style={{ maxHeight: "calc(95vh - 160px)" }}>
+                        <ModalRequestRouter 
+                            request={request} 
+                            mode={mode} 
+                            setLoadingModal={setLoadingModal} 
+                            isTheRouteOfChange={isTheRouteOfChange} 
+                            loadingModal={loadingModal}
+                            setMode={setMode}
+                            setStatusLocal={setStatusLocal}
+                        />
+                    </div>
                         
                     {/* Ações (editar, aprovar, etc.) */}
                     {(!loadingModal && mode === "viewing") && 

@@ -1,9 +1,9 @@
 import { Coffee } from "lucide-react"
 
-export const MomentCoffe = ({mensagem }:{mensagem :string}) => {
+export const MomentCoffe = ({mensagem, applyColor=true }:{mensagem :string, applyColor?:boolean}) => {
 
     return (
-        <div className="mt-10 w-full max-w-[600px] h-[50vh] flex flex-col items-center justify-center text-center text-gray-600 bg-white rounded-2xl shadow-lg">
+        <div className={`mt-10 w-full max-w-[600px] h-[50vh] flex flex-col items-center justify-center text-center text-gray-600 ${applyColor && "shadow-lg bg-white"} rounded-2xl `}>
             <Coffee size={48} strokeWidth={1.5} className="mb-4 text-accent" />
             <h2 className="text-xl font-semibold mb-4">
                 {mensagem}

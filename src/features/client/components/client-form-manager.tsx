@@ -18,24 +18,20 @@ import { useState } from "react";
 import { useReview } from "@/context";
 
 
-
-
-
 interface ClientFormManagerProps{
     defaultValue: IClient;
     mode: FormStateType;
     isChange: boolean;
     loadingModal: boolean;
-    setReasonFieldReview:  React.Dispatch<React.SetStateAction<{[key: string]: string;}>>
-    reasonFieldReview: {[key: string]: string };
     setLoadingModal: React.Dispatch<React.SetStateAction<boolean>>;
     status: StatusRequest;
     setMode:React.Dispatch<React.SetStateAction<FormStateType>>
     viewRequestId: number;
     obervationRequest: string | null;
+    setStatusLocal: React.Dispatch<React.SetStateAction<StatusRequest>>;
 }
 
-export const ClientFormManager = ({defaultValue, mode, isChange, loadingModal, setReasonFieldReview, reasonFieldReview, setLoadingModal, status, setMode, viewRequestId, obervationRequest}:ClientFormManagerProps) => {
+export const ClientFormManager = ({defaultValue, mode, isChange, loadingModal,setLoadingModal, status, setMode, viewRequestId, obervationRequest, setStatusLocal}:ClientFormManagerProps) => {
     
     if(loadingModal){
         return <LoadingModal/> 
@@ -56,7 +52,8 @@ export const ClientFormManager = ({defaultValue, mode, isChange, loadingModal, s
         setMode,
         status,
         viewRequestId,
-        updateFunction: upsertClientService
+        updateFunction: upsertClientService,
+        setStatusLocal
     });
 
 
@@ -103,7 +100,8 @@ export const ClientFormManager = ({defaultValue, mode, isChange, loadingModal, s
                 viewRequestId,
                 setLoadingModal,
                 setMode,
-                observation: observationDenied
+                observation: observationDenied,
+                setStatusLocal
             })
             reset();
         } else if (mode === "reviewing"){
@@ -120,8 +118,10 @@ export const ClientFormManager = ({defaultValue, mode, isChange, loadingModal, s
             await reviewRequest({
                 setLoadingModal,
                 setMode,
-                viewRequestId
+                viewRequestId,
+                setStatusLocal
             })
+            
         } else {
             console.warn("Modo não tratado: ", mode)
         }
@@ -211,7 +211,7 @@ export const ClientFormManager = ({defaultValue, mode, isChange, loadingModal, s
             />
         </FormLayout>
         
-    );
+    );          
 };
 
 

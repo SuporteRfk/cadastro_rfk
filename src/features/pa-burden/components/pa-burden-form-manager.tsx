@@ -23,21 +23,21 @@ interface PABurdenFormManagerProps{
     mode: FormStateType;
     isChange: boolean;
     loadingModal: boolean;
-    setReasonFieldReview:  React.Dispatch<React.SetStateAction<{[key: string]: string;}>>
-    reasonFieldReview: {[key: string]: string };
     setLoadingModal: React.Dispatch<React.SetStateAction<boolean>>;
     status: StatusRequest;
     setMode:React.Dispatch<React.SetStateAction<FormStateType>>
     viewRequestId: number;
     obervationRequest: string | null;
+    setStatusLocal: React.Dispatch<React.SetStateAction<StatusRequest>>;
+
 }
 
-export const PABurdenFormManager = ({defaultValue, mode, isChange, loadingModal, setReasonFieldReview, reasonFieldReview, setLoadingModal, status, setMode, viewRequestId, obervationRequest}:PABurdenFormManagerProps) => {
+export const PABurdenFormManager = ({defaultValue, mode, isChange, loadingModal, setLoadingModal, status, setMode, viewRequestId, obervationRequest, setStatusLocal}:PABurdenFormManagerProps) => {
         
     if(loadingModal){
         return <LoadingModal/> 
     }
-    console.log(defaultValue)
+    
     const methods= useForm<IPABurdenRegister>({
         defaultValues: defaultValue,
         resolver: yupResolver(paBurdenRegisterSchema)
@@ -50,7 +50,8 @@ export const PABurdenFormManager = ({defaultValue, mode, isChange, loadingModal,
         setMode,
         status,
         viewRequestId,
-        updateFunction: updatePABurdenService
+        updateFunction: updatePABurdenService,
+        setStatusLocal
     });
 
     // Hooks para lidar com negar a solicitação
@@ -77,7 +78,8 @@ export const PABurdenFormManager = ({defaultValue, mode, isChange, loadingModal,
                 viewRequestId,
                 setLoadingModal,
                 setMode,
-                observation: observationDenied
+                observation: observationDenied,
+                setStatusLocal
             })
             reset();
         } else if (mode === "reviewing"){
@@ -94,7 +96,8 @@ export const PABurdenFormManager = ({defaultValue, mode, isChange, loadingModal,
             await reviewRequest({
                 setLoadingModal,
                 setMode,
-                viewRequestId
+                viewRequestId,
+                setStatusLocal
             })
         } else {
             console.warn("Modo não tratado: ", mode)

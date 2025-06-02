@@ -17,8 +17,10 @@ export const RequestTableBody = ({table, observationOpenId}:RequestTableBodyProp
         return (
           <TableBody>
             <TableRow>
-              <TableCell colSpan={table.getAllColumns().length} className="py-4">
-                <MomentCoffe mensagem=" Nenhuma solicitação encontrada"/>
+              <TableCell colSpan={table.getAllColumns().length} className="h-[400px] py-4 text-center align-middle">
+                 <div className="flex flex-col items-center justify-center h-full w-full">
+                    <MomentCoffe mensagem=" Nenhuma solicitação encontrada" applyColor={false}/>
+                 </div>
               </TableCell>
             </TableRow>
           </TableBody>

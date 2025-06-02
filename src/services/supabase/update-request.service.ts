@@ -3,32 +3,25 @@ import { IUpdateRequest } from "@/interfaces";
 
 // Atualizar Solicitação
 export const updateRequestService = async (dataUpdate: IUpdateRequest) => {
-
+    
     if (dataUpdate.novo_solicitante) {
+        
         const {error: RPCError} = await supabaseApi
             .rpc("updateEditSolicitacao", {
+                alteracoes_valor: dataUpdate.alteracao || null,
+                motivo_recusa_valor: dataUpdate.motivo_recusa || null,
                 novo_solicitante: dataUpdate.novo_solicitante,
-                solicitacao_id: dataUpdate.solicitacao_id
-        })
+                observacao_valor: dataUpdate.observacao || null,
+                solicitacao_id: dataUpdate.solicitacao_id,
+                status_valor: dataUpdate.status
+        })  
 
         if(RPCError){
-            throw new Error(`Erro na RPC: ${RPCError.message}`);
+            console.log(RPCError)
+            throw new Error(RPCError.message);
         }
     }
 
-    const {error} = await supabaseApi
-        .from("solicitacoes")
-        .update({
-            status: dataUpdate.status,
-            observacao: dataUpdate.observacao || null,
-            motivo_recusa: dataUpdate.motivo_recusa || null,
-            alteracoes: dataUpdate.alteracao || null
-        })
-        .eq("id", dataUpdate.solicitacao_id)
-
-    if(error){
-        throw new Error(`Erro na atualização da tabela: ${error.message}`);
-    }
 };
 
 

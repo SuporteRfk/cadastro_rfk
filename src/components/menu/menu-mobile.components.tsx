@@ -10,7 +10,7 @@ import { useClickAway } from "react-use";
 
 
 export const MenuMobile = () => {
-    const {isMobileOpenMenu, toggleMenuMobile, setIsMobileOpenMenu, resetPathsMenusAndNavigateDashboard} = useContext(NavigationContext);
+    const {isMobileOpenMenu, toggleMenuMobile, setIsMobileOpenMenu} = useContext(NavigationContext);
 
     const ref = useRef(null);
     useClickAway(ref, ()=> setIsMobileOpenMenu(false))
@@ -18,13 +18,13 @@ export const MenuMobile = () => {
     return(
         <div ref={ref} className="w-full relative lg:hidden z-50">
             <div className="w-full h-[60px] flex justify-between items-center px-4 shadow-md bg-white-default relative">
-                <img src={SymbolLogo} alt="logo do sistema" className="w-9 h-9 object-contain cursor-pointer" onClick={() => resetPathsMenusAndNavigateDashboard()} />
+                <img src={SymbolLogo} alt="logo do sistema" className="w-9 h-9 object-contain cursor-pointer"/>
                 <Hamburger toggled={isMobileOpenMenu} size={25} toggle={toggleMenuMobile} color={isMobileOpenMenu ? "var(--color-error)" : "var(--color-accent)"}/>
             </div>
             <AnimatePresence>
                 {isMobileOpenMenu && (
                     <motion.div
-                        className="absolute left-0 right-0 px-5 pb-2 pt-0 bg-neutral/15 rounded-b-[8px] z-[-20] border-b-[3px] border-neutral/80"
+                        className="absolute left-0 right-0 px-5 pb-2 pt-0 bg-white-default rounded-b-[8px] z-[-20] border-b-[3px] border-neutral/80"
                         initial={{ y: "-100%" }}
                         animate={{ y: 0}}
                         exit={{ y: "-100%" }}

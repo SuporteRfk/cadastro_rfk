@@ -27,8 +27,9 @@ export const DateInput = ({name,label,register,error,mode = "visualizacao"}: Dat
                 const formattedDate = localDate.toISOString().slice(0, 16);
                 setCurrentDate(formattedDate);
             } else if (value){
-                const iso = new Date(value).toISOString();
-                const formatted = iso.slice(0, 16);
+                const date = new Date(value);
+                const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+                const formatted = localDate.toISOString().slice(0, 16);
                 setCurrentDate(formatted);
             }
             initialized.current = true;

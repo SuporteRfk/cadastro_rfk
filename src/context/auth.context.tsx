@@ -73,7 +73,7 @@ export const AuthProvider = ({children}:{children:ReactNode}) => {
             setUser(user);
             await registerUpdateUserController(user); // verificar se o usuario é da controladoria e salvando no banco
             setIsAuthenticated(true);
-
+            
             setIsLoading(true);
             navigate("/dashboard", {replace:true});
             /// 🔹Define mensagem de boas vindas ao logar
@@ -114,6 +114,7 @@ export const AuthProvider = ({children}:{children:ReactNode}) => {
             Cookies.remove("refresh_token_keycloak_cad_rfk");
             setUser(null);
             setIsAuthenticated(false);
+            
 
             if(toast){
                 setToastMessage(toast)
@@ -172,7 +173,8 @@ export const AuthProvider = ({children}:{children:ReactNode}) => {
         const accessToken = Cookies.get("access_token_keycloak_cad_rfk");
         // 🔹 Se não houver tokens, desloga o usuário
         if (!accessToken || !refreshToken) {
-            logoutService();
+            setIsAuthenticated(false);
+            setUser(null);
             return;
         }
         

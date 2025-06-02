@@ -27,9 +27,10 @@ interface PACopackerFormManagerProps{
     setMode:React.Dispatch<React.SetStateAction<FormStateType>>
     viewRequestId: number;
     obervationRequest: string | null;
+    setStatusLocal: React.Dispatch<React.SetStateAction<StatusRequest>>;
 }
 
-export const PACopackerFormManager = ({defaultValue, mode, isChange, loadingModal, setLoadingModal, status, setMode, viewRequestId, obervationRequest}:PACopackerFormManagerProps) => {
+export const PACopackerFormManager = ({defaultValue, mode, isChange, loadingModal, setLoadingModal, status, setMode, viewRequestId, obervationRequest,setStatusLocal}:PACopackerFormManagerProps) => {
         
     if(loadingModal){
         return <LoadingModal/> 
@@ -47,7 +48,8 @@ export const PACopackerFormManager = ({defaultValue, mode, isChange, loadingModa
         setMode,
         status,
         viewRequestId,
-        updateFunction: updatePACopackerService
+        updateFunction: updatePACopackerService,
+        setStatusLocal
     });
 
     // Hooks para lidar com negar a solicitação
@@ -74,7 +76,8 @@ export const PACopackerFormManager = ({defaultValue, mode, isChange, loadingModa
                 viewRequestId,
                 setLoadingModal,
                 setMode,
-                observation: observationDenied
+                observation: observationDenied,
+                setStatusLocal
             })
             reset();
               } else if (mode === "reviewing"){
@@ -91,7 +94,8 @@ export const PACopackerFormManager = ({defaultValue, mode, isChange, loadingModa
             await reviewRequest({
                 setLoadingModal,
                 setMode,
-                viewRequestId
+                viewRequestId,
+                setStatusLocal
             })
         } else {
             console.warn("Modo não tratado: ", mode)

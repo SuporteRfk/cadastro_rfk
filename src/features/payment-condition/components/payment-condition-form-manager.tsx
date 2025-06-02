@@ -27,9 +27,10 @@ interface PaymentConditionFormManagerProps{
     setMode:React.Dispatch<React.SetStateAction<FormStateType>>
     viewRequestId:number;
     obervationRequest: string | null;
+    setStatusLocal: React.Dispatch<React.SetStateAction<StatusRequest>>;
 }
 
-export const PaymentConditionFormManager = ({defaultValue, mode, isChange, loadingModal, setLoadingModal, status, setMode, viewRequestId, obervationRequest}:PaymentConditionFormManagerProps) => {
+export const PaymentConditionFormManager = ({defaultValue, mode, isChange, loadingModal, setLoadingModal, status, setMode, viewRequestId, obervationRequest, setStatusLocal}:PaymentConditionFormManagerProps) => {
     if(loadingModal){
         return <LoadingModal/> 
     }
@@ -47,7 +48,8 @@ export const PaymentConditionFormManager = ({defaultValue, mode, isChange, loadi
         setMode,
         status,
         viewRequestId,
-        updateFunction: updatePaymentConditionService
+        updateFunction: updatePaymentConditionService,
+        setStatusLocal
     })
     
     // Hooks para lidar com negar a solicitação
@@ -74,7 +76,8 @@ export const PaymentConditionFormManager = ({defaultValue, mode, isChange, loadi
                 viewRequestId,
                 setLoadingModal,
                 setMode,
-                observation: observationDenied
+                observation: observationDenied,
+                setStatusLocal
             })
             reset();
         } else if (mode === "reviewing"){
@@ -91,7 +94,8 @@ export const PaymentConditionFormManager = ({defaultValue, mode, isChange, loadi
             await reviewRequest({
                 setLoadingModal,
                 setMode,
-                viewRequestId
+                viewRequestId,
+                setStatusLocal
             })
         } else {
             console.warn("Modo não tratado: ", mode)

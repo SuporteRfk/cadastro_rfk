@@ -72,7 +72,7 @@ export const LoginPage = () => {
                         />
                         <button
                             type="button"
-                            className="absolute right-3 top-[40px]"
+                            className="absolute right-3 top-[36px]"
                             onClick={() => setShowPassword((view) => !view)}
                         >
                             {showPassword ? <HidePasswordIcon size={20} color="var(--text-color-neutral)"/> : <ViewPasswordIcon size={20} color="var(--text-color-neutral)"/>}
