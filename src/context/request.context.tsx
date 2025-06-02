@@ -16,7 +16,7 @@ interface IRequestContext {
     counters: Counters
     loadingSkelleton: boolean;
     filter: IQueryRequest | null;
-    setFilter: React.Dispatch<React.SetStateAction<IQueryRequest>>;
+    setFilter: React.Dispatch<React.SetStateAction<IQueryRequest | null>>;
     request: IViewRequest[];
     totalRequest: number;
     getRequest: (filter?:IQueryRequest) => void;
@@ -46,7 +46,7 @@ export const RequestProvider = ({children}:{children: ReactNode}) => {
     const {user} = useContext(AuthContext);
     const isApprover = user?.access_approver; // Verifica se o usuário é um aprovador/controladoria
 
-    const [filter, setFilter] = useState<IQueryRequest>({offset:0 , indexLimit:10}); // controle dos filtros e paginação 
+    const [filter, setFilter] = useState<IQueryRequest | null>(null); // controle dos filtros e paginação 
     
 
     // Função para buscar os contadores de solicitações
