@@ -61,18 +61,29 @@ export const LoginPage = () => {
                         type="text"
                    />
                     <div className="relative w-full mb-6">
-                        <Input
-                            name="password"
-                            label="Senha"
-                            icon={IconPassword} 
-                            placeholder="Digite sua senha"
-                            type={showPassword ? "text" : "password"}
-                            register={methods.register("password")}
-                            error={methods.formState.errors.password?.message}
-                        />
+                        <label htmlFor="password"  className="text-sm font-medium pl-0.5 text-text-medium">
+                            Senha
+                        </label>
+                        <div className="relative">
+                            <IconPassword className="absolute left-2 top-[7px]" color="var(--text-color-strong)" size={20}/>
+                            <input
+                                id="password"
+                                {...methods.register("password")}
+                                type="text"
+                                name="password"
+                                placeholder="Digite sua senha"
+                                className={`
+                                    w-full h-8 pl-10 pr-3 rounded-lg text-sm no-spinner 
+                                    border ${methods.formState.errors.password ? 'border-error' : 'border-border'}
+                                    focus:outline-hidden ${methods.formState.errors.password ? 'focus:border-error focus:ring-error' : 'focus:border-accent focus:ring-1 focus:ring-accent'}
+                                    cursor-text bg-white-default text-text-medium
+                                `}
+                            />
+                            {methods.formState.errors.password && <p className="text-error/80 text-xs mt-1 pl-1">{methods.formState.errors.password.message}</p>}
+                        </div>
                         <button
                             type="button"
-                            className="absolute right-3 top-[36px]"
+                            className="absolute right-3 top-[31px]"
                             onClick={() => setShowPassword((view) => !view)}
                         >
                             {showPassword ? <HidePasswordIcon size={20} color="var(--text-color-neutral)"/> : <ViewPasswordIcon size={20} color="var(--text-color-neutral)"/>}

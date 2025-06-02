@@ -116,7 +116,7 @@ export const FormLayout = <T extends FieldValues> ({methods, onSubmit, children,
                             type="email"
                             icon={EmailIcon}
                             valueInitial={user?.email}
-                            readOnly={true}
+                            readOnly={mode ? true : false}
                         />
                         <InputWithMask
                             name={"whatsapp" as Path<T>}
