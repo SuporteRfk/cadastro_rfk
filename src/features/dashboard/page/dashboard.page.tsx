@@ -1,48 +1,42 @@
-import { PageLayout } from "@/components";
 import { MomentCoffe } from "@/components/moment-coffe.components";
-import { RequestTable } from "@/components/table";
+import { LoadingSkelleton, PageLayout } from "@/components";
 import { AuthContext, RequestContext } from "@/context";
-import { StatusRequest } from "@/interfaces";
-import { useContext, useEffect } from "react";
+import { RequestTable } from "@/components/table";
 import {House as DashIcon} from "lucide-react";
+import { useContext, useEffect} from "react";
 
 
 export const DashboardPage = () => {
-    const {filter, setFilter, totalRequest} = useContext(RequestContext);
-    const {user} = useContext(AuthContext);
-
-    const isApprover = user?.access_approver;
+    const {filter, setFilter, totalRequest, loadingSkelleton} = useContext(RequestContext);
+    const {user, isLoading} = useContext(AuthContext);
     
-
+    
+    
     useEffect(() => {
-        if (!user) return;
-      
-        if(isApprover) {
-            setFilter({
-              status: StatusRequest.PENDENTE,
-              offset: 0,
-              indexLimit: filter?.indexLimit || 10,
-            });
-        }else {
-            setFilter({
-              offset: 0,
-              indexLimit: filter?.indexLimit || 10,
-              email: user.email,
-            });
-        }
-      }, [user, isApprover]);
-      
+           if(!user) return;
+            
+          if(!user.access_approver){
+            setFilter({ offset: 0, indexLimit: filter?.indexLimit || 10, email: user.email });
+          } else{
+            setFilter({ offset: 0, indexLimit: filter?.indexLimit || 10});
+          }
+    }, [user]);
 
     return ((
         <PageLayout>
-            {totalRequest === 0 ?(
-              <MomentCoffe mensagem="Olá, seja bem-vindo ao sistema!" />
+            { (loadingSkelleton || isLoading || !user) ? (
+              <div className="w-full p-2 mt-12">
+                <LoadingSkelleton numberLines={filter?.indexLimit || 10}/>
+              </div>
+            ): (totalRequest === 0) ?(
+              <div className="w-full h-full flex items-center justify-center">
+                <MomentCoffe mensagem="Olá, seja bem-vindo ao sistema!" />
+              </div>
             ):(
               <RequestTable 
                 titlePage={`Bem vindo, ${user?.name}`} 
-                showFilterDash={!user?.access_approver} 
                 iconForm={DashIcon} 
-                fixedFilter={user?.access_approver ? {status:StatusRequest.PENDENTE} :{email: user!.email} }
+                fixedFilter={!user.access_approver ? {email: user.email} : undefined}
               />
             )}
         </PageLayout>

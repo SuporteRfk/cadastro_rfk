@@ -1,5 +1,7 @@
 // Centralizador dos componentes 
 
+export * from "./review-field/safe-review-field.components";
+export * from "./request-denied-info.components";
 export * from "./menu/menu-desktop.components";
 export * from "./loading-skelleton.components";
 export * from "./full-page-loader.components";

@@ -1,63 +1,26 @@
 import { FormLayout, FormProductAttributes, FormProductCategorySelector, FormProductDescription, PageLayout, SubTitleForm, Toastify } from "@/components";
+import { FamilyCodeIndirectProducts, TypeCodeIndirectProducts} from "../interface/indirect-products-enum";
+import { useGroupSelectorIndirectProduct } from "../hook/use-group-selector-indirect-product";
 import { insertIndirectProductsService } from "../service/insert-indirect-products.service";
 import { indirectProductsRegisterSchema } from "../schema/indirect-products.schema";
 import { IIndirectProductsRegister } from "../interface/indirect-products";
 import { PackageCheck as IndirectProductsIcon } from "lucide-react";
 import { yupResolver } from "@hookform/resolvers/yup";
-import {
-    GroupCodeIndirectProducts_30, 
-    GroupCodeIndirectProducts_31, 
-    GroupCodeIndirectProducts_32, 
-    GroupCodeIndirectProducts_33, 
-    GroupCodeIndirectProducts_36, 
-    GroupCodeIndirectProducts_37, 
-    GroupCodeIndirectProducts_39,
-    FamilyCodeIndirectProducts,
-    TypeCodeIndirectProducts
-} from "../interface/indirect-products-enum";
-import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { handleApiError } from "@/utils";
+import { useState } from "react";
 
 
 export const RegisterIndirectProducts = () => {
     const [loading, setLoading] = useState(false);
 
-    const [group, setGroup] = useState<
-        | typeof GroupCodeIndirectProducts_30
-        | typeof GroupCodeIndirectProducts_31 
-        | typeof GroupCodeIndirectProducts_32
-        | typeof GroupCodeIndirectProducts_33
-        | typeof GroupCodeIndirectProducts_36
-        | typeof GroupCodeIndirectProducts_37
-        | typeof GroupCodeIndirectProducts_39
-        | ["Selecione uma família"]
-    > (["Selecione uma família"]);
-
     const methods = useForm<IIndirectProductsRegister>({
         resolver: yupResolver(indirectProductsRegisterSchema),
     });
 
+    const group = useGroupSelectorIndirectProduct(methods);
 
-    const codeFamilyValue = methods.watch("codigo_familia");
-
-    const groupFamily = {
-        [FamilyCodeIndirectProducts.IMOBILIZADO]: GroupCodeIndirectProducts_37,
-        [FamilyCodeIndirectProducts.INSUMOS_NAO_PRODUTIVOS]: GroupCodeIndirectProducts_30,
-        [FamilyCodeIndirectProducts.MATERIAL_CONSUMO]: GroupCodeIndirectProducts_31,
-        [FamilyCodeIndirectProducts.MERCADORIA_REVENDA]: GroupCodeIndirectProducts_39,
-        [FamilyCodeIndirectProducts.PRODUTO_MANUTENCAO_FROTAS]: GroupCodeIndirectProducts_33,
-        [FamilyCodeIndirectProducts.PRODUTO_MANUTENCAO_INDUSTRIAL]: GroupCodeIndirectProducts_32,
-        [FamilyCodeIndirectProducts.SUBPRODUTO]: GroupCodeIndirectProducts_36,
-    };
-
-
-    useEffect(()=> {
-        const family = groupFamily[codeFamilyValue] ;
-        setGroup(family || ["Selecione uma família"])
-        
-    },[codeFamilyValue])
-
+   
     const onSubmit = async (data: IIndirectProductsRegister) => {
         try {
             setLoading(true);

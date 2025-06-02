@@ -3,13 +3,13 @@ import { insertSupplierService } from "../service/insert-supplier.service";
 import { SupplierTpj, SupplierType } from "../interface/supplier-enum";
 import { supplierRegisterSchema } from "../schema/supplier.schema";
 import { ISupplierRegisterForm } from "../interface/supplier";
-import { Factory as SuppliersIcon} from "lucide-react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { handleApiError } from "@/utils";
 import { useState } from "react";
 import {
     MapPinned as ZipCodeIcon,
+     Factory as SuppliersIcon
 } from "lucide-react";
 import { FormAddress } from "@/components/form/form-address.components";
 
@@ -21,7 +21,7 @@ export const RegisterSupplier = () => {
     });
 
     const onSubmit = async (data:ISupplierRegisterForm) => {
-        const {fisico_juridico, ...dataRegister} = data;
+        const {fisica_juridica, ...dataRegister} = data;
         try {
             setLoading(true);
             await insertSupplierService(dataRegister);
@@ -29,6 +29,7 @@ export const RegisterSupplier = () => {
                 type: "success",
                 message: "Solicitação realizada com sucesso"
             })
+            methods.reset();
         } catch (error) {
             handleApiError(error, "Erro ao cadastrar fornecedor")
         } finally {

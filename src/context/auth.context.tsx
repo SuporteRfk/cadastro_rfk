@@ -22,7 +22,7 @@ export const AuthContext = createContext<IAuthContextType>({
     isAuthenticated: true,
     loginService: async (_dataLogin: ILoginRequest) => {},
     logoutService: async (_toast:IToastifyMessageAuthContext | undefined) => {},
-    isLoading: false
+    isLoading: false,
 });
 
 // 🔹 Variável global para armazenar o timeout de renovação de token, evitando multiplos agendamentos.
@@ -38,8 +38,6 @@ export const AuthProvider = ({children}:{children:ReactNode}) => {
     //🔹useEffect que verifica a sessão ao carregar a aplicação
     useEffect(() => {
         checkSession();
-        console.log(isAuthenticated)
-        console.log(user)
         // 🔹 Se o usuário estiver autenticado, ativa a checagem periódica da sessão
         if (isAuthenticated) {
             const sessionInterval = setInterval(() => {
@@ -60,6 +58,7 @@ export const AuthProvider = ({children}:{children:ReactNode}) => {
 
     //🔹Realiza o login e armazena os tokens nos cookies
     const loginService = async (data:ILoginRequest) => {
+        
         try {
             const {access_token, refresh_token} = await Login(data);
 
@@ -74,7 +73,7 @@ export const AuthProvider = ({children}:{children:ReactNode}) => {
             setUser(user);
             await registerUpdateUserController(user); // verificar se o usuario é da controladoria e salvando no banco
             setIsAuthenticated(true);
-
+            
             setIsLoading(true);
             navigate("/dashboard", {replace:true});
             /// 🔹Define mensagem de boas vindas ao logar
@@ -106,6 +105,7 @@ export const AuthProvider = ({children}:{children:ReactNode}) => {
     //🔹Realiza logout, remove os tokens e força atualização da página
     const logoutService = async (toast?: IToastifyMessageAuthContext) => {
         setIsLoading(true);
+        
         try {
             const refreshToken = Cookies.get("refresh_token_keycloak_cad_rfk");
             if(refreshToken) await Logout(refreshToken);
@@ -114,6 +114,7 @@ export const AuthProvider = ({children}:{children:ReactNode}) => {
             Cookies.remove("refresh_token_keycloak_cad_rfk");
             setUser(null);
             setIsAuthenticated(false);
+            
 
             if(toast){
                 setToastMessage(toast)
@@ -172,7 +173,8 @@ export const AuthProvider = ({children}:{children:ReactNode}) => {
         const accessToken = Cookies.get("access_token_keycloak_cad_rfk");
         // 🔹 Se não houver tokens, desloga o usuário
         if (!accessToken || !refreshToken) {
-            logoutService();
+            setIsAuthenticated(false);
+            setUser(null);
             return;
         }
         
@@ -201,6 +203,7 @@ export const AuthProvider = ({children}:{children:ReactNode}) => {
         setIsAuthenticated(true);
         //🔹Agendar a renovação automática do token 
         scheduleTokenRefresh(accessToken, refreshToken);
+        
     }
 
     //🔹Registar ou atualizar usuario da controladoria 
@@ -221,7 +224,7 @@ export const AuthProvider = ({children}:{children:ReactNode}) => {
             isAuthenticated,
             loginService,
             logoutService,
-            isLoading
+            isLoading,
         }}
         >
                 {children}

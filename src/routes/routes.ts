@@ -1,13 +1,9 @@
+import { RequestPendingPage, RequestApprovedPage, RequestDeniedPage, RequestChangePage, RequestRevisionPage } from "@/features/request/pages";
 import { RegisterIndirectProducts } from "@/features/indirect-products/page/register-indirect-products.page";
 import { RegisterPaymentCondition } from "@/features/payment-condition/page/register-payment-codition.page";
 import { RegisterUnitMeasure } from "@/features/unit-measure/page/register-unit-measure.page";
-import { RequestRevisionPage } from "@/features/request-revision/page/request-revision.page";
-import { RequestApprovedPage } from "@/features/request-approved/page/request-approved.page";
 import { RegisterPACopacker } from "@/features/pa-copacker/page/register-pa-copacker.page";
-import { RequestPendingPage } from "@/features/request-pending/page/request-pending.page";
 import { RegisterPAUnitary } from "@/features/pa-unitary/page/register-pa-unitary.page";
-import { RequestChangePage } from "@/features/request-change/page/request-change.page";
-import { RequestDeniedPage } from "@/features/request-denied/page/request-denied.page";
 import { RegisterPABurden } from "@/features/pa-burden/page/register-pa-burden.page";
 import { RegisterSupplier } from "@/features/suppliers/page/register-supplier.page";
 import { RegisterPAThird } from "@/features/pa-third/page/register-pa-third.page";

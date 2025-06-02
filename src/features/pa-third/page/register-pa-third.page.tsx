@@ -4,14 +4,14 @@ import { insertPATerceiroService } from "../service/insert-pa-third.service";
 import { paThirdRegisterSchema } from "../schema/pa-third.schema";
 import { IPAThirdRegister } from "../interface/pa-third";
 import { yupResolver } from "@hookform/resolvers/yup";
-import {Building as PAThirdIcon} from "lucide-react";
 import { useForm } from "react-hook-form";
 import { handleApiError } from "@/utils";
 import { useState } from "react";
 import {
     Weight as KgIcon,
     Warehouse as StorageIcon,
-    Group as SubGroupIcon
+    Group as SubGroupIcon,
+    Building as PAThirdIcon
 } from "lucide-react";
 import { FormProductPackagingInfo } from "@/components/form/form-product-packaging-info.components";
 

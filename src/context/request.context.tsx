@@ -1,9 +1,9 @@
 import { createContext, ReactNode, useContext, useEffect, useState } from "react";
 import { getCountersRequest, getRequestService } from "@/services/supabase";
-import { AuthContext } from "./auth.context";
-import { handleApiError } from "@/utils";
 import { useSupabaseRealtime } from "@/hooks/use-supabase-realtime.hooks";
 import { IQueryRequest, IViewRequest } from "@/interfaces";
+import { AuthContext } from "./auth.context";
+import { handleApiError } from "@/utils";
 
 type Counters = {
     total: number;
@@ -19,6 +19,7 @@ interface IRequestContext {
     setFilter: React.Dispatch<React.SetStateAction<IQueryRequest | null>>;
     request: IViewRequest[];
     totalRequest: number;
+    getRequest: (filter?:IQueryRequest) => void;
 }
 
 
@@ -32,19 +33,21 @@ export const RequestContext = createContext<IRequestContext>({
     filter: null,
     setFilter: () => null,
     request: [],
-    totalRequest: 0
+    totalRequest: 0,
+    getRequest:(_filter?:IQueryRequest) => {}
 });
 
 export const RequestProvider = ({children}:{children: ReactNode}) => {
     const [counters, setCounters] = useState<Counters>({total: 0,pending: 0,review: 0}) 
     const [loadingSkelleton, setLoadingSkelleton] = useState<boolean>(false); // controlar o loading do skelleton
-    const [filter, setFilter] = useState<IQueryRequest | null>(null); // controle dos filtros e paginação 
     const [request, setRequest] = useState<IViewRequest[]>([]);  
     const [totalRequest, setTotalRequest] = useState<number>(0);
-
+    
     const {user} = useContext(AuthContext);
-
     const isApprover = user?.access_approver; // Verifica se o usuário é um aprovador/controladoria
+
+    const [filter, setFilter] = useState<IQueryRequest | null>(null); // controle dos filtros e paginação 
+    
 
     // Função para buscar os contadores de solicitações
     const getCountersService = async () => {
@@ -56,8 +59,13 @@ export const RequestProvider = ({children}:{children: ReactNode}) => {
         }
     }
 
+
+
+
     //Primeira carga inicial dos contadores apenas se for da controladoria
     useEffect(() => {
+        if (!isApprover) return 
+        
         if(isApprover){
             getCountersService()
         }
@@ -67,10 +75,11 @@ export const RequestProvider = ({children}:{children: ReactNode}) => {
     //Sempre que o filtro mudar, faz nova requisição  trazendo as solicitações
     useEffect(() => {
         if (!filter) return
-        console.log('useEffet filtro:', filter)
         getRequest(filter)
 
     },[filter])
+
+    
 
     // Hook supabase para escutar as mudanças em tempo real na tabela de solicitações
     useSupabaseRealtime({
@@ -92,12 +101,12 @@ export const RequestProvider = ({children}:{children: ReactNode}) => {
             const {data, count} = await getRequestService(filter);
             setRequest(data);
             setTotalRequest(!count ? 0 : count);
-            console.log('solicitacoes:', data)
-            console.log("total solicitacoes:", totalRequest,count)
         } catch (error) {
             handleApiError(error, "Erro na busca das solicitações");
         } finally {
-            setLoadingSkelleton(false);
+              setTimeout(()=> {
+                setLoadingSkelleton(false);
+            },800)
         }
     };
 
@@ -108,7 +117,8 @@ export const RequestProvider = ({children}:{children: ReactNode}) => {
             filter,
             setFilter,
             request,
-            totalRequest
+            totalRequest,
+            getRequest
         }}>
             {children}
         </RequestContext.Provider>

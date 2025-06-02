@@ -119,9 +119,9 @@ export const paUnitaryRegisterSchema: yup.ObjectSchema<IPAUnitaryRegister> = yup
         )
         .required("Por favor, informe a validade de acordo com o tipo de prazo"), 
     cest:yup.string()
-        .transform((value) => value.replace(/[\s.]/g, null))
-        .matches(/^\d{7}$/, "Informe um CEST válido de 7 dígitos. Ex: 84.301.80")
-        .notRequired(),
+            .transform((value) => value.replace(/[\s.]/g, ""))
+            .matches(/^\d{7}$/, "Informe um CEST válido de 7 dígitos. Ex: 84.301.80")
+            .notRequired(),
     grupo_tributario: yup.number()
         .transform((value, originalValue) =>
             originalValue === "" ? null : value

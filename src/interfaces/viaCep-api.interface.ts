@@ -21,4 +21,5 @@ export interface IAddress {
     bairro: string;
     municipio: string;
     estado: string;
+    numero: string;
 }

@@ -18,8 +18,8 @@ export const getRequestService = async (filter?: IQueryRequest):Promise<{data:IV
         query = query.ilike("email", filter.email)
     };
 
-    if(filter?.nome){
-        query = query.ilike("nome", filter.nome)
+    if(filter?.nome_solicitante){
+        query = query.ilike("nome_solicitante", filter.nome_solicitante)
     };
 
     if(filter?.operacao){

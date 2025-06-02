@@ -37,7 +37,7 @@ export const paThirdRegisterSchema: yup.ObjectSchema<IPAThirdRegister> = yup.obj
         .required("Por favor, informe o tipo do produto"),  
     unidade_medida: yup.string()
         .required("Por favor, informe a unidade de como VENDEMOS, por extenso a unidade de medida. Ex: UNIDADE (UN)"), 
-    segunda_undiade_medida: yup.string()
+    segunda_unidade_medida: yup.string()
         .required("Por favor, informe a unidade de como COMPRAMOS, por extenso a unidade de medida. Ex: UNIDADE (UN)"),
     fator_conversor: yup.number()
         .transform((value, originalValue) =>

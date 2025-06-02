@@ -31,3 +31,8 @@ export const ModalQuestion = ({message, onConfirm, onClose}: IModalQuestionProps
         </div>
     );
 };
+
+
+
+
+

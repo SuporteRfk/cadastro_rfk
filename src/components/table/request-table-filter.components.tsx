@@ -17,7 +17,7 @@ export const RequestTableFilter = ({fixedFilter={}}:RequestTableFilterProps) => 
     status: fixedFilter.status ?? null,
     tipo: null,
     operacao: null,
-    nome: "",
+    nome_solicitante: "",
     data: "",
     email: fixedFilter.email ?? null,
   };
@@ -107,7 +107,7 @@ export const RequestTableFilter = ({fixedFilter={}}:RequestTableFilterProps) => 
 
                 {/* Operação */}
                 <Select onValueChange={(value)=>handleChange("operacao", value)} value={localFilter.operacao || "all"}>
-                    <p className="text-sm my-2 ml-1 font-medium text-text-medium">Filtrar por tipo:</p>
+                    <p className="text-sm my-2 ml-1 font-medium text-text-medium">Filtrar por Operação:</p>
                     <SelectTrigger>
                         <SelectValue placeholder="Tipo da operação"/>
                     </SelectTrigger>
@@ -128,8 +128,8 @@ export const RequestTableFilter = ({fixedFilter={}}:RequestTableFilterProps) => 
                         <label className="text-sm my-2 ml-1 font-medium text-text-medium">Solicitante</label>
                         <input
                             type="text"
-                            value={localFilter.nome || ""}
-                            onChange={(e) => handleChange("nome", e.target.value)}
+                            value={localFilter.nome_solicitante || ""}
+                            onChange={(e) => handleChange("nome_solicitante", e.target.value)}
                             className="w-full border rounded px-3 py-1.5 text-sm outline-transparent focus:outline-accent"
                             placeholder="Digite o nome"
                         />

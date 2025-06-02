@@ -32,7 +32,7 @@ export interface IQueryRequest {
     tipo?: string | null;
     data?: string | null;
     operacao? : OperationRequest | null;
-    nome?:string | null;
+    nome_solicitante?:string | null;
     email?: string | null;
     indexLimit?: number | null;
     offset?: number | null;
@@ -62,4 +62,26 @@ export enum TypeRequest {
     PA_THIRD="PA Terceiro",
     INDIRECT_PRODUCTS="Produtos Indiretos",
     UNIT_MEASURE="Unidade de Medida"
+};
+
+
+export interface IUpdateRequest {
+    solicitacao_id: number;
+    status: StatusRequest,
+    novo_solicitante?:{
+        nome: string;
+        data: string;
+        departamento: string;
+        operacao: string;
+    },
+    observacao?: string;
+    motivo_recusa?: {
+        [key: string]: string;
+    },
+    alteracao?: {
+         [key:string]:{
+            of: string;
+            to: string;
+        }
+    }
 };

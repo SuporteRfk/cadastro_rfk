@@ -1,18 +1,18 @@
 import { FormAddress, FormBusinessNames, FormLayout, FormRegistrationIdentification, FormTaxIdentification, FormTelephone, InputRadio, PageLayout, SubTitleForm, Toastify } from "@/components";
+import { insertClientService } from "../service/insert-client.service";
+import { clientRegisterFormSchema } from "../schema/client.schema";
 import { ClientTpj ,ClientType } from "../interface/client-enum";
 import { IClientRegisterForm } from "../interface/client";
 import { yupResolver } from "@hookform/resolvers/yup";
-import {Users as UsersIcon} from "lucide-react";
 import { useForm } from "react-hook-form";
-import { clientRegisterFormSchema } from "../schema/client.schema";
-import { useState } from "react";
-import { insertClientService } from "../service/insert-client.service";
 import { handleApiError } from "@/utils";
+import { useState } from "react";
 import {
     MapPinned as ZipCodeIcon,
-    LocateFixed as BillingAddressIcon
+    LocateFixed as BillingAddressIcon,
+    Users as UsersIcon
 } from "lucide-react";
-import { PfOrPj } from "@/interfaces";
+import { handleIsPJ } from "../utils/handle-is-pj";
 
 
 
@@ -32,6 +32,7 @@ export const RegisterClientPage = () => {
                 type: "success",
                 message: "Solicitação realizada com sucesso"
             })
+            methods.reset();
         } catch (error) {
             handleApiError(error, "Erro ao cadastrar cliente")
         } finally {
@@ -41,11 +42,8 @@ export const RegisterClientPage = () => {
 
 
     const isBillingAddressValue = methods.watch("mesmo_endereco_cobranca");
-    
-    const handleIsPJ = ():boolean => {
-        const fisicaJuridicaValue = methods.watch("fisica_juridica");
-        return fisicaJuridicaValue === PfOrPj.JURIDICO;
-    };
+    const fisicaJuridicaValue = methods.watch("fisica_juridica");
+   
 
     return(
         <PageLayout>
@@ -73,7 +71,7 @@ export const RegisterClientPage = () => {
                     methods={methods} 
                     optionsTpj={Object.values(ClientTpj)}
                     typeForm="client"
-                    isPj={handleIsPJ()}
+                    isPj={handleIsPJ(fisicaJuridicaValue)}
                 />
                 
                 {/* Sessão telefones */}

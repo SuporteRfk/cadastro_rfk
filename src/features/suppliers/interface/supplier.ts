@@ -33,7 +33,7 @@ export interface ISupplier {
 };
 
 export interface ISupplierRegisterForm extends Omit<ISupplier, 'id'> {
-    fisico_juridico: PfOrPj;
+    fisica_juridica: PfOrPj;
 }
 
 export interface ISupplierRegisterSupabase extends Omit<ISupplier, 'id'> {}

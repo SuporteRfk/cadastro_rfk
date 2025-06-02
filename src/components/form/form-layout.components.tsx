@@ -22,7 +22,7 @@ import {
 interface BaseFormProps<T extends FieldValues> {
     onSubmit?: (data: T) => void;
     children: ReactNode;
-    formState?: FormStateType;
+    mode?: FormStateType;
     showSector?: boolean;
     titleForm : string;
     iconForm : LucideIcon;
@@ -36,12 +36,11 @@ interface BaseFormProps<T extends FieldValues> {
     loading: boolean;
 }
 
-export const FormLayout = <T extends FieldValues> ({methods, onSubmit, children, formState, showSector, titleForm, iconForm:IconForm, showButtonsDefault=true, modalQuestion, onResetStates, loading }: BaseFormProps<T>) => {
+export const FormLayout = <T extends FieldValues> ({methods, onSubmit, children, mode, showSector, titleForm, iconForm:IconForm, showButtonsDefault=true, modalQuestion, onResetStates, loading }: BaseFormProps<T>) => {
     const {user} = useContext(AuthContext);
     const {openModal} = useContext(ModalContext);
     
 
-   
 
     const handleReset = () => {
         methods.reset();
@@ -51,9 +50,9 @@ export const FormLayout = <T extends FieldValues> ({methods, onSubmit, children,
         }
     }
     
-
+    
     return(
-        <ScrollArea className="h-[98vh] w-full min-w-0 max-w-[1920px] mx-auto rounded-lg">
+        <ScrollArea className="max-h-[98vh] w-full min-w-0 max-w-[1920px] mx-auto rounded-lg">
             {/* Titulo do Formulário */}
             <h1 className="p-3 text-xl text-text-strong font-bold mt-3 flex gap-2 items-center">
                 {<IconForm size={20}/>}
@@ -75,7 +74,7 @@ export const FormLayout = <T extends FieldValues> ({methods, onSubmit, children,
                         <DateInput
                             label="Data Solicitação"
                             name="criado_em"
-                            mode="cadastro"
+                            mode={mode ? "visualizacao" : "cadastro"}
                             register={methods.register("criado_em" as Path<T>)}
                             error={methods.formState.errors.criado_em?.message as string | undefined}
                         />
@@ -100,7 +99,7 @@ export const FormLayout = <T extends FieldValues> ({methods, onSubmit, children,
                                 placeholder="Escolhe o seu setor" 
                                 label="Setor"
                                 selectLabel="Setores"
-                                disabled={formState === 'viewing' || formState === 'reviewing'}
+                                disabled={(mode === 'viewing' || mode === 'reviewing')}
                                 error={methods.formState.errors.setor?.message as string | undefined}
                             />
                         }
@@ -117,7 +116,7 @@ export const FormLayout = <T extends FieldValues> ({methods, onSubmit, children,
                             type="email"
                             icon={EmailIcon}
                             valueInitial={user?.email}
-                            readOnly={true}
+                            readOnly={mode ? true : false}
                         />
                         <InputWithMask
                             name={"whatsapp" as Path<T>}
@@ -126,7 +125,7 @@ export const FormLayout = <T extends FieldValues> ({methods, onSubmit, children,
                             error={methods.formState.errors.whatsapp?.message as string | undefined}
                             Icon={WhatsAppIcon}
                             label="WhatsApp"
-                            readOnly={formState === 'viewing' || formState === 'reviewing'}
+                            readOnly={(mode === 'viewing' || mode === 'reviewing')}
                         />
                     </FormSection>
                     {/* Elementos filhos dinâmicos */}

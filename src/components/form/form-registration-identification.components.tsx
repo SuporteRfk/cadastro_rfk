@@ -6,6 +6,8 @@ import { InputSelect, InputWithMask } from "../inputs";
 import { FileDigit as CpfCnpjIcon} from "lucide-react";
 import { useEffect } from "react";
 import { unmask } from "remask";
+import { SafeReviewField } from "../review-field/safe-review-field.components";
+
 
 
 interface FormRegistrationIdentificationProps<T extends FieldValues> {
@@ -37,45 +39,54 @@ export const FormRegistrationIdentification = <T extends FieldValues>({mode, met
     return(
         <FormSection className="mt-2 md:mt-3 md:flex-row gap-4">
             {/* Tipo de cadastro (PF ou PJ)*/}
-            <InputSelect
-                label="Tipo de Cadastro"
-                name="fisica_juridica"
-                options={Object.values(PfOrPj)}
-                placeholder="PF ou PJ"
-                error={methods.formState.errors.fisica_juridica?.message as string | undefined}
-                maxWidth="max-w-[140px]"
-                disabled={mode === 'viewing' || mode === 'reviewing'}
-            />
-            {/* CPF/CNPJ */}
-            <InputWithMask
-                label={typeRegisterValue === PfOrPj.FISICO ? "CPF" : "CNPJ"}
-                Icon={CpfCnpjIcon}
-                name="cnpj_cpf"
-                error={methods.formState.errors.cnpj_cpf?.message as string | undefined}
-                maskType={typeRegisterValue === PfOrPj.FISICO? "cpf": "cnpj"}
-                readOnly={(mode === 'viewing' || mode === 'reviewing') || !typeRegisterValue}
-                widthContainer="min-w-[190px] max-w-[190px]"
-            />
-            {/* Tipo */}
-            <InputSelect
-                label="Tipo"
-                name="tipo"
-                placeholder="Escolha um tipo"
-                options={optionsForType}
-                error={methods.formState.errors.tipo?.message as string | undefined}
-                disabled={mode === 'viewing' || mode === 'reviewing'}
-            />
-            {/* Apenas para Fornecedor */}
-            {/* Produtor Rural */}
-            {typeForm === "supplier" && 
+            <SafeReviewField field="fisica_juridica" mode={mode || "viewing"}>
                 <InputSelect
-                    label="Produtor Rural"
-                    name="produtor_rural"
-                    placeholder="É produtor Rural?"
-                    options={Object.values(OptionYesNo)}
-                    error={methods.formState.errors.produtor_rural?.message as string | undefined}
+                    label="Tipo de Cadastro"
+                    name="fisica_juridica"
+                    options={Object.values(PfOrPj)}
+                    placeholder="PF ou PJ"
+                    error={methods.formState.errors.fisica_juridica?.message as string | undefined}
+                    maxWidth="max-w-[140px]"
                     disabled={mode === 'viewing' || mode === 'reviewing'}
                 />
+            </SafeReviewField>
+            {/* CPF/CNPJ */}
+            <SafeReviewField field="cnpj_cpf" mode={mode || "viewing"}>
+                <InputWithMask
+                    label={typeRegisterValue === PfOrPj.FISICO ? "CPF" : "CNPJ"}
+                    Icon={CpfCnpjIcon}
+                    name="cnpj_cpf"
+                    error={methods.formState.errors.cnpj_cpf?.message as string | undefined}
+                    maskType={typeRegisterValue === PfOrPj.FISICO? "cpf": "cnpj"}
+                    readOnly={(mode === 'viewing' || mode === 'reviewing') || !typeRegisterValue}
+                    widthContainer="min-w-[190px] max-w-[190px]"
+                />
+            </SafeReviewField>
+            {/* Tipo */}
+            <SafeReviewField field="tipo" mode={mode || "viewing"}>
+                <InputSelect
+                    label="Tipo"
+                    name="tipo"
+                    placeholder="Escolha um tipo"
+                    options={optionsForType}
+                    error={methods.formState.errors.tipo?.message as string | undefined}
+                    disabled={mode === 'viewing' || mode === 'reviewing'}
+                />
+            </SafeReviewField>
+            {/* Apenas para Fornecedor */}
+
+            {/* Produtor Rural */}
+            {typeForm === "supplier" && 
+                <SafeReviewField field="produtor_rural" mode={mode || "viewing"}>
+                    <InputSelect
+                        label="Produtor Rural"
+                        name="produtor_rural"
+                        placeholder="É produtor Rural?"
+                        options={Object.values(OptionYesNo)}
+                        error={methods.formState.errors.produtor_rural?.message as string | undefined}
+                        disabled={mode === 'viewing' || mode === 'reviewing'}
+                    />
+                </SafeReviewField>
             }
         </FormSection>
     );

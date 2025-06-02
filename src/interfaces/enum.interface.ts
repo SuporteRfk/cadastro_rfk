@@ -34,10 +34,11 @@ export enum ConverterType{
     MULTIPLICADOR="M - MULTIPLICADOR"
 };
 
-export type FormStateType = 'editing' | 'viewing' | 'reviewing';
+export type FormStateType = 'editing' | 'viewing' | 'reviewing' | 'denied';
 
 export enum  PfOrPj {
    FISICO = "F - FISICA",
    JURIDICO = "J - JURIDICA"
 };
   
+

@@ -8,6 +8,7 @@ import {
 import {
     Phone as TelephoneIcon,
 } from "lucide-react";
+import { SafeReviewField } from "../review-field/safe-review-field.components";
 
 
 
@@ -21,41 +22,50 @@ export const FormTelephone = <T extends FieldValues>({mode, methods}:FormTelepho
     return(
         <FormSection className="mt-2 lg:mt-3 lg:flex-row gap-4">
             {/* Telefone */}
-            <InputWithMask 
-                name="telefone_1"
-                error={methods.formState.errors.telefone_1?.message as string | undefined}
-                label="Telefone Principal"
-                Icon={WhatsAppIcon}
-                maskType="dynamic"
-                readOnly={mode === 'viewing' || mode === 'reviewing'}
-            />    
+            <SafeReviewField field="telefone_1" mode={mode || "viewing"}>
+                <InputWithMask 
+                    name="telefone_1"
+                    error={methods.formState.errors.telefone_1?.message as string | undefined}
+                    label="Telefone Principal"
+                    Icon={WhatsAppIcon}
+                    maskType="dynamic"
+                    readOnly={mode === 'viewing' || mode === 'reviewing'}
+                />    
+            </SafeReviewField>
             {/* Telefone 2 Opcional*/}    
-            <InputWithMask 
-                name="telefone_2"
-                error={methods.formState.errors.telefone_2?.message as string | undefined}
-                label="Telefone 2 opcional"
-                Icon={WhatsAppIcon}
-                maskType={"dynamic"}
-                readOnly={mode === 'viewing' || mode === 'reviewing'}
-            />  
+            <SafeReviewField field="telefone_2" mode={mode || "viewing"}>
+                <InputWithMask 
+                    name="telefone_2"
+                    error={methods.formState.errors.telefone_2?.message as string | undefined}
+                    label="Telefone 2 opcional"
+                    Icon={WhatsAppIcon}
+                    maskType={"dynamic"}
+                    readOnly={mode === 'viewing' || mode === 'reviewing'}
+                />  
+            </SafeReviewField>
             {/* Telefone 3 Opcional */}
-            <InputWithMask 
-                name="telefone_3"
-                error={methods.formState.errors.telefone_3?.message as string | undefined}
-                label="Telefone 3 opcional"
-                Icon={TelephoneIcon}
-                maskType="dynamic"
-                readOnly={mode === 'viewing' || mode === 'reviewing'}
-            /> 
+            <SafeReviewField field="telefone_3" mode={mode || "viewing"}>
+                <InputWithMask 
+                    name="telefone_3"
+                    error={methods.formState.errors.telefone_3?.message as string | undefined}
+                    label="Telefone 3 opcional"
+                    Icon={TelephoneIcon}
+                    maskType="dynamic"
+                    readOnly={mode === 'viewing' || mode === 'reviewing'}
+                /> 
+            </SafeReviewField>
             {/* Telefone 4 Opcional */}
-            <InputWithMask 
-                name="telefone_4"
-                error={methods.formState.errors.telefone_4?.message as string | undefined}
-                label="Telefone 4 opcional"
-                Icon={TelephoneIcon}
-                maskType="dynamic"
-                readOnly={mode === 'viewing' || mode === 'reviewing'}
-            /> 
+            <SafeReviewField field="nome_fantasia" mode={mode || "viewing"}>
+                <InputWithMask 
+                    name="telefone_4"
+                    error={methods.formState.errors.telefone_4?.message as string | undefined}
+                    label="Telefone 4 opcional"
+                    Icon={TelephoneIcon}
+                    maskType="dynamic"
+                    readOnly={mode === 'viewing' || mode === 'reviewing'}
+                /> 
+            </SafeReviewField>
+     
         </FormSection>
     );
 };
