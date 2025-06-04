@@ -1,0 +1,145 @@
+@import 'tailwindcss';
+
+
+@theme {
+  --breakpoint-*: initial;
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 767px;
+  --breakpoint-lg: 960px;
+  --breakpoint-xl: 1200px;
+  --breakpoint-2xl: 1400px;
+  --breakpoint-3xl: 1920px;
+
+  --color-bg: var(--bg-color);
+  --color-accent: var(--color-accent);
+  --color-text-strong: var(--text-color-strong);
+  --color-text-medium: var(--text-color-medium);
+  --color-text-neutral: var(--text-color-neutral);
+  --color-border: var(--color-border);
+  --color-shadow: var(--color-shadow);
+  --color-error: var(--color-error);
+  --color-success: var(--color-success);
+  --color-info: var(--color-info);
+  --color-warning: var(--color-warning);
+  --color-white-default: var(--color-white);
+  --color-bg-color-input-valid: var(--input-bg-valid);
+  --color-bg-menu: var(--color-bg-menu);
+  --color-strong: var(--color-strong);
+  --color-medium: var(--color-medium);
+  --color-neutral: var(--color-neutral);
+  --color-item-select: var(--color-select-item);
+  --color-bg-sub-menu: var(--color-bg-subMenu);
+  --color-bg-modal: var(--color-bg-modal);
+
+  --background-image-login: url('/background/bg_login.webp');
+
+  --animate-spin-slow: spin 1.5s linear infinite;
+}
+
+@utility container {
+  margin-inline: auto;
+  padding-inline: 15px;
+  @media (width >= --theme(--breakpoint-sm)) {
+    max-width: none;
+  }
+  @media (width >= 1400px) {
+    max-width: 1400px;
+  }
+  @media (width >= 1920px) {
+    max-width: 1920px;
+  }
+}
+
+/*
+  The default border color has changed to `currentColor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-border, currentColor);
+  }
+}
+
+:root {
+    font-family: "Inter", serif;
+    font-weight: 400;
+  
+    /* colors */
+    --bg-color: #F3F4F6;
+    --text-color-strong: #1F2937;
+    --text-color-medium: #364151;
+    --text-color-neutral:#9CA3AF;
+    --color-white: #FFFFFF;
+    --color-accent:#00ADBB;
+    --color-border: #E5E7EB; 
+    --color-shadow: #E9EAEC; 
+    --color-error: #EF4444;
+    --color-success: #00C642;
+    --color-info: #3B82F6;
+    --color-warning: #FACC15;
+    --input-bg-valid: #EBFFFD;
+    --color-bg-menu: #e9e9e9;
+    --color-strong: #1F2937;
+    --color-medium: #364151;
+    --color-neutral: #9CA3AF;
+    --color-select-item: #bac1cd;
+    --color-bg-subMenu:  #E5E7EB;
+    --color-bg-modal: #e9eaec96;
+
+    input:not(:placeholder-shown){
+      background-color: var(--input-bg-valid);
+    }
+
+    input[type="radio"]:checked::after {
+      content: "";
+      width: 8px;
+      height: 8px;
+      background-color: var(--color-accent); /* Cor do círculo interno */
+      border-radius: 50%;
+      position: absolute;
+      top: 50%;
+      left: 50%;     
+      transform: translate(-50%, -50%);
+    }
+
+    /* Remove os botões de incremento/decremento no Chrome, Safari e Edge */
+    .no-spinner::-webkit-outer-spin-button,
+    .no-spinner::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    /* Remove os botões de incremento/decremento no Firefox */
+    .no-spinner {
+        -moz-appearance: textfield; 
+    }
+
+
+    div[style*="display: table"] {
+      display: block !important;
+      width: 100% !important;
+      max-width: 100% !important;
+    }
+    
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
