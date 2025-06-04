@@ -1,69 +1,59 @@
-# Documentação do Componente `FormProductDescription`;
+# 📁 Documentação do Componente `FormProductDescription`
 
 ## 📁 Localização
+`/components/form/form-product-description.componentes.tsx`
 
-`/components/forms/form-product-description.components.ts`
+---
 
 ## 📊 Visão Geral
 
-O componente `FormProductDescription` é utilizado para exibir e editar as informações de descrição e uso de um produto, incluindo a **descrição curta**, **uso do produto** e **nome científico**. Ele é integrado ao `react-hook-form` para gerenciamento de formulário e tem opções para controlar a visibilidade e o comportamento dos campos.
+O componente `FormProductDescription` é responsável por renderizar campos relacionados à **descrição do produto**, seu **uso** e **nome científico**, com opção de exibir instruções de preenchimento para padronização e clareza dos dados inseridos.
 
-## 🔎 Detalhes Técnicos
+---
 
-### Dependências:
+## 🧩 Props Aceitas
 
-- `react-hook-form:` Para integração com o gerenciamento de formulários.
-- `InputSelect`: Para renderizar os campos de seleção (select).
-- `FormSection`: Componente de formulário que serve como container
+| Prop                   | Tipo                            | Descrição                                                                 |
+|------------------------|----------------------------------|-----------------------------------------------------------------------------|
+| `mode`                 | `"editing"` \| `"viewing"` \| `"reviewing"` | Define o modo de uso do formulário.                                   |
+| `methods`              | `UseFormReturn<T>`              | Objeto do `react-hook-form` com métodos de controle de campos.            |
+| `viewInstructions`     | `boolean`                        | Exibe instruções de preenchimento dos campos.                             |
+| `viewKeyUseProduct`    | `boolean`                        | Controla a exibição do campo "Uso do Produto".                            |
+| `viewKeyNameScientific`| `boolean`                        | Controla a exibição do campo "Nome Científico".                           |
 
-### Propriedades (PROPS):
+---
 
-### `mode` (opcional)
-- **Tipo**: `FormStateType`
-- **Descrição**: Controla o comportamento dos campos, determinando se estão editáveis ou somente leitura.
-  - **Valores possíveis**:
-    - `"editing"`: Os campos estão habilitados para edição.
-    - `"viewing"`: Os campos estão desabilitados para edição, permitindo somente visualização.
-    - `"reviewing"`: Os campos estão desabilitados para edição, permitindo somente revisão.
+## 🧠 Campos Renderizados
 
-### `methods` (obrigatório)
-- **Tipo**: `UseFormReturn<T>`
-- **Descrição**: O objeto retornado pelo `useForm` do `react-hook-form`, que contém os métodos e o estado do formulário. Usado para associar os campos aos dados do formulário e controlar a validação.
+| Campo              | Tipo   | Ícone              | Visibilidade                        |
+|--------------------|--------|--------------------|-------------------------------------|
+| descricao_curta    | `Input`| `ClipboardPenLine` | Sempre                              |
+| descricao_uso      | `Input`| `ClipboardPenLine` | Condicional (`viewKeyUseProduct`)   |
+| nome_cientifico    | `Input`| `Atom`             | Condicional (`viewKeyNameScientific`)|
 
-### `viewInstructions` (opcional)
-- **Tipo**: `boolean`
-- **Descrição**: Se definido como `true`, exibe instruções detalhadas sobre como preencher o campo de **descrição curta**. A descrição inclui regras de abreviação e formatação de texto para o campo.
-- **OBS**: As instruções são usadas somente na feature `pa-third (PA-Terceiro)`. Mas podem ser expandidas para outras features, com ajustes no componente.
+Todos os campos são renderizados dentro de `SafeReviewField`, que define se o campo estará editável ou somente leitura com base no `mode`.
 
-### `viewKeyUseProduct` (opcional)
-- **Tipo**: `boolean`
-- **Descrição**: Se definido como `true`, exibe o campo **"Uso do Produto"**, permitindo ao usuário preencher o uso do produto.
-- **OBS**: Essa chave é usada apenas na feature `indirect-products (Produtos indiretos)`. Mas podem ser expandidas para outras features.
+---
 
+## ℹ️ Instruções Renderizadas
 
-### `viewKeyNameScientific` (opcional)
-- **Tipo**: `boolean`
-- **Descrição**: Se definido como `true`, exibe o campo **"Nome Científico"**, permitindo ao usuário preencher a descrição completa do nome científico do produto.
+Se `viewInstructions` for verdadeiro:
 
+- Exibe orientações padronizadas para preenchimento da descrição e nome científico.
+- Ex: Abreviação com 2 letras (VT) para “Vinho Tinto” e 3 letras (ESP) para nomes únicos como “Espumante”.
 
-## 🎨 Funcionamento
+---
 
-Este componente agrupa três campos de entrada principais:
+## 🔗 Conexões
 
-1. **Descrição Curta**:
-   - Campo de entrada que permite ao usuário inserir uma descrição curta do produto. O campo é configurável com **instruções de preenchimento** quando `viewInstructions` é `true`.
-   
-2. **Uso do Produto**:
-   - Campo opcional que permite inserir informações sobre o **uso do produto**. Aparece somente se `viewKeyUseProduct` for `true`.
+- `Input`: componente base de entrada de dados
+- `SafeReviewField`: renderiza o campo com base no modo de formulário
+- `FormSection`: estrutura responsiva do layout
+- Ícones `ClipboardPenLine` e `Atom` da biblioteca `lucide-react`
 
-3. **Nome Científico**:
-   - Campo opcional que permite inserir o **nome científico** do produto. Aparece somente se `viewKeyNameScientific` for `true`, e pode exibir **instruções de preenchimento** quando `viewInstructions` for `true`.
+---
 
-### Controle de Visibilidade e Edição:
-- O componente verifica o valor de `mode` para definir se os campos estarão **habilitados** ou **desabilitados** para edição. Se `mode` for `"viewing"` ou `"reviewing"`, os campos são desabilitados, permitindo apenas visualização.
-- A propriedade `readOnly` é usada para garantir que os campos sejam somente leitura no modo de visualização e revisão.
-
-## 💡 Exemplo de Uso
+## 💻 Exemplo de Uso
 
 ```tsx
 <FormProductDescription
@@ -74,3 +64,12 @@ Este componente agrupa três campos de entrada principais:
   viewKeyNameScientific={true}
 />
 ```
+
+---
+
+## 🧠 Por que usar este componente?
+
+- 🧩 Agrupa campos descritivos e científicos em um único componente reutilizável
+- 📝 Garante padronização com instruções embutidas
+- 🔐 Adapta-se a diferentes modos de uso com `SafeReviewField`
+- 🔄 Flexível: renderiza somente os campos necessários com base em `props`

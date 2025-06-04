@@ -1,48 +1,76 @@
 # Documentação do `RequestTableHeader`
 
 ## 📁 Localização
-`/components/table/request-table-header.tsx`
+`/src/components/table/request-table-header.components.tsx`
 
 ## 📊 Visão Geral
-Este componente é responsável por renderizar o cabeçalho da tabela de solicitações. Ele é dinâmico e baseado nas colunas definidas via `@tanstack/react-table` que definimos no `request-columns`.
 
-Cada cabeçalho de coluna é renderizado de forma a permitir futuras expansões, como ordenação ou filtros por coluna, se necessário.
+O componente `RequestTableHeader` é responsável por renderizar o cabeçalho da tabela principal utilizando o sistema de tabelas da biblioteca `@tanstack/react-table`.
+
+Ele itera sobre os grupos de cabeçalhos fornecidos pelo hook `useReactTable` e aplica estilos específicos para garantir uma apresentação visual clara, destacando colunas de ação com ícones e separações visuais com bordas.
 
 ## 🔎 Detalhes Técnicos
-### ✅ Props:
-- `table`: Table<IViewRequest>
-    - Instância da tabela criada com `useReactTable`, que contém os métodos e o modelo de colunas.
-### 🧠 Renderização:
-- Itera sobre `table.getHeaderGroups()` para exibir os grupos de cabeçalho.
-- Cada `headerGroup` contém os `headers` de colunas individuais.
-- Para cada header, verifica:
--   
-    ```tsx
-        header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())
-    ```
-     - Isso garante que:
-        - Colunas “fantasmas” (placeholders) sejam ignoradas.
-        - O conteúdo do cabeçalho seja corretamente renderizado, mesmo que seja um JSX complexo ou função.
 
-### ⚖️ Regras de Uso
-- Este componente deve ser incluído dentro da <`Table`>, como primeiro filho (antes do <`TableBody`>).
-- O `table` deve ser criado com o hook `useReactTable()` com colunas previamente definidas.
-- O cabeçalho depende da estrutura retornada por `getRequestColumns()`.
+### 🎯 Props Recebidas
 
+| Prop   | Tipo                        | Descrição                                                         |
+|--------|-----------------------------|--------------------------------------------------------------------|
+| `table`| `Table<IViewRequest>`       | Instância da tabela criada via `useReactTable`.                   |
+
+---
+
+### 🧠 Lógica Interna
+
+- Itera sobre `table.getHeaderGroups()` para suportar múltiplos níveis de cabeçalhos.
+- Renderiza cada `TableHead` com estilos e bordas condicionais:
+  - A primeira e última coluna têm estilo diferente para evitar borda lateral dupla.
+- Identifica a coluna de ações (`""`) e insere o ícone `MousePointerClick`.
+
+```tsx
+const isColumnAction = header.column.columnDef.header === ""
+```
+
+- Usa `flexRender` para renderizar cabeçalhos customizados (permite JSX, componentes, etc.).
+
+---
+
+### 🎨 Estilo Aplicado
+
+- Fundo: `bg-accent/70`
+- Texto: `text-text-strong`, `text-sm`, `font-semibold`
+- Bordas:
+  - Laterais: aplicadas condicionalmente com `border-l-2`
+  - Inferior: todas com `border-b-2 border-b-accent`
+
+---
+
+## ⚖️ Regras de Uso
+
+- Deve ser utilizado dentro do componente `Table` do projeto.
+- Depende da configuração de colunas via `getRequestColumns()` ou estrutura compatível com TanStack Table.
+
+---
 
 ## 💻 Exemplo de Uso
 
 ```tsx
-<Table className="min-w-full">
+<Table>
   <RequestTableHeader table={table} />
-  <RequestTableBody table={table} observationOpenId={observationOpenId} />
+  <RequestTableBody table={table} />
 </Table>
 ```
-## 🧠 Explicação técnica: `header.isPlaceholder`
-- Alguns recursos do `@tanstack/react-table` criam colunas `“placeholder”` para alinhamento ou mesclagem de colunas (ex: group headers).
-- Essa verificação evita renderizar valores vazios ou quebrar o layout com `undefined`.
 
-## 💡 Futuras melhorias
-- Adicionar ícones de ordenação clicáveis com `onSort` no `header`.
-- Tornar cada `header.column` interativo ao clicar (alterar ordem asc/desc).
-- Adicionar tooltips ou ícones de ajuda sobre colunas com informações sensíveis.
+---
+
+## 📚 Integração com o contexto
+
+- Não consome nenhum contexto diretamente.
+- Toda a estrutura e dados são fornecidos pela instância `table`.
+
+---
+
+## 💡 Melhorias planejadas (futuras)
+
+- Suporte a ordenação de colunas (com ícones clicáveis)
+- Tooltip nos cabeçalhos com descrição dos campos
+- Componente para configuração dinâmica de colunas visíveis

@@ -1,104 +1,134 @@
 # Documentação do `ModalContext`
 
-# 📁 Localização
-`src/context/modal.context.tsx`
+## 📁 Localização
+
+`/context/modal.context.tsx`
 
 ## 📊 Visão Geral
-O `ModalContext` gerencia o estado de exibição de modais de pergunta em toda a aplicação. Ele usa o **React Context** para fornecer um estado global que permite abrir e fechar modais de maneira dinâmica, baseado em uma chave única para cada modal.
+
+O `ModalContext` é responsável por **gerenciar a abertura e fechamento de modais** de confirmação ou aviso na aplicação.
+
+Ele oferece:
+- Abertura de modais com chaves dinâmicas
+- Controle de múltiplos modais ao mesmo tempo
+- Integração com o componente visual `ModalQuestion`
+- Estado centralizado acessível em toda a aplicação
 
 ---
 
-## 🔎 Detalhamento Linha a Linha e Funcionamento
+## 🔍 Tipagens
 
-### Importações
+### `ModalConfig`
 ```ts
-import { createContext, ReactNode, useState } from "react";
-import { Modal } from "../components/modal.components";
-import { IModal, IModalContext, ModalConfig } from "../interfaces/modalContext.interface"
-```
-- `createContext`: Cria o contexto do React para fornecer o estado global dos modais.
-- `useState`: Hook para gerenciar o estado local dos modais no ModalProvider.
-- `Modal`: O componente modal que será renderizado quando um modal estiver ativo.
-- Tipagens `IModal`, `IModalContext` e `ModalConfig`: Interfaces definidas para estruturar a configuração e o estado dos modais.
-
-### Criação do Contexto
-```tsx
-export const ModalContext = createContext<IModalContext>({
-    modals: {},
-    closeModal: () => {
-        throw new Error("closeModal was called outside of ModalProvider");
-    },
-    openModal: (_modalKey, _modalConfig) => {
-        throw new Error("openModal was called outside of ModalProvider");
-    }
-});
-```
-- `ModalContext`: Cria o contexto para os modais, com funções `openModal` e `closeModal`.
-- `modals`: Objeto que armazena o estado de cada modal. A chave é a chave do modal, e o valor é a configuração do modal.
-
-### Provedor de Contexto
-```tsx
-export const ModalProvider = ({ children }: { children: ReactNode }) => {
-    const [modals, setModals] = useState<IModal>({});
+{
+  message: string;
+  isOpen?: boolean;
+  onConfirm: () => Promise<void> | void;
 }
 ```
-- `ModalProvider`: O provedor que envolve a aplicação e disponibiliza o contexto dos modais.
-- `modals`: Estado local que mantém todos os modais ativos, usando `useState` para atualizar a lista de modais dinamicamente.
+- Define a estrutura de um modal individual.
 
-## Função `openModal`
-```tsx
-const openModal = (modalKey: string, modalConfig: ModalConfig) => {
-    setModals((prev) => ({
-        ...prev, // Mantém os modais existentes
-        [modalKey]: {...modalConfig, isOpen: true }, // Abre ou atualiza o modal
-    }));
-};
+### `IModal`
+```ts
+{
+  [key: string]: ModalConfig;
+}
+```
+- Representa um conjunto de modais ativos, indexados por chave (`modalKey`).
+
+### `IModalContext`
+```ts
+{
+  modals: IModal;
+  openModal(modalKey: string, config: ModalConfig): void;
+  closeModal(modalKey: string): void;
+}
+```
+- Interface de contexto que define as funções e o estado exposto.
+
+---
+
+## ⚙️ Estados e Funções
+
+### `modals`
+- Tipo: `IModal`
+- Estado que guarda todos os modais abertos ou fechados.
+
+---
+
+### `openModal(modalKey, modalConfig)`
+1. Recebe uma chave única e a configuração do modal
+2. Adiciona ou atualiza o modal no estado
+3. Define `isOpen: true`
+
+```ts
+openModal("delete-confirm", {
+  message: "Tem certeza que deseja excluir?",
+  onConfirm: async () => { ... }
+});
 ```
 
-- `openModal`: Função que permite abrir ou atualizar um modal com uma chave específica.
-    - Se o modal já existir, ele será atualizado (usando o spread para manter os modais anteriores e sobrescrever o valor correspondente).
-    - `modalKey` é a chave única do modal, e `modalConfig` é a configuração do modal (mensagem, função de confirmação, etc.).
+---
 
-## Função `closeModal`
+### `closeModal(modalKey)`
+1. Define `isOpen: false` para a chave informada
+2. Mantém os outros modais inalterados
 
-```tsx
-const closeModal = (modalKey: string) => {
-    setModals((prev) => ({
-        ...prev, // Mantém os outros modais
-        [modalKey]: { ...prev[modalKey], isOpen: false }, // Fecha o modal específico
-    }));
-};
-```
-- `closeModal`: Função que fecha um modal específico, atualizando o estado de `isOpen` para `false` no modal correspondente.
-- O modal continua no estado, mas é marcado como fechado (`isOpen: false`).
+---
 
-## Renderização dos Modais Ativos
+## 🖼️ Renderização de Modais
+
+Dentro do próprio `<ModalProvider>` são renderizados todos os modais ativos com base em `modals[key].isOpen`.
 
 ```tsx
-{Object.entries(modals).map(([key, config]) => 
-    config.isOpen ? (
-        <Modal
-            key={key}
-            message={config.message}
-            onConfirm={async () => {
-                await config.onConfirm();
-                closeModal(key);
-            }}
-            onClose={() => closeModal(key)}
-        />
-    ): (
-        null
-    )
+{Object.entries(modals).map(([key, config]) =>
+  config.isOpen ? (
+    <ModalQuestion
+      key={key}
+      message={config.message}
+      onConfirm={async () => {
+        await config.onConfirm();
+        closeModal(key);
+      }}
+      onClose={() => closeModal(key)}
+    />
+  ) : null
 )}
 ```
 
-- **Renderização dinâmica**: Para cada modal ativo (com `isOpen: true`), o componente `Modal` é renderizado.
-    - `onConfirm`: Quando o modal é confirmado, a função `onConfirm` é chamada uma função assincrona. Após a execução da função, o modal é fechado.
-    - `onClose`: Quando o modal é cancelado, a função `closeModal` é chamada para fechá-lo.
+---
 
+## 💻 Exemplo de Uso
 
-## ⚖️ Regras de Uso
+```tsx
+import { useContext } from "react";
+import { ModalContext } from "@/context/modal.context";
 
-- Uso exclusivo dentro de `ModalProvider`: As funções `openModal` e `closeModal` só podem ser usadas dentro de um componente que esteja dentro do `ModalProvider`.
-- **Chave única para cada modal**: Use uma chave única para identificar cada modal.
-- **Atualização dinâmica**: Sempre que `openModal` for chamado com a mesma chave, o modal será atualizado com a nova configuração. O estado `isOpen` controla a visibilidade do modal.
+const { openModal } = useContext(ModalContext);
+
+const handleDelete = () => {
+  openModal("confirm-delete", {
+    message: "Deseja realmente excluir este item?",
+    onConfirm: async () => {
+      await deleteItem();
+    }
+  });
+};
+```
+
+---
+
+## 🔗 Conexões
+
+- **Componente**: `ModalQuestion` (interface visual dos modais)
+- **Local de uso**: Aplicação inteira, onde ações críticas exigem confirmação
+- **Chave única (`modalKey`)**: Permite múltiplos modais coexistirem sem conflito
+
+---
+
+## 📌 Observações
+
+- O modal permanece no estado mesmo ao ser fechado, com `isOpen: false`
+- A centralização permite consistência visual e controle total sobre o fluxo de confirmação
+- Ideal para ações críticas como exclusão, aprovações, rejeições etc.
+

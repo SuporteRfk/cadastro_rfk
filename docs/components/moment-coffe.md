@@ -1,37 +1,68 @@
-# Documentação do Componente `MomentCoffe`;
+# 📁 Documentação do Componente `MomentCoffe`
 
 ## 📁 Localização
-
 `/components/moment-coffe.components.tsx`
+
+---
 
 ## 📊 Visão Geral
 
-O componente `MomentCoffe` é um componente visual simples que exibe uma mensagem personalizada para o usuário. Ele exibe um ícone de café e uma mensagem relacionada ao contexto de solicitações. A mensagem é passada como prop, tornando o componente reutilizável para diferentes tipos de mensagens em diferentes contextos.
+O `MomentCoffe` é um componente visual usado para exibir mensagens amigáveis, geralmente em estados vazios de páginas (ex: nenhuma solicitação pendente).
 
-## 🔎 Detalhes Técnicos
+Ele combina ícones, uma mensagem central e uma ilustração leve para transmitir que "está tudo certo" no momento.
 
-- `mensagem`: A mensagem que será exibida dentro do componente. Ela pode ser personalizada conforme a necessidade (ex.: "Nenhuma solicitação no momento", "Aproveite seu café").
-- `Coffee`: Ícone da biblioteca `lucide-react` usado para ilustrar o componente de café.
-- **Estilos**: O layout usa classes do TailwindCSS para garantir um design limpo e responsivo.
+---
+
+## 🔧 Props Aceitas
+
+| Prop         | Tipo        | Descrição                                                                 | Padrão |
+|--------------|-------------|---------------------------------------------------------------------------|--------|
+| `mensagem`   | `string`    | Mensagem principal que será exibida no centro do componente               | —      |
+| `applyColor` | `boolean`   | Define se o fundo branco e sombra serão aplicados                        | `true` |
+
+---
+
+## 🎨 Composição Visual
+
+- Ícone: `Coffee` da lib `lucide-react`
+- Mensagem central em destaque (`<h2>`)
+- Submensagem em cinza claro
+- Emoji `☕` com animação `bounce`
+
+---
+
+### 🎨 Estilos Dinâmicos
+
+O componente aplica classes extras de estilo somente se `applyColor` for `true`:
+
+```tsx
+${applyColor && "shadow-lg bg-white"}
+```
+
+Isso permite reutilizar o componente em contextos com ou sem fundo.
+
+---
 
 ## ⚖️ Regras de Uso
 
-- **Uso condicional:**: Use este componente em contextos onde seja necessário exibir uma mensagem de boas-vindas ou uma mensagem de estado (como quando não há solicitações pendentes).
-- **Personalização da mensagem**: A mensagem é passada como props para o atributo `mensagem`, permitindo que o conteúdo seja dinâmico e adaptável a diferentes páginas ou estados.
+- Ideal para telas de estado vazio ou mensagens de sucesso
+- Pode ser reutilizado em qualquer layout que deseje transmitir leveza
+- A mensagem passada por prop deve ser curta e direta
+
+---
 
 ## 💻 Exemplo de Uso
 
 ```tsx
 import { MomentCoffe } from "@/components/moment-coffe.components";
 
-export const DashboardPage = () => {
-  return (
-    <PageLayout>
-      {/* Exemplo de renderização condicional */}
-      <MomentCoffe mensagem="Nenhuma solicitação pendente no momento" />
-    </PageLayout>
-  );
-};
-
-
+<MomentCoffe mensagem="Nenhuma solicitação pendente no momento" />
 ```
+
+---
+
+## 🧠 Por que usar este componente?
+
+- 🧼 Melhora a experiência do usuário em páginas sem conteúdo
+- 🎯 Facilita a padronização de mensagens de estado
+- ⚙️ Reutilizável com controle visual (`applyColor`)

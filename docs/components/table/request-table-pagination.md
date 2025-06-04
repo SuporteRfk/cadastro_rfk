@@ -1,66 +1,89 @@
 # Documentação do `RequestTablePagination`
 
 ## 📁 Localização
-`/components/table/request-table-pagination.tsx`
+`/src/components/table/request-table-pagination.components.tsx`
 
 ## 📊 Visão Geral
-Este componente é responsável pela **navegação entre páginas-** na tabela de solicitações. Ele oferece:
-- Botões para ir à primeira, anterior, próxima e última página.
-- Um seletor para o usuário escolher quantas linhas deseja visualizar por página. 
 
-O controle é totalmente integrado com o `RequestContext`, e os dados são paginados no servidor (`server-side pagination`).
+O componente `RequestTablePagination` controla a navegação entre páginas da tabela de solicitações. Ele oferece ao usuário a capacidade de:
+
+- Escolher quantas linhas deseja ver por página
+- Navegar para a próxima, anterior, primeira ou última página
+
+Esse componente é sensível ao contexto `RequestContext` para obter o total de registros e o filtro atual.
 
 ## 🔎 Detalhes Técnicos
-```tsx
-interface IRequestTablePaginationProps {
-  onChangePage: (page: number) => void;
-  onChangePageSize: (size: number) => void;
-}
-```
-Essas funções são passadas pelo componente pai (`RequestTable`) e manipulam o estado de filter (com `offset` e `indexLimit`), disparando novas requisições.
 
-## 🧠 Integração com contexto
-Internamente, o componente consome o `RequestContext` para acessar:
-- `totalRequest`: número total de solicitações retornadas pela última requisição
-- `filter`: para acessar `offset` e `indexLimit`, e calcular página atual e total
+### 🎯 Props Recebidas
 
-## 🧮 Lógica de paginação:
+| Prop              | Tipo                   | Descrição                                                              |
+|-------------------|------------------------|-------------------------------------------------------------------------|
+| `onChangePage`    | `(page: number) => void`| Função chamada ao mudar de página.                                     |
+| `onChangePageSize`| `(size: number) => void`| Função chamada ao mudar o tamanho da página (linhas por página).       |
+
+---
+
+### 🧠 Lógica Interna
+
+- Obtém os valores do `RequestContext`:
+  - `filter.offset`: offset atual da requisição
+  - `filter.indexLimit`: número de registros por página
+  - `totalRequest`: total de registros existentes
+
 ```tsx
 const pageSize = filter?.indexLimit || 10;
 const pageIndex = Math.floor((filter?.offset || 0) / pageSize);
 const totalPages = Math.ceil(totalRequest / pageSize);
 ```
-- `pageIndex`: página atual (base 0)
-- `canPrevious` e `canNext`: controles de ativação dos botões
-- `totalPages`: número total de páginas baseado nos dados do backend
 
-## ⚙️ Funções que o componente aciona
+- Calcula:
+  - `canPrevious` = se há página anterior
+  - `canNext` = se há próxima página disponível
 
-| Função                   | Ação                                                                       |
-| ------------------------ | -------------------------------------------------------------------------- |
-| `onChangePage(index)`    | Atualiza o `offset` no filtro para mudar a página                          |
-| `onChangePageSize(size)` | Altera o `indexLimit`, redefinindo a visualização para o início (offset 0) |
+---
 
+### 🧩 Controles de UI
+
+- **Dropdown de seleção** para linhas por página: opções [5, 10, 20, 50]
+- **Botões de navegação**:
+  - Primeira página (`FirstIcon`)
+  - Página anterior (`PreviuosIcon`)
+  - Próxima página (`NextIcon`)
+  - Última página (`LastIcon`)
+
+- Estilo: `bg-accent/5`, `border-t`, `rounded-b-md`
+
+---
+
+## ⚖️ Regras de Uso
+
+- Deve ser usado dentro do `RequestTable`, após o corpo da tabela.
+- Depende do `RequestContext` para funcionar corretamente.
+- `onChangePage` e `onChangePageSize` devem atualizar o filtro global (`setFilter()`).
+
+---
 
 ## 💻 Exemplo de Uso
+
 ```tsx
 <RequestTablePagination
-  onChangePage={(page) =>
-    setFilter(prev => ({ ...prev!, offset: page * (prev?.indexLimit ?? 10) }))
-  }
-  onChangePageSize={(size) =>
-    setFilter(prev => ({ ...prev!, indexLimit: size, offset: 0 }))
-  }
+  onChangePage={(page) => {
+    setFilter((prev) => ({ ...prev, offset: page * prev.indexLimit }));
+  }}
+  onChangePageSize={(size) => {
+    setFilter((prev) => ({ ...prev, indexLimit: size, offset: 0 }));
+  }}
 />
 ```
 
-## ⚖️ Regras de Uso
-- A paginação deve refletir o filtro do contexto (`offset`, `indexLimit`, `totalRequest`).
-- A função de `getRequest` deve ser chamada no `useEffect` do contexto ao alterar o filtro.
-- Os botões devem estar desativados quando:
-    - Está na primeira página (`!canPrevious`)
-    - Está na última página (`!canNext`)
+---
+
+## 📚 Integração com o contexto
+
+- Lê diretamente de `RequestContext`:
+  - `filter`
+  - `totalRequest`
 
 
-## 🧠 Observação importante:
-Este componente não usa `@tanstack/react-table` diretamente, pois a paginação é controlada externamente pelo `RequestContext`. Isso evita conflitos e mantém a lógica clara e desacoplada.
+
+
