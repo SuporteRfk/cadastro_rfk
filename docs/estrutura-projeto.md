@@ -1,67 +1,50 @@
-# 📁 Estrutura de Pastas do Projeto
+# 🏗️ Estrutura do Projeto
 
-Este documento serve como referência oficial da arquitetura de pastas utilizada no projeto.  
+Esta documentação descreve a estrutura de diretórios e arquivos do projeto, explicando o propósito de cada seção e como elas se relacionam.
+
 A estrutura segue o padrão por **features**, garantindo **escalabilidade**, **clareza** e **facilidade de manutenção**.
 
 
 ✅ **Regra de ouro**: Qualquer nova funcionalidade deve seguir essa estrutura. Alterar o padrão exige discussão e aprovação do time responsável.
 
+---
 
-<br>
-
-## 🌐 Padrões de Nomeação
-
-- **Pastas e arquivos**: Inglês e `kebab-case` (ex: `form-clientes`, `auth-context`)  
-- **Variáveis, funções e tipos**: Inglês, mas se nome levar algo relacionado a feature, manter o português em `camelCase` (ex: `handleCadastroCliente`)  
-- **Enums, interfaces e constantes globais**: `PascalCase` e em português (ex: `StatusSolicitacoes`, `TipoOperacao`)  
-- **Commits**: Padrão **Conventional Commits**
-- **Comentários**: Em português;
-
-<br>
-
-## 📂 Pasta `/public`
-
-A pasta `public/` é fundamental em projetos com Vite, pois serve diretamente arquivos estáticos.
-
-Use-a para:
-- Imagens institucionais
-- Ícones SVG globais
-- Arquivos públicos acessíveis (como PDF, favicon, etc)
-
-⚠️ Arquivos dentro da `public/` **não** devem ser manipulados por Webpack ou importados via JavaScript.
-
-## 📂 Estrutura Base
-
+## 📁 Estrutura Geral
 
 ```bash
-src/ 
-    ├── @types                              # Tipagens globais (se usadas) 
-    ├── assets                              # Logos, ícones, fontes, imagens estáticas 
-    ├── components                          # Componentes reutilizáveis e compartilhados 
-    ├── context                             # Contextos globais como Auth, Modal, Config 
-    ├── features                            # Cada funcionalidade (ex: clientes, insumos, etc) 
-    │       └── clientes/                       # Contém tudo relacionado ao domínio "clientes" 
-    │               ├── components/             # Componentes específicos 
-    │               ├── forms/                  # Formulários por tipo (cadastro, edição, revisão) 
-    │               ├── schema/                 # Yup schemas do módulo 
-    │               ├── service/                # Funções de chamada de API 
-    │               ├── index.tsx               # Entrada principal da feature (opcional) 
-    │               └──cliente.interface.tsx    # Interface da features 
-    ├── hooks                               # Custom hooks globais (useToast, useAuth, etc) 
-    ├── interfaces                          # Interfaces/Enums globais (se existirem) 
-    ├── pages                               # Páginas públicas ou sem layout (login, 404) 
-    ├── schemas                             # Yup schemas compartilhados (ex: authSchema) 
-    ├── services                            # Serviços globais (config do Supabase, auth, etc) 
-    ├── style                               # Estilos globais (ex: tailwind.css) 
-    ├── utils                               # Funções utilitárias compartilhadas 
-    ├── views                               # Views da aplicação (home, dashboard, controladoria) 
-    ├── App.tsx                             # Arquivo principal do app 
-    ├── main.tsx                            # Ponto de entrada (React + Vite) 
-    └── vite-env.d.ts
-
+/root/
+├── .env            # Guardar chaves e dados sensíveis   
+├── public/         # Arquivos estáticos acessíveis diretamente, como imgs, ícones e bg
+├── src/            # Todo o código-fonte da aplicação.
+│   ├── @types/     # Tipagens globais (se usadas) 
+│   ├── assets/     # Logos e imagens internas usadas pelos componentes.
+│   ├── components/ # Componentes reutilizáveis e compartilhados
+│   ├── context/    # Contextos globais como Auth, Modal, Config.
+|   ├── data/       #  
+|   ├── features/   # Cada funcionalidade (ex:clientes, insumos, etc). 
+│       └── clientes/   # Diretório é o módulo, recebe contéudo exclusivo dele.
+│               ├── components/     # Componentes específicos       (opcional) 
+│               ├── hook/           # Hook customizado do módulo    (opcional) 
+│               ├── interface/      # Interfaces/Enums globais      (opcional)
+│               ├── page/           # Página do módulo      
+│               ├── schema/         # Yup schemas do módulo         (opcional) 
+│               ├── service/        # Funções de chamada de API     (opcional) 
+│               ├── utils/          # Funções utilitárias           (opcional) 
+│               └── index.tsx       # Entrada principal da feature  (opcional) 
+│   ├── hooks/      # Hooks customizados de uso global
+│   ├── interfaces/ # Interfaces/Enums globais (se existirem) 
+│   ├── lib/        # Diretório exclusivo de uso da lib do tailwind
+│   ├── pages/      # Páginas que não precisam de módulo (ex: not-found)
+│   ├── routes/     # Configurações de rotas públicas e privadas.
+│   ├── services/   # erviços globais (config do Supabase, auth, etc) 
+│   ├── style/      # Estilos globais (ex: tailwind.css) 
+│   ├── utils/      # Funções utilitárias compartilhadas 
+│   ├── App.tsx     # Arquivo principal do app 
+│   ├── main.tsx    # Ponto de entrada da aplicação, renderiza o React.
+│   └── vite-env.d.ts
 ```
 
-<br>
+---
 
 ## ✨ Exemplos de Features
 
@@ -79,7 +62,6 @@ clientes/
 └── index.tsx
 ```
 
-<br>
 
 ## 📚 Documentação
 

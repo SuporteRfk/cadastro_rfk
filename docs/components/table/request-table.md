@@ -1,70 +1,87 @@
-# Documentação do `getRequestColumns`
+# Documentação do `RequestTable`
 
 ## 📁 Localização
-`/components/table/request-table.tsx`
+`/src/components/table/request-table.components.tsx`
 
 ## 📊 Visão Geral
 
-Este é o componente principal da funcionalidade de tabela de solicitações. Ele integra e orquestra todos os outros componentes da pasta `table`/, gerenciando a renderização, estados e a lógica de paginação, filtro e exibição dos dados.
+O componente `RequestTable` é a tabela principal de exibição de solicitações no sistema. Ele integra múltiplos subcomponentes — como filtros, cabeçalhos e paginação — com a tabela em si, utilizando o contexto global `RequestContext` para listar e gerenciar os dados das requisições.
+
+A tabela é altamente configurável e se adapta automaticamente à rota atual, diferenciando o comportamento quando o usuário está na tela de "Solicitar Alteração".
 
 ## 🔎 Detalhes Técnicos
 
-### ✅ Componentes utilizados:
+### 🎯 Props Recebidas
 
-| Componente                | Responsabilidade                                       |
-| ------------------------- | ------------------------------------------------------ |
-| `RequestTableHeader`      | Renderiza o cabeçalho da tabela                        |
-| `RequestTableBody`        | Renderiza as linhas e células da tabela                |
-| `RequestTablePagination`  | Controle de troca de páginas e linhas por página       |
-| `RequestTableFilterModal` | Exibe o modal com filtros de busca                     |
-| `LoadingSkelleton`        | Exibe placeholders quando a requisição está carregando |
-| `Table`                   | Wrapper do `shadcn/ui` com estrutura básica de tabela  |
+| Prop             | Tipo                    | Descrição                                                                 |
+|------------------|-------------------------|---------------------------------------------------------------------------|
+| `titlePage`      | `string`                | Título exibido na parte superior da tabela.                              |
+| `iconForm`       | `LucideIcon`            | Ícone exibido ao lado do título da página.                               |
+| `showFilterDash` | `boolean` (opcional)    | Controla se o botão de filtro deve ser exibido. Padrão: `true`.          |
+| `fixedFilter`    | `Partial<IQueryRequest>`| Filtros fixos aplicados à tabela.                                         |
 
-### 📦 Estados internos:
-- `observationOpenId`: controla qual linha está com observação expandida
-- `modalOpen`: (opcional) controla a exibição de modal de detalhes da solicitação
+---
 
-### 🧠 useEffect inicial:
-- No primeiro render, define um filtro base:
+### 🧠 Controle de Estado
 
-```tsx
-useEffect(() => {
-  setFilter({
-    offset: 0,
-    indexLimit: 10,
-  });
-}, []);
-```
+| Estado               | Tipo                         | Descrição                                                  |
+|----------------------|------------------------------|-------------------------------------------------------------|
+| `observationOpenId`  | `number \| null`             | Define qual observação de requisição está visível.         |
+| `modalOpen`          | `boolean`                    | Controla visibilidade do modal de detalhes.                |
+| `selectedRequest`    | `IViewRequest \| null`       | Requisição selecionada para visualização no modal.         |
 
-Isso garante que, ao montar a página, ela sempre começa da primeira página com 10 itens.
+---
 
-### ⚙️ Instância da Tabela:
-```tsx
-const table = useReactTable({
-  columns: getRequestColumns({ ... }),
-  data: request,
-  getCoreRowModel: getCoreRowModel(),
-});
-```
+### 🧩 Composição e Subcomponentes
 
-- `columns`: definidas via getRequestColumns
-- `data`: vem diretamente do contexto request
-- `getCoreRowModel`: função padrão para controle do corpo da tabela`
+- **`RequestTableFilter`**: Modal para filtros avançados.
+- **`RequestTableHeader`**: Cabeçalho com título, ícone e botão de filtro.
+- **`RequestTableBody`**: Corpo da tabela com linhas dinâmicas e interação.
+- **`RequestTablePagination`**: Controle de paginação.
+- **`ModalRequest`**: Modal para exibição ou revisão da requisição selecionada.
 
-### ⚖️ Regras de Uso
-- Este componente deve ser usado em páginas como: `pendentes`, `aprovados`, `dashboard`, etc.
-- Toda lógica de paginação e filtro é controlada via `RequestContext`.
-- Os dados são sempre buscados do servidor, respeitando `offset` e `indexLimit`.
+---
+
+### ⚙️ Integração com Contexto
+
+Consome o `RequestContext` para:
+
+- Obter e exibir a lista de requisições (`request`)
+- Gerenciar filtros (`filter`, `setFilter`)
+- Controlar estado de carregamento (`loadingSkelleton`)
+
+---
+
+## ⚖️ Regras de Uso
+
+- Deve estar dentro do escopo do `RequestContextProvider`.
+- Requer que a rota esteja corretamente mapeada no `React Router` para ativar `useLocation`.
+- Pode receber `fixedFilter` para pré-filtragem da tabela (ex: status fixo por aba).
+
+---
 
 ## 💻 Exemplo de Uso
+
 ```tsx
-<RequestTable titlePage="Pendentes" iconForm={HourglassIcon} />
+<RequestTable
+  titlePage="Solicitações Pendentes"
+  iconForm={FileIcon}
+  fixedFilter={{ status: StatusRequest.PENDENTE }}
+/>
 ```
 
-## 💡 Padrões seguidos
-- `Modularidade`: cada parte da tabela foi isolada em seu próprio componente.
-- `Legibilidade`: nomes claros e props bem nomeadas.
-- `Extensibilidade`: permite adicionar ordenação, modais, status, tooltips e multiseleção no futuro.
+---
 
-## 🔧 Responsabilidade
-Este componente não toma decisões de negócio diretamente — apenas orquestra os componentes e interage com o `RequestContext`.
+## 📚 Integração com o contexto
+
+- Atualiza o filtro global da tabela com `setFilter`
+- Reage às mudanças de rota via `useLocation`
+- Exibe modal dinâmico de acordo com a requisição clicada
+
+---
+
+## 💡 Melhorias planejadas (futuras)
+
+- Suporte a ordenação por coluna (com ícones clicáveis)
+- Agrupamento por tipo de solicitação
+- Exportação de dados em CSV

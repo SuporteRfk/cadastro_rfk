@@ -1,49 +1,87 @@
 # Documentação do `RequestTableBody`
 
 ## 📁 Localização
-`/components/table/request-table-body.tsx`
+`/src/components/table/request-table-body.components.tsx`
 
 ## 📊 Visão Geral
-Este componente é responsável por renderizar o corpo da tabela de solicitações. Ele percorre os dados fornecidos pelo `@tanstack/react-table` e monta dinamicamente as linhas e células.
 
-Também é aqui que ocorre o controle da exibição das observações extras relacionadas a uma solicitação (quando abertas).
+O componente `RequestTableBody` é responsável por renderizar o corpo da tabela principal de solicitações. Ele consome os dados processados pelo hook `useReactTable` e renderiza as linhas dinamicamente, além de exibir uma mensagem amigável quando não há registros.
+
+Utiliza o componente `MomentCoffe` para personalizar a experiência quando a tabela está vazia.
 
 ## 🔎 Detalhes Técnicos
 
-### ✅ Principais props:
-- `table`: instância do Table<`IViewRequest`> criada com `useReactTable`.
-- `observationOpenId`: ID da solicitação que está com observação expandida (pode ser `null`).
+### 🎯 Props Recebidas
 
-### 🔄 Lógica:
-- Percorre `table.getRowModel().rows` para renderizar cada linha.
-- Em cada linha:
-    - Renderiza as células visíveis com `row.getVisibleCells()`.
-    - Usa `flexRender()` para renderizar dinamicamente o conteúdo da célula.
-- Se o `observationOpenId` for igual ao `row.original.id`, renderiza uma segunda linha abaixo, mostrando o conteúdo de `observacao`.
+| Prop               | Tipo                       | Descrição                                                                  |
+|--------------------|----------------------------|-----------------------------------------------------------------------------|
+| `table`            | `Table<IViewRequest>`      | Instância da tabela gerada pelo `useReactTable`.                          |
+| `observationOpenId`| `number \| null`           | ID de requisição cuja observação está expandida (se aplicável).           |
 
-### ⚖️ Regras de Uso
-- Este componente deve ser usado dentro da `<Table>`, logo após o cabeçalho (`<RequestTableHeader />`).
-- Requer que o table seja corretamente configurado via `useReactTable()`.
-- O controle do ID expandido (`observationOpenId`) deve estar no componente pai, e atualizado com a função `onToggleObservation`.
+---
 
+### 🧠 Lógica Interna
+
+- A lista de linhas visíveis é obtida com `table.getRowModel().rows`.
+- Se não houver linhas (`rows.length === 0`), exibe:
+  - Uma célula única (`colSpan`) com o componente `MomentCoffe` e mensagem de “Nenhuma solicitação encontrada”.
+
+```tsx
+if (rows.length === 0) {
+  return (
+    <TableBody>
+      <TableRow>
+        <TableCell colSpan={table.getAllColumns().length}>
+          <MomentCoffe mensagem="Nenhuma solicitação encontrada" />
+        </TableCell>
+      </TableRow>
+    </TableBody>
+  );
+}
+```
+
+- Caso haja dados, renderiza:
+  - Linhas com estilos alternados (`odd:bg-neutral/10`, `even:bg-white`)
+  - Células com `flexRender(...)`, que permite suporte a JSX customizado
+
+---
+
+### 🎨 Estilo Visual
+
+- Alternância de cor entre linhas pares e ímpares
+- Hover com leve destaque (`hover:bg-accent/10`)
+- Altura flexível (`h-fit`), texto `text-sm`
+- Células com controle de bordas internas dependendo da posição
+
+---
+
+## ⚖️ Regras de Uso
+
+- Deve ser usado junto ao `RequestTableHeader` dentro do componente `Table`.
+- Exige que o hook `useReactTable` esteja corretamente configurado e passado via prop `table`.
+
+---
 
 ## 💻 Exemplo de Uso
+
 ```tsx
-<RequestTableBody
-  table={table}
-  observationOpenId={observationOpenId}
-/>
+<Table>
+  <RequestTableHeader table={table} />
+  <RequestTableBody table={table} observationOpenId={observationOpenId} />
+</Table>
 ```
 
-## 🔧 Exibição de Observações
-Quando o usuário clica para expandir uma linha, este componente renderiza uma linha adicional com o conteúdo de `row.original.observacao`. Se não houver texto, mostra a mensagem:
+---
 
-```
-    "Sem observação registrada para a solicitação de número X."
-```
+## 📚 Integração com o contexto
 
-## 🧠 FlexRender — explicação rápida
-- A função `flexRender(columnDef.cell, cell.getContext())` é parte da `@tanstack/react-table` e serve para:
-    - Renderizar dinamicamente o conteúdo da célula.
-    - Suporta tanto JSX quanto strings simples.
-    - É essencial para componentes com renderização customizada.
+- Este componente **não consome nenhum contexto diretamente**.
+- Depende dos dados fornecidos pela instância da tabela (`table`).
+
+---
+
+## 💡 Melhorias planejadas (futuras)
+
+- Renderização condicional de colunas específicas como ações
+- Animações ao expandir/contrair observações
+- Integração com `ReviewContext` para mostrar ícones ou marcações por linha

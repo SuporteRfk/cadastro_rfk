@@ -1,61 +1,49 @@
-# Documentação do Componente `FormProductPackagingInfo`;
+# 📁 Documentação do Componente `FormValidity`
 
 ## 📁 Localização
+`/components/form/form-validity.components.tsx`
 
-`/components/forms/form-product-packaging-info.components.ts`
+---
 
 ## 📊 Visão Geral
 
-O componente `FormValidity` é utilizado para exibir e editar informações relacionadas à **validade do produto** e **lotes**. Ele contém campos para selecionar o **tipo de prazo**, **prazo de validade**, **lote econômico** e **lote mínimo**. O componente é integrado ao `react-hook-form` para o gerenciamento do estado do formulário e validação.
+O componente `FormValidity` gerencia campos relacionados à **validade do produto** e parâmetros de **lotes mínimos e econômicos**. Ele se adapta aos modos `editing`, `viewing` e `reviewing`, garantindo consistência na exibição e edição dos dados.
 
-## 🔎 Detalhes Técnicos
+---
 
-### Dependências:
-- `react-hook-form:` Para integração com o gerenciamento de formulários.
-- `InputSelect`, `Input`:  Componentes de input utilizados para renderizar os campos de entrada.
-- `FormSection`: Componente de formulário que serve como container
+## 🧩 Props Aceitas
 
-## ⚙️ Propriedades
+| Prop      | Tipo                          | Descrição                                         |
+|-----------|-------------------------------|--------------------------------------------------|
+| `mode`    | `"editing"` \| `"viewing"` \| `"reviewing"` | Define o comportamento dos campos.       |
+| `methods` | `UseFormReturn<T>`            | Objeto do `react-hook-form` usado para controle. |
 
-### `mode` (opcional)
-- **Tipo**: `FormStateType`
-- **Descrição**: Define o modo de exibição dos campos. Dependendo do valor de `mode`, os campos podem estar desabilitados para edição.
-  - **Valores possíveis**:
-    - `"editing"`: Campos habilitados para edição.
-    - `"viewing"`: Campos desabilitados, apenas visualização.
-    - `"reviewing"`: Campos desabilitados, apenas revisão de dados.
+---
 
-### `methods` (obrigatório)
-- **Tipo**: `UseFormReturn<T>`
-- **Descrição**: O objeto retornado pelo `useForm` do `react-hook-form`. Contém os métodos e o estado do formulário, como `register`, `formState.errors`, etc., usados para associar os campos aos dados do formulário e realizar a validação.
+## 🧪 Campos Renderizados
 
-## 🎨 Funcionamento
+| Campo                 | Nome do Field     | Componente     | Ícone              |
+|----------------------|-------------------|----------------|--------------------|
+| Tipo de Prazo        | `tipo_prazo`      | `InputSelect`  | —                  |
+| Prazo de Validade    | `prazo_validade`  | `Input`        | `Clock`            |
+| Lote Econômico       | `lote_economico`  | `Input`        | `Boxes`            |
+| Lote Mínimo          | `lote_minimo`     | `Input`        | `PackageMinus`     |
 
-Este componente lida com quatro campos principais:
+Todos os campos usam `SafeReviewField` para alternar entre os modos de exibição e edição, e exibem erros de validação via `formState.errors`.
 
-1. **Tipo de Prazo**:
-   - Campo de **seleção** para escolher o tipo de prazo relacionado ao produto. A lista de opções é fornecida pelo **`ValidityPeriod`**.
-   - O campo é desabilitado quando o **`mode`** é **"viewing"** ou **"reviewing"**, permitindo apenas visualização.
+---
 
-2. **Prazo de Validade**:
-   - Campo de entrada para o **prazo de validade** do produto.
-   - O campo é desabilitado para edição quando o **`mode`** é **"viewing"** ou **"reviewing"**, tornando-o apenas para leitura.
+## 🔗 Conexões
 
-3. **Lote Econômico**:
-   - Campo de entrada para o **lote econômico** do produto.
-   - O campo também está desabilitado para edição quando o **`mode`** é **"viewing"** ou **"reviewing"**.
+- `Input`, `InputSelect`: Campos personalizados para entrada de dados e seleção.
+- `SafeReviewField`: Alterna entre edição, visualização e revisão.
+- `FormSection`: Agrupa os campos horizontalmente.
+- Ícones do `lucide-react`: `Clock`, `Boxes`, `PackageMinus`.
+- Enum `ValidityPeriod` (do projeto): Preenche as opções de `tipo_prazo`.
 
-4. **Lote Mínimo**:
-   - Campo de entrada para o **lote mínimo** do produto.
-   - O campo é tratado da mesma forma que os outros, desabilitado para edição quando o **`mode`** é **"viewing"** ou **"reviewing"**.
+---
 
-### Desabilitação de Campos:
-- Os campos de entrada podem ser desabilitados dependendo do valor da prop `mode`. Se `mode` for **"viewing"** ou **"reviewing"**, os campos se tornam **somente leitura** e não podem ser editados.
-
-### Integração com `react-hook-form`:
-- O componente usa `react-hook-form` para controlar o estado do formulário e a validação dos campos. Ele utiliza os métodos `register` e `formState.errors` para associar os campos aos dados do formulário e exibir as mensagens de erro de validação.
-
-## 💡 Exemplo de Uso
+## 💻 Exemplo de Uso
 
 ```tsx
 <FormValidity
@@ -63,3 +51,11 @@ Este componente lida com quatro campos principais:
   methods={methods}
 />
 ```
+
+---
+
+## 🧠 Por que usar este componente?
+
+- 🧪 Centraliza informações de validade e lotes do produto
+- 🔁 Facilita manutenção e reutilização de lógica em diferentes formulários
+- 🧼 Garante consistência visual e integração total com `react-hook-form`

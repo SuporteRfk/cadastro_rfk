@@ -16,6 +16,8 @@ Ele fornece:
 - Registro de usuário da controladoria no Supabase (quando aplicável)
 - Exibição de notificações (via `Toastify`) após transições
 
+---
+
 ## 🔍 Detalhamento das Funções e Estados
 
 ### `user`
@@ -52,18 +54,17 @@ user: {
     departaments: 'Comercial';
 };
 ```
-
 ### `isAuthenticated`
 - Tipo: `boolean`
 - Indica se o usuário está com sessão ativa e autenticado
 
 ### `isLoading`
 - Tipo: `boolean`
-- Utilizado para mostrar um `loading` global durante as transições de login, logout e verificações de sessão.
+- Utilizado para mostrar um `loading` global durante transições de login, logout e validação de sessão.
 
 ### `toastMessage`
-- Armazena uma notificação (mensagem e tipo) que só é exibida **após** o `isLoading` finalizar.
-- Mensagem pendente que será exibida após loading (usando o componente Toastify)
+- Tipo: `IToastifyMessageAuthContext | null`
+- Mensagem que será exibida após a finalização do carregamento, utilizando o componente `Toastify`.
 
 ```tsx
 useEffect(() => {
@@ -78,12 +79,13 @@ useEffect(() => {
 
 ### `loginService(dataLogin)`
 
-1. Chama a função `Login()` (API Keycloak)
-2. Salva os tokens (`access` e `refresh`) nos cookies
-3. Decodifica o token para extrair os dados do usuário
-4. Atualiza `user` e `isAuthenticated`
-5. Chama `registerUpdateUserController()` e caso o usuário seja da controladoria atualiza a tabela no `supabase` dos usuários aprovadores.
-6. Armazena `toastMessage`
+1. Chama a função `Login()` (Keycloak API)
+2. Salva os tokens (`access_token`, `refresh_token`) em cookies
+3. Decodifica o token com `decodeToken()`
+4. Constrói o usuário com `buildUserFromToken()`
+5. Atualiza `user` e `isAuthenticated`
+6. Caso o usuário seja aprovador (`access_approver`), registra/atualiza no Supabase com `upsertUserApprover()`
+7. Define `toastMessage` de boas-vindas ou erro, se aplicável
 
 **Importante:**
 - É utilizado `setTimeout` ao final para suavizar a transição de loading
@@ -93,19 +95,16 @@ useEffect(() => {
 
 ### `logoutService(toast?)`
 
-1. Chama a API de `Logout()` com `refresh_token`
-2. Remove cookies com os tokens
-3. Limpa estados (`user`, `isAuthenticated`)
-4. Exibe um Toastify:
-   - Se for passado um objeto toast, exibe esse.
-   - Caso contrário, exibe a mensagem padrão de logout (Sessão encerrada com sucesso).
-5. Finaliza o `loading` suavemente usando `setTimeout`.
+1. Chama `Logout()` na API com `refresh_token`
+2. Limpa cookies e estados (`user`, `isAuthenticated`)
+3. Exibe `toastMessage` customizado (ou mensagem padrão de logout)
+4. Navega para a página de login
 
 ---
 
 ### `checkSession()`
 
-Responsável por **verificar se a sessão é válida ao iniciar a aplicação** ou em intervalos regulares:
+Responsável por **verificar se a sessão é válida ao iniciar a aplicação**:
 
 1. Pega `access` e `refresh` dos cookies
 2. Se não houver tokens, chama `logoutService()`
@@ -120,20 +119,22 @@ Responsável por **verificar se a sessão é válida ao iniciar a aplicação** 
 
 ### `isTokenExpired(token)`
 
-Utiliza o `decodeToken()` para verificar se a propriedade `exp` (timestamp Unix) já passou em relação ao tempo atual.
+Verifica se o `exp` do token é menor que a data atual (timestamp unix).
 
 ---
 
 ### `refreshTokenService(tokenRefresh)`
 
-Chama o serviço do Keycloak para renovar os tokens.
-- Se falhar, executa `logoutService()` para forçar o re-login.
+1. Solicita novos tokens ao Keycloak
+2. Atualiza cookies
+3. Se falhar, executa `logoutService()`
 
 ---
 
 ### `scheduleTokenRefresh()`
 
-Agenda o próximo `refreshTokenService()` **30 segundos antes** do token expirar:
+Agenda uma renovação automática de token **30 segundos antes de expirar**:
+
 ```tsx
 const expiresIn = decoded.exp * 1000 - Date.now() - 30000;
 setTimeout(() => refreshTokenService(refreshToken), expiresIn);
@@ -145,18 +146,20 @@ Evita multiplas chamadas com `clearTimeout` e uma variável global `refreshTimeo
 
 ### `registerUpdateUserController()`
 
-- Verifica se o usuário logado tem `access_approver === true`
-- Se tiver, faz `upsert` (inserção/atualização) no Supabase com os dados do usuário
-- Mantém controle da controladoria sincronizado com as credenciais
+1. Verifica se o usuário tem `access_approver === true`
+2. Executa `upsertUserApprover()` no Supabase
+3. Mantém a base de aprovadores sincronizada com o login
 
 ---
 
 ## ⚖️ Regras de Uso
 
-- O `AuthContext` deve **envolver toda a aplicação** para prover acesso aos dados de login e funções de sessão
-- Não utilize diretamente cookies para ler dados de autenticação. Use o `user` do contexto
-- Não reescreva a lógica de validação de token fora deste contexto
-- Use `isAuthenticated` para controlar rotas privadas
+- O `AuthContext` deve **envolver toda a aplicação**
+- Use `useContext(AuthContext)` para consumir os dados
+- Nunca use cookies diretamente no componente
+- Controle de rotas privadas deve se basear em `isAuthenticated`
+
+---
 
 ## 💻 Exemplo de Uso
 
@@ -177,18 +180,9 @@ useEffect(() => {
 
 ## 🔗 Conexões e Dependências
 
-- `Login`, `Logout`, `RefreshToken`: Serviços da API do Keycloak
-- `decodeToken`: Utilitário que transforma o JWT em objeto decodificado
-- `buildUserFromToken`: Extrai dados como nome, email, roles do token
-- `Cookies`: Usado para armazenar e remover tokens
-- `Toastify`: Exibe mensagens de erro, sucesso e informações
-- `upsertUserApprover`: (Supabase) Sincroniza dados de controle
-
----
-
-Este contexto é o **coração da autenticação do sistema** e foi pensado para evitar:
-- Repetição de código
-- Erros por falta de validação de sessão
-- Experiências inconsistentes para o usuário
-
-Se for fazer ajustes, **documente a razão e valide o impacto em toda a aplicação**.
+- `Login`, `Logout`, `RefreshToken`: serviços de autenticação via Keycloak
+- `Cookies`: leitura e escrita dos tokens
+- `decodeToken`, `buildUserFromToken`: utilitários de interpretação do JWT
+- `Toastify`: exibição de mensagens
+- `upsertUserApprover`: integração com Supabase
+- `useNavigate`: redirecionamento após login/logout
