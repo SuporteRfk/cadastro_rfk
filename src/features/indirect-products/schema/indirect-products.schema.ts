@@ -19,9 +19,11 @@ export const indirectProductsRegisterSchema: yup.ObjectSchema<IIndirectProductsR
   criado_em: yup.string()
     .required("Data é obrigatório"),
   nome_solicitante: yup.string()
+    .transform((value) => value?.toLowerCase())
     .required("Por favor, informe seu nome"),
   email: yup.string()
     .email("Insira um e-mail valido")
+    .transform((value) => value?.toLowerCase())
     .required("E-mail é obrigatório"), 
   whatsapp: yup.string()
     .transform((value) => value.replace(/[\s()-]/g, ""))
