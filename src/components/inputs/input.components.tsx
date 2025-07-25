@@ -45,8 +45,8 @@ export const Input = ({name,label,placeholder,type = "text",register,error,icon:
                     {...register}
                     type={type}
                     name={name}
-                    defaultValue={value}
-                    onChange={(e) => setValue(e.target.value)}
+                    defaultValue={value.toUpperCase()}
+                    onChange={(e) => setValue(e.target.value.toUpperCase())}
                     placeholder={placeholder}
                     maxLength={maxCaractere}
                     readOnly={readOnly}
@@ -60,8 +60,9 @@ export const Input = ({name,label,placeholder,type = "text",register,error,icon:
                             if (nextInput) (nextInput as HTMLElement).focus();
                         }
                     }}
+                    
                         className={`
-                        w-full h-8 pl-10 pr-3 rounded-lg text-sm no-spinner 
+                        w-full h-8 pl-10 pr-3 rounded-lg text-sm no-spinner uppercase
                         border ${error ? 'border-error' : 'border-border'}
                         focus:outline-hidden ${error ? 'focus:border-error focus:ring-error' : 'focus:border-accent focus:ring-1 focus:ring-accent'}
                         ${readOnly ? 'cursor-not-allowed text-text-medium/75 bg-white-default/65' : 'cursor-text bg-white-default text-text-medium'}

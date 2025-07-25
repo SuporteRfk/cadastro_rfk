@@ -6,8 +6,8 @@ import * as yup from "yup";
 
 export const insumosRegisterSchema: yup.ObjectSchema<IInsumoRegister> = yup.object<IInsumoRegister>().shape({
     criado_em: yup.string().required("Data é obrigatório"),
-    email: yup.string().email("Insira um e-mail valido").required("E-mail é obrigatório"),
-    nome_solicitante: yup.string().required("Por favor, informe seu nome"),
+    email: yup.string().email("Insira um e-mail valido").transform((value) => value?.toLowerCase()).required("E-mail é obrigatório"),
+    nome_solicitante: yup.string().transform((value) => value?.toLowerCase()).required("Por favor, informe seu nome"),
     whatsapp: yup.string()
         .transform((value) => value.replace(/[\s()-]/g, ""))
         .min(14, 'Por favor, insira um número válido, Ex: +55 (11) 9 9999-0000')

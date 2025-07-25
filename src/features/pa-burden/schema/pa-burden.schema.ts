@@ -8,8 +8,10 @@ export const paBurdenRegisterSchema: yup.ObjectSchema<IPABurdenRegister> = yup.o
         .required("Data é obrigatório"),
     email: yup.string()
         .email("Insira um e-mail valido")
+        .transform((value) => value?.toLowerCase())
         .required("E-mail é obrigatório"),
     nome_solicitante: yup.string()
+        .transform((value) => value?.toLowerCase())
         .required("Por favor, informe seu nome"),
     whatsapp: yup.string()
         .transform((value) => value.replace(/[\s()-]/g, ""))
