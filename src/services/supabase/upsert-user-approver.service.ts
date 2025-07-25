@@ -8,7 +8,7 @@ export const upsertUserApprover = async (user: IUser): Promise<void> => {
         .from("usuarios_ativos_controladoria")
         .upsert({
             id: user.id_keycloak,
-            email: user.email,
+            email: user.email || `${user.fullName}@semEmail.com.br`,
             nome: user.fullName,
             ultimo_acesso: new Date() 
         },

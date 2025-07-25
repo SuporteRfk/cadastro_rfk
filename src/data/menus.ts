@@ -65,11 +65,11 @@ export const menuCommon:MenuItem[] =[
             {label: "Cad. Condição de Pagamento", path: "/cadastro/condicao-pagamento", icon: PaymentCoonditionIcon},
         ]
     },
-    {
-        label: "Solicitar Alteração",
-        icon: RequestChangeIcon,
-        path: "/solicitar-alteracao"
-    }
+    // {
+    //     label: "Solicitar Alteração",
+    //     icon: RequestChangeIcon,
+    //     path: "/solicitar-alteracao"
+    // }
 ];
 
 
