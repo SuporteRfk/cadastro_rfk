@@ -13,7 +13,7 @@ interface DateInputProps {
 
 export const DateInput = ({name,label,register,error,mode = "visualizacao"}: DateInputProps) => {
     const [currentDate, setCurrentDate] = useState<string>("");
-    const {watch} = useFormContext();
+    const {watch, setValue} = useFormContext();
     const value = watch(name);
     const initialized = useRef(false);        
        
@@ -26,6 +26,7 @@ export const DateInput = ({name,label,register,error,mode = "visualizacao"}: Dat
                 // Formata para YYYY-MM-DDTHH:MM (para input datetime-local)
                 const formattedDate = localDate.toISOString().slice(0, 16);
                 setCurrentDate(formattedDate);
+                setValue(name, formattedDate);
             } else if (value){
                 const date = new Date(value);
                 const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);

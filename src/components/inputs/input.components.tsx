@@ -15,9 +15,10 @@ interface InputProps {
     maxCaractere?: number;
     readOnly?: boolean;
     widthContainer?: string;
+    useUppercase?:boolean;
   }
 
-export const Input = ({name,label,placeholder,type = "text",register,error,icon: Icon,valueInitial="", maxCaractere,readOnly = false,widthContainer="w-full"}:InputProps) => {
+export const Input = ({name,label,placeholder,type = "text",register,error,icon: Icon,valueInitial="", maxCaractere,readOnly = false,widthContainer="w-full", useUppercase=true}:InputProps) => {
     const [value, setValue] = useState(valueInitial);
     const { watch } = useFormContext();
     const valueInputForm = watch(name) ?? "";
@@ -62,7 +63,7 @@ export const Input = ({name,label,placeholder,type = "text",register,error,icon:
                     }}
                     
                         className={`
-                        w-full h-8 pl-10 pr-3 rounded-lg text-sm no-spinner uppercase
+                        w-full h-8 pl-10 pr-3 rounded-lg text-sm no-spinner ${useUppercase && 'uppercase'}
                         border ${error ? 'border-error' : 'border-border'}
                         focus:outline-hidden ${error ? 'focus:border-error focus:ring-error' : 'focus:border-accent focus:ring-1 focus:ring-accent'}
                         ${readOnly ? 'cursor-not-allowed text-text-medium/75 bg-white-default/65' : 'cursor-text bg-white-default text-text-medium'}

@@ -59,6 +59,7 @@ export const LoginPage = () => {
                         error={methods.formState.errors.username?.message} 
                         placeholder="Digite seu usúario"
                         type="text"
+                        useUppercase={false}
                    />
                     <div className="relative w-full mb-6">
                         <label htmlFor="password"  className="text-sm font-medium pl-0.5 text-text-medium">
