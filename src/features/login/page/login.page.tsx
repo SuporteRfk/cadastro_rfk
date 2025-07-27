@@ -70,7 +70,7 @@ export const LoginPage = () => {
                             <input
                                 id="password"
                                 {...methods.register("password")}
-                                type="text"
+                                type={showPassword ? "text" : "password"}
                                 name="password"
                                 placeholder="Digite sua senha"
                                 className={`
