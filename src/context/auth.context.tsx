@@ -64,7 +64,6 @@ export const AuthProvider = ({children}:{children:ReactNode}) => {
             
             //🔹Armazena os tokens nos cookies 
             const isSecure = window.location.protocol === "https:";
-            console.log(isSecure, 'testando amb producao :D');
             if(isSecure){
                 Cookies.set("access_token_keycloak_cad_rfk", access_token, { secure: isSecure});
                 Cookies.set("refresh_token_keycloak_cad_rfk", refresh_token, { secure: isSecure});
@@ -119,6 +118,9 @@ export const AuthProvider = ({children}:{children:ReactNode}) => {
 
             Cookies.remove("access_token_keycloak_cad_rfk");
             Cookies.remove("refresh_token_keycloak_cad_rfk");
+            localStorage.removeItem("access_token_keycloak_cad_rfk");
+            localStorage.removeItem("refresh_token_keycloak_cad_rfk");
+            
             setUser(null);
             setIsAuthenticated(false);
             

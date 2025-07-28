@@ -45,8 +45,7 @@ export const  App = () =>  {
 
   },[pathName, isAuthenticated,navigate]);
 
-  console.log("nova versão")
-
+  
   return (
     isLoading || isAuthenticated === null || !isRouteReady? (
       <FullPageLoader/>
