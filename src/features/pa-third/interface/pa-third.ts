@@ -21,6 +21,8 @@ export interface IPAThird {
     peso_bruto: number;
     peso_liquido: number;
     rastro: Trail;
+    lastro: number; 
+    paletizacao: number; 
     codigo_barras: number;
     segundo_codigo_barras: number;
     nome_cientifico: string;

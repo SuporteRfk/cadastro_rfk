@@ -59,6 +59,16 @@ export const paThirdRegisterSchema: yup.ObjectSchema<IPAThirdRegister> = yup.obj
     rastro: yup.string()
         .oneOf(Object.values(Trail))
         .required("Por favor, informe o rastro"), 
+    lastro: yup.number()
+        .transform((value, originalValue) =>
+            originalValue === "" ? null : value
+        )   
+        .required("Por favor, informe o lastro"),
+    paletizacao: yup.number()
+        .transform((value, originalValue) =>
+            originalValue === "" ? null : value
+        )   
+    .required("Por favor, informe a paletização"),
     codigo_barras:yup.number()
         .transform((value, originalValue) =>
             originalValue === "" ? null : value
