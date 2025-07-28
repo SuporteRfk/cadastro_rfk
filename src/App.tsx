@@ -11,7 +11,7 @@ export const  App = () =>  {
   const {isAuthenticated, isLoading} = useContext(AuthContext);
   const location = useLocation();
   const navigate = useNavigate();
- const [isRouteReady, setIsRouteReady] = useState(false);
+  const [isRouteReady, setIsRouteReady] = useState(false);
   const pathName = location.pathname;
   const allRoutes = [
     ...publicRoutes.map(route => route.path),
@@ -45,6 +45,7 @@ export const  App = () =>  {
 
   },[pathName, isAuthenticated,navigate]);
 
+  console.log("nova versão")
 
   return (
     isLoading || isAuthenticated === null || !isRouteReady? (
