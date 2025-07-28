@@ -14,12 +14,13 @@ interface FormPalletizingTrackingConversionProps<T extends FieldValues> {
     mode?: FormStateType; // 'editing' | 'viewing' | 'reviewing';
     methods: UseFormReturn<T>;
     showConverters: boolean;
+    isPaThird?: boolean;
 }
 
-export const FormPalletizingTrackingConversion = <T extends FieldValues>({mode, methods, showConverters}:FormPalletizingTrackingConversionProps<T>) => {
+export const FormPalletizingTrackingConversion = <T extends FieldValues>({mode, methods, showConverters,isPaThird=false}:FormPalletizingTrackingConversionProps<T>) => {
     return(
         <FormSection className="xl:flex-row gap-1 md:gap-4 md:mt-3">
-           {showConverters ? (
+           {showConverters && (
                 <>
                     {/* Fator conversor */}
                     <SafeReviewField field="fator_conversor" mode={mode || "viewing"}>
@@ -45,7 +46,8 @@ export const FormPalletizingTrackingConversion = <T extends FieldValues>({mode, 
                         />
                     </SafeReviewField>
                 </>
-           ): (
+           )} 
+           {(!showConverters || isPaThird) && (
                <>
                     {/* paletizacao*/}
                     <SafeReviewField field="paletizacao" mode={mode || "viewing"}>
