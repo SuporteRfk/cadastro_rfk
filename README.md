@@ -70,16 +70,11 @@ npm run dev
 * Sempre documente novas funcionalidades.
 
 
-## 👨‍💻 Desenvolvedor
-
-Este projeto é mantido e desenvolvido por [Thiago Silva](https://github.com/ThiagoKalac) , como parte do processo de evolução interna dos fluxos operacionais da RFK.
-
-
 ## 📄 Licença
 Este projeto é de uso interno da RFK. Não possui licença aberta para uso externo.
 
 
-## Desenvolvedor
+## 👨‍💻Desenvolvedor
 Este sistema está sendo desenvolvido por [Thiago Silva](https://github.com/ThiagoKalac) com apoio da equipe de controladoria e TI da RFK.
 
 O objetivo é garantir a continuidade, escalabilidade e autonomia da equipe sobre os dados e processos internos.

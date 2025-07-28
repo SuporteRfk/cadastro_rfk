@@ -82,7 +82,7 @@ export const RegisterPAThird = () => {
                 <SubTitleForm title="Peso e Medidas"  styleLine="border-t-3 border-dashed border-strong/10 mt-4" icon={KgIcon}/>
                 
                 {/* Sessão de Conversor e Rastro */}
-                <FormPalletizingTrackingConversion methods={methods} showConverters/>
+                <FormPalletizingTrackingConversion methods={methods} showConverters isPaThird/>
 
                 {/* Sessão Pesos */}
                 <FormWeights methods={methods}/>

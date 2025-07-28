@@ -157,7 +157,7 @@ export const PAThirdFormManager = ({defaultValue, mode, isChange, loadingModal, 
             <SubTitleForm title="Peso e Medidas"  styleLine="border-t-3 border-dashed border-strong/10 mt-4" icon={KgIcon}/>
             
             {/* Sessão de Conversor e Rastro */}
-            <FormPalletizingTrackingConversion methods={methods} showConverters mode={mode}/>
+            <FormPalletizingTrackingConversion methods={methods} showConverters mode={mode} isPaThird/>
 
             {/* Sessão Pesos */}
             <FormWeights methods={methods} mode={mode}/>
