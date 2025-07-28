@@ -64,8 +64,14 @@ export const AuthProvider = ({children}:{children:ReactNode}) => {
             
             //🔹Armazena os tokens nos cookies 
             const isSecure = window.location.protocol === "https:";
-            Cookies.set("access_token_keycloak_cad_rfk", access_token, { secure: isSecure, httpOnly: false, });
-            Cookies.set("refresh_token_keycloak_cad_rfk", refresh_token, { secure: isSecure, httpOnly: false});
+            console.log(isSecure, 'testando amb producao :D');
+            if(isSecure){
+                Cookies.set("access_token_keycloak_cad_rfk", access_token, { secure: isSecure});
+                Cookies.set("refresh_token_keycloak_cad_rfk", refresh_token, { secure: isSecure});
+            }else{
+                localStorage.setItem("access_token_keycloak_cad_rfk", access_token);
+                localStorage.setItem("refresh_token_keycloak_cad_rfk", refresh_token);
+            }
 
             //🔹Decodifica o token e extrai as informações do usuário
             const tokenDecoded:ITokenBearer = decodeToken(access_token) as ITokenBearer;
@@ -143,11 +149,16 @@ export const AuthProvider = ({children}:{children:ReactNode}) => {
     //🔹Renova o token de acesso caso tenha expirado
     const refreshTokenService = async(token:string):Promise<void> => {
         try {
-         const { access_token, refresh_token } = await RefreshToken(token);
-         const isSecure = window.location.protocol === "https:";
-         Cookies.set("access_token_keycloak_cad_rfk", access_token, { secure: isSecure, httpOnly: false });
-         Cookies.set("refresh_token_keycloak_cad_rfk", refresh_token, { secure: isSecure, httpOnly: false });
-         scheduleTokenRefresh(access_token, refresh_token);  
+            const { access_token, refresh_token } = await RefreshToken(token);
+            const isSecure = window.location.protocol === "https:";
+            if(isSecure){
+                Cookies.set("access_token_keycloak_cad_rfk", access_token, { secure: isSecure});
+                Cookies.set("refresh_token_keycloak_cad_rfk", refresh_token, { secure: isSecure});
+            }else{
+                localStorage.setItem("access_token_keycloak_cad_rfk", access_token);
+                localStorage.setItem("refresh_token_keycloak_cad_rfk", refresh_token);
+            }
+            scheduleTokenRefresh(access_token, refresh_token);  
         } catch (error) {
             handleApiError(error, "Erro ao tentar renovar o token! Faça login novamente");
             logoutService({
@@ -171,8 +182,9 @@ export const AuthProvider = ({children}:{children:ReactNode}) => {
 
     //🔹Verifica a sessão do usuário ao carregar a aplicação
     const checkSession = async ():Promise<void> => {
-        const refreshToken = Cookies.get("refresh_token_keycloak_cad_rfk");
-        const accessToken = Cookies.get("access_token_keycloak_cad_rfk");
+        const accessToken = Cookies.get("access_token_keycloak_cad_rfk") || localStorage.getItem("access_token_keycloak_cad_rfk");
+        const refreshToken = Cookies.get("refresh_token_keycloak_cad_rfk") || localStorage.getItem("refresh_token_keycloak_cad_rfk");
+
         // 🔹 Se não houver tokens, desloga o usuário
         if (!accessToken || !refreshToken) {
             setIsAuthenticated(false);
