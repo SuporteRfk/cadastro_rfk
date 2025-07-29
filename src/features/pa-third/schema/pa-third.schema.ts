@@ -105,4 +105,5 @@ export const paThirdRegisterSchema: yup.ObjectSchema<IPAThirdRegister> = yup.obj
         )   
         .nullable()
         .notRequired(),
+    id_usr_keycloak: yup.string().required()
 });

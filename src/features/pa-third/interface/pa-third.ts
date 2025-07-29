@@ -34,6 +34,7 @@ export interface IPAThird {
     ncm: string;
     cest: string;
     grupo_tributario?: number | null;
+    id_usr_keycloak: string;
 };
 
 export interface IPAThirdRegister extends Omit<IPAThird, 'id'>{};
