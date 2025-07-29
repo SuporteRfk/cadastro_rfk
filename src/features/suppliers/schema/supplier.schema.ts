@@ -128,6 +128,8 @@ export const supplierRegisterSchema:yup.ObjectSchema<ISupplierRegisterForm> = yu
         .required("Por favor selecione o município"),
     cep: yup.string()
         .required("Por favor informe o CEP"),
+    id_usr_keycloak: yup.string()
+        .required()    
 });
 
 

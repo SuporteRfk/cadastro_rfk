@@ -33,6 +33,7 @@ export interface IIndirectProducts {
     tipo: TypeCodeIndirectProducts;
     unidade_medida: string;
     ncm: string;
+    id_usr_keycloak: string;
 }
 
 export interface IIndirectProductsRegister extends Omit<IIndirectProducts, "id"> {}

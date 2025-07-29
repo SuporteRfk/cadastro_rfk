@@ -92,5 +92,7 @@ export const insumosRegisterSchema: yup.ObjectSchema<IInsumoRegister> = yup.obje
             originalValue === "" ? null : value
         )   
         .nullable()
-        .notRequired()
+        .notRequired(),
+    id_usr_keycloak: yup.string()
+        .required()    
 });

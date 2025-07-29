@@ -27,6 +27,7 @@ export interface IInsumo {
     fator_conversor_alternativo?: number | null;
     tipo_conversor_alternativo?: ConverterType | null;
     nome_cientifico?: string | null;
+    id_usr_keycloak: string;    
 }
 
 export interface IInsumoRegister extends Omit<IInsumo, 'id'>{}

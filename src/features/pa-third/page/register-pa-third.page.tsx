@@ -24,7 +24,6 @@ export const RegisterPAThird = () => {
     
     const onSubmit = async (data: IPAThirdRegister) => {
         try {
-            console.log(data)
             setLoading(true);
             await insertPATerceiroService(data);
             Toastify({

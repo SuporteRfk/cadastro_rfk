@@ -146,4 +146,6 @@ export const paBurdenRegisterSchema: yup.ObjectSchema<IPABurdenRegister> = yup.o
         )
         .nullable()   
         .notRequired(),
+    id_usr_keycloak: yup.string()
+        .required()    
 });

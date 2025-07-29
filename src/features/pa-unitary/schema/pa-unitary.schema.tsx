@@ -148,4 +148,6 @@ export const paUnitaryRegisterSchema: yup.ObjectSchema<IPAUnitaryRegister> = yup
         )   
         .nullable()
         .notRequired(),
+    id_usr_keycloak: yup.string()
+        .required()
 });

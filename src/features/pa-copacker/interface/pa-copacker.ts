@@ -35,6 +35,7 @@ export interface IPACopacker {
     cest?: string | null;
     grupo_tributario?: number | null;
     armazem_padrao?: string | null;
+    id_usr_keycloak: string;
 };
 
 export interface IPACopackerRegister extends Omit<IPACopacker, 'id'>{};
