@@ -1,5 +1,6 @@
 import { PaymentConditionFormManager } from "@/features/payment-condition/components/payment-condition-form-manager";
 import { IndirectProductsFormManager } from "@/features/indirect-products/components/indirect-products-form-manager";
+import { RequestChangeFormManager } from "@/features/request-change/components/request-change-form-manager";
 import { UnitMeasureFormManager } from "@/features/unit-measure/components/unit-measure-form-manager";
 import { PACopackerFormManager } from "@/features/pa-copacker/components/pa-copacker-form-manager";
 import { PAUnitaryFormManager } from "@/features/pa-unitary/components/pa-unitary-form-manager";
@@ -23,7 +24,7 @@ interface ModalRequestRouterProps {
 }
 
 export const ModalRequestRouter = ( {request, mode, setLoadingModal,isTheRouteOfChange, loadingModal, setMode, setStatusLocal}:ModalRequestRouterProps) => {
-    
+    console.log(request)
     switch (request.tabela_origem) {
         case "cad_condicao_pagamento":
             return <ModalRequestWrapper 
@@ -135,6 +136,18 @@ export const ModalRequestRouter = ( {request, mode, setLoadingModal,isTheRouteOf
                         setMode={setMode}
                         setStatusLocal={setStatusLocal}
                     />
+        case "cad_alteracao": 
+            return <ModalRequestWrapper
+                        request={request}
+                        FormComponent={RequestChangeFormManager}
+                        mode={mode} 
+                        isTheRouteOfChange={isTheRouteOfChange} 
+                        setLoadingModal={setLoadingModal}
+                        loadingModal={loadingModal}
+                        setMode={setMode}
+                        setStatusLocal={setStatusLocal}
+                    />
+        
         default:
             return (
                 <div className="text-sm text-muted-foreground italic">

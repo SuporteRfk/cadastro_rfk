@@ -61,7 +61,9 @@ export enum TypeRequest {
     PA_UNITARY="PA Unitário",
     PA_THIRD="PA Terceiro",
     INDIRECT_PRODUCTS="Produtos Indiretos",
-    UNIT_MEASURE="Unidade de Medida"
+    UNIT_MEASURE="Unidade de Medida",
+    CHANGE_REQUEST="Alteração",
+    SERVICE="Serviço"
 };
 
 
