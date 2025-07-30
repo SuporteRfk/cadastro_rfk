@@ -18,7 +18,7 @@ export function RequestChangePage() {
     });
     
     const onSubmit = async (data: IRequestChangeRegister) => {
-        console.log(data)
+        
         try {
             setLoading(true);
             await insertRequestChangeService(data);
@@ -44,7 +44,7 @@ export function RequestChangePage() {
                 onSubmit={onSubmit}
             >
                 {/* Subtitulo */}
-                <SubTitleForm title="Dados para Alteração"  styleLine="border-t-3 border-dashed border-strong/10 mt-4"/>
+                <SubTitleForm title="Dados para Alteração"  styleLine="border-t-3 border-dashed border-strong/10 mt-4" icon={RequestChangeIcon}/>
                 
                 <FormInfoChangeRequest methods={methods}/>
             </FormLayout>

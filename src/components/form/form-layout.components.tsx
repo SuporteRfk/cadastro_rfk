@@ -6,7 +6,7 @@ import { DateInput, Input, InputSelect } from "../inputs";
 import { FormSection } from "./form-section.components";
 import { AuthContext, ModalContext } from "@/context";
 import { Button } from "../button/button.components";
-import { ReactNode, useContext, useEffect } from "react";
+import { ReactNode, useContext} from "react";
 import { FormStateType, Sectors } from "@/interfaces";
 import { ScrollArea } from "../ui";
 import { 
@@ -50,13 +50,10 @@ export const FormLayout = <T extends FieldValues> ({methods, onSubmit, children,
         }
     }
     
-    // adicionar id do usuario no keycloack
-    useEffect(() => {
-        if (user?.id_keycloak) {
-            methods.setValue("id_usr_keycloak" as Path<T>, user.id_keycloak as PathValue<T, Path<T>>);
-        }
-    }, [user?.id_keycloak, methods]);
-    
+    // setar o id do keycloak
+    methods.setValue("id_usr_keycloak" as Path<T>, user!.id_keycloak as PathValue<T, Path<T>>);
+
+       
     return(
         <ScrollArea className="max-h-[98vh] w-full min-w-0 max-w-[1920px] mx-auto rounded-lg">
             {/* Titulo do Formulário */}

@@ -21,6 +21,7 @@ import {
     FileX2 as DeniedRequestIcon,
     FileCheck2 as ApprovedRequestIcon,
     House as HomeIcon,
+    Wrench as ServiceIcon
 } from "lucide-react";
 
 
@@ -37,6 +38,7 @@ export const menuCommon:MenuItem[] =[
         children: [
             {label: "Cad. Clientes",path: "/cadastro/cliente",icon: UsersIcon},
             {label: "Cad. Fornecedores",path: "/cadastro/fornecedores",icon: SuppliersIcon},
+            {label: "Cad. Serviços",path: "/cadastro/servico",icon: ServiceIcon},
         ]
     },
     {

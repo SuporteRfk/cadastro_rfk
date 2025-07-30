@@ -12,6 +12,7 @@ import { RegisterClientPage } from "@/features/client/page/register-client.page"
 import { RegisterInsumo } from "@/features/insumos/page/register-insumo.page";
 import { DashboardPage } from "@/features/dashboard/page/dashboard.page";
 import { LoginPage } from "@/features/login/page/login.page";
+import { ServiceRegistrationPage } from "@/features/service-registration/page/service-registration.page";
 
 
 // Arquivo para organiar as rotas do sistema
@@ -21,6 +22,7 @@ export const privateRoutes = [
     {path: "/cadastro/cliente", element: RegisterClientPage},
     {path: "/cadastro/condicao-pagamento", element: RegisterPaymentCondition},
     {path: "/cadastro/fornecedores", element: RegisterSupplier},
+    {path: "/cadastro/servico", element: ServiceRegistrationPage},
     {path: "/cadastro/insumos", element: RegisterInsumo},
     {path: "/cadastro/pa-copacker", element: RegisterPACopacker},
     {path: "/cadastro/pa-fardo", element: RegisterPABurden},

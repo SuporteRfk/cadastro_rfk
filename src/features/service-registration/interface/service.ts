@@ -10,7 +10,6 @@ export interface IServiceRegistration {
     whatsapp: string;
     codigo_familia: FamilyCodeService;
     codigo_grupo: GroupCodeService;
-    nome_cadastro: string;
     tipo: TypeCodeService;
     descricao: string;
     codigo_servico:string;
