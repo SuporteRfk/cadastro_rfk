@@ -191,6 +191,7 @@ export const AuthProvider = ({children}:{children:ReactNode}) => {
         if (!accessToken || !refreshToken) {
             setIsAuthenticated(false);
             setUser(null);
+            navigate("/login", {replace:true})
             return;
         }
         
@@ -221,7 +222,7 @@ export const AuthProvider = ({children}:{children:ReactNode}) => {
         scheduleTokenRefresh(accessToken, refreshToken);
         
     }
-    console.log(user)
+    
     //🔹Registar ou atualizar usuario da controladoria 
     const registerUpdateUserController = async(user:IUser):Promise<void> => {
         if(!user.access_approver) return;
