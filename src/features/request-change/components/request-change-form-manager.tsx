@@ -14,7 +14,6 @@ import {
 interface RequestChangeFormManagerProps{
     defaultValue: IRequestChange;
     mode: FormStateType;
-    isChange: boolean;
     loadingModal: boolean;
     setLoadingModal: React.Dispatch<React.SetStateAction<boolean>>;
     status: StatusRequest;
@@ -24,7 +23,7 @@ interface RequestChangeFormManagerProps{
     setStatusLocal: React.Dispatch<React.SetStateAction<StatusRequest>>;
 };
 
-export const RequestChangeFormManager = ({defaultValue, mode, isChange, loadingModal, setLoadingModal, status, setMode, viewRequestId, obervationRequest,setStatusLocal}:RequestChangeFormManagerProps) => {
+export const RequestChangeFormManager = ({defaultValue, mode, loadingModal, setLoadingModal, status, setMode, viewRequestId, obervationRequest,setStatusLocal}:RequestChangeFormManagerProps) => {
     if(loadingModal){
         return <LoadingModal/> 
     };

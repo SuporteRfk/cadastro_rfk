@@ -21,7 +21,6 @@ import { useReview } from "@/context";
 interface ClientFormManagerProps{
     defaultValue: IClient;
     mode: FormStateType;
-    isChange: boolean;
     loadingModal: boolean;
     setLoadingModal: React.Dispatch<React.SetStateAction<boolean>>;
     status: StatusRequest;
@@ -31,7 +30,7 @@ interface ClientFormManagerProps{
     setStatusLocal: React.Dispatch<React.SetStateAction<StatusRequest>>;
 }
 
-export const ClientFormManager = ({defaultValue, mode, isChange, loadingModal,setLoadingModal, status, setMode, viewRequestId, obervationRequest, setStatusLocal}:ClientFormManagerProps) => {
+export const ClientFormManager = ({defaultValue, mode, loadingModal,setLoadingModal, status, setMode, viewRequestId, obervationRequest, setStatusLocal}:ClientFormManagerProps) => {
     
     if(loadingModal){
         return <LoadingModal/> 

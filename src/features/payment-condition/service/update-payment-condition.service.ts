@@ -4,7 +4,6 @@ import { IPaymentConditionRegister } from "../interface/payment-condition";
 
 //Atualizar Condicao de Pagamento 
 export const updatePaymentConditionService =async(id:number,dataUpdate:IPaymentConditionRegister):Promise<void> =>{
-    console.log('service:', dataUpdate)
     const {error} = await supabaseApi
         .from("cad_condicao_pagamento")
         .update({

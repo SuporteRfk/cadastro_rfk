@@ -41,8 +41,6 @@ export const getRequestService = async (filter?: IQueryRequest):Promise<{data:IV
     }
 
     
-    console.log(filter)
-
     const { data, count, error } = await query.order("id", { ascending: false });
 
     if(error){

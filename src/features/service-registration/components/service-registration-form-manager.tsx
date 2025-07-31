@@ -16,7 +16,6 @@ import { updateServiceRegistrationService } from "../service/update-service-regi
 interface RequestChangeFormManagerProps{
     defaultValue: IServiceRegistration;
     mode: FormStateType;
-    isChange: boolean;
     loadingModal: boolean;
     setLoadingModal: React.Dispatch<React.SetStateAction<boolean>>;
     status: StatusRequest;
@@ -26,7 +25,7 @@ interface RequestChangeFormManagerProps{
     setStatusLocal: React.Dispatch<React.SetStateAction<StatusRequest>>;
 };
 
-export const ServiceRegistrationFormManager = ({defaultValue, mode, isChange, loadingModal, setLoadingModal, status, setMode, viewRequestId, obervationRequest,setStatusLocal}:RequestChangeFormManagerProps) => {
+export const ServiceRegistrationFormManager = ({defaultValue, mode, loadingModal, setLoadingModal, status, setMode, viewRequestId, obervationRequest,setStatusLocal}:RequestChangeFormManagerProps) => {
     if(loadingModal){
         return <LoadingModal/> 
     };
@@ -96,7 +95,6 @@ export const ServiceRegistrationFormManager = ({defaultValue, mode, isChange, lo
                 viewRequestId,
                 setStatusLocal
             });
-            console.warn("Modo review: ", mode)
         } else {
             console.warn("Modo não tratado: ", mode)
         }

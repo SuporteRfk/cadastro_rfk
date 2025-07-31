@@ -20,25 +20,31 @@ export const clientRegisterFormSchema:yup.ObjectSchema<IClientRegisterForm> = yu
         .required("Por favor informe seu nome"),
     tipo: yup.string()
         .oneOf(Object.values(ClientType))
+        .transform((value) => value?.toUpperCase())
         .required("Por favor selecione o tipo de cliente"),
     fisica_juridica: yup.string()
         .oneOf(Object.values(PfOrPj))
+        .transform((value) => value?.toUpperCase())
         .required("Selecione o tipo de cadastro"),
     cnpj_cpf: yup.string()
         .transform((value) => value.replace(/\D/g, ""))
         .required("Por favor informe o CNPJ/CPF"),
     razao_social: yup.string()
+        .transform((value) => value?.toUpperCase())
         .required("Por favor informe a razão social"),
     nome_fantasia: yup.string()
-        .transform((value, originalValue) =>
-            originalValue === "" ? null : value
-        )   
+        .transform((value) =>{
+            console.log(value)
+            if(!value) return null;
+            return value.toUpperCase();
+        })  
         .nullable()
         .notRequired(),
     cnae: yup.string()
-        .transform((value, originalValue) =>
-            originalValue === "" ? null : value
-        )   
+        .transform((value) =>{
+            if(!value) return null;
+            return value.toUpperCase();
+        }) 
         .nullable()
         .notRequired(),
     telefone_1: yup.string()
@@ -58,16 +64,16 @@ export const clientRegisterFormSchema:yup.ObjectSchema<IClientRegisterForm> = yu
         .nullable()
         .transform((value) => value ? value.replace(/[\s()-]/g, "") : "")
         .test("valid-telefone_3", "Por favor insira um telefone fixo válido, Ex: (11) 3456-7890", value => {
-        if (!value) return true;
-        return /^\+?\d{10,13}$/.test(value);
+            if (!value) return true;
+            return /^\+?\d{10,13}$/.test(value);
         }),
     telefone_4: yup.string()
         .notRequired()
         .nullable()
         .transform((value) => value ? value.replace(/[\s()-]/g, "") : "")
         .test("valid-telefone_4", "Por favor insira um telefone fixo válido, Ex: (11) 3456-7890", value => {
-        if (!value) return true;
-        return /^\+?\d{10,13}$/.test(value);
+            if (!value) return true;
+            return /^\+?\d{10,13}$/.test(value);
         }),
     inscricao_estadual: yup.string()
         .transform((value, originalValue) =>
@@ -83,13 +89,15 @@ export const clientRegisterFormSchema:yup.ObjectSchema<IClientRegisterForm> = yu
         .notRequired(),    
     email_cliente: yup.string()
         .email("Insira um e-mail valido")
-        .transform((value, originalValue) =>
-            originalValue === "" ? null : value
-        )   
+        .transform((value) =>{
+            if(!value) return null;
+            return value.toUpperCase();
+        }) 
         .nullable()
         .notRequired(),
     tpj: yup.string()
         .oneOf(Object.values(ClientTpj))
+        .transform((value) => value?.toUpperCase())
         .required("Por favor selecione o tipo de pessoa jurídica"),
     contribuinte: yup.string()
         .oneOf(Object.values(OptionYesNo))
@@ -116,20 +124,25 @@ export const clientRegisterFormSchema:yup.ObjectSchema<IClientRegisterForm> = yu
             }
         }),
     endereco: yup.string()
+        .transform((value) => value?.toUpperCase())
         .required("Por favor informe o endereço"),
     numero: yup.string()
         .required("Informe o número"),
     bairro: yup.string()
+        .transform((value) => value?.toUpperCase())
         .required("Por favor informe o bairro"),
     complemento: yup.string()
-        .transform((value, originalValue) =>
-            originalValue === "" ? null : value
-        )   
+        .transform((value) =>{
+            if(!value) return null;
+            return value.toUpperCase();
+        })  
         .nullable()
         .notRequired(),
     estado: yup.string()
+        .transform((value) => value?.toUpperCase())
         .required("Por favor, informe o estado"),
     municipio: yup.string()
+        .transform((value) => value?.toUpperCase())
         .required("Por favor, informe o município"),
     cep: yup.string()
         .required("Por favor, informe o CEP"),
@@ -139,7 +152,7 @@ export const clientRegisterFormSchema:yup.ObjectSchema<IClientRegisterForm> = yu
     endereco_cobranca: yup.string()
         .when('mesmo_endereco_cobranca', ([value]) => {
         return value === "não" 
-            ? yup.string().required("Por favor informe o endereço de cobrança")
+            ? yup.string().transform((value) => value?.toUpperCase()).required("Por favor informe o endereço de cobrança")
             : yup.string().nullable().notRequired()
     }),
     numero_cobranca: yup.string()
@@ -150,23 +163,24 @@ export const clientRegisterFormSchema:yup.ObjectSchema<IClientRegisterForm> = yu
     }),
     bairro_cobranca: yup.string().when('mesmo_endereco_cobranca', ([value]) => {
         return value === "não" 
-            ? yup.string().required("Por favor informe o bairro de cobrança")
+            ? yup.string().transform((value) => value?.toUpperCase()).required("Por favor informe o bairro de cobrança")
             : yup.string().nullable().notRequired()
     }),
     complemento_cobranca: yup.string()
-        .transform((value, originalValue) =>
-            originalValue === "" ? null : value
-        )   
+        .transform((value) =>{
+            if(!value) return null;
+            return value.toUpperCase();
+        })   
         .nullable()
         .notRequired(),
     estado_cobranca: yup.string().when('mesmo_endereco_cobranca', ([value]) => {
         return value === "não" 
-        ? yup.string().required("Por favor informe o estado de cobrança")
+        ? yup.string().transform((value) => value?.toUpperCase()).required("Por favor informe o estado de cobrança")
         : yup.string().nullable().notRequired()
     }),
     municipio_cobranca: yup.string().when('mesmo_endereco_cobranca', ([value]) => {
         return value === "não" 
-        ? yup.string().required("Por favor informe o município de cobrança")
+        ? yup.string().transform((value) => value?.toUpperCase()).required("Por favor informe o município de cobrança")
         : yup.string().nullable().notRequired()
     }),
     cep_cobranca: yup.string().when('mesmo_endereco_cobranca', ([value] ) => {

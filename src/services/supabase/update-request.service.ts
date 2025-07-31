@@ -8,7 +8,6 @@ export const updateRequestService = async (dataUpdate: IUpdateRequest) => {
         
         const {error: RPCError} = await supabaseApi
             .rpc("updateEditSolicitacao", {
-                alteracoes_valor: dataUpdate.alteracao || null,
                 motivo_recusa_valor: dataUpdate.motivo_recusa || null,
                 novo_solicitante: dataUpdate.novo_solicitante,
                 observacao_valor: dataUpdate.observacao || null,

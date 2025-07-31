@@ -16,33 +16,30 @@ interface ModalRequestActionsProps {
   request: IViewRequest;
   setMode: React.Dispatch<React.SetStateAction<FormStateType>>
   mode: FormStateType;
-  isTheRouteOfChange: boolean;
   setloadingModal: React.Dispatch<React.SetStateAction<boolean>>
   setStatusLocal:React.Dispatch<React.SetStateAction<StatusRequest>>
 }
 
-export const ModalRequestActions = ({ request, mode, setMode, isTheRouteOfChange, setloadingModal,setStatusLocal }: ModalRequestActionsProps) => {
+export const ModalRequestActions = ({ request, mode, setMode, setloadingModal,setStatusLocal }: ModalRequestActionsProps) => {
   const { user } = useContext(AuthContext);
   const { openModal } = useContext(ModalContext);
 
   const isUserApprover = user?.access_approver;
   const isPending = request.status === StatusRequest.PENDENTE;
   const isReview = request.status === StatusRequest.REVISAO;
-  const isApprover = request.status === StatusRequest.APROVADO;
-  const requestEmail = request.email;
+  const idKeycloack = request.id_usr_keycloak;
 
   
   const handleReleaseEdit = ():boolean => {
-    if(isUserApprover) return true; 
-    
-    if(isTheRouteOfChange){
-        return isPending || isReview || isApprover
-     }
-     if(!isTheRouteOfChange){
-        return (user?.email.toLowerCase() === requestEmail && request.status !== StatusRequest.NEGADO) ;
-     }
+    if(isUserApprover){
+        return true; 
+    } 
 
-     return false
+    if(!isUserApprover && idKeycloack === user?.id_keycloak && (isPending || isReview)){
+        return true;
+    }
+
+    return false
   }
   
   // hook para aprovar a solicitação

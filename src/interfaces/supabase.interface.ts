@@ -81,11 +81,5 @@ export interface IUpdateRequest {
     observacao?: string;
     motivo_recusa?: {
         [key: string]: string;
-    },
-    alteracao?: {
-         [key:string]:{
-            of: string;
-            to: string;
-        }
     }
 };
