@@ -1,5 +1,6 @@
 import { IPaymentCondition } from "@/features/payment-condition/interface/payment-condition";
 import { IIndirectProducts } from "@/features/indirect-products/interface/indirect-products";
+import { IServiceRegistration } from "@/features/service-registration/interface/service";
 import { IRequestChange } from "@/features/request-change/interface/request-change";
 import { FormStateType, IViewRequest, PfOrPj, StatusRequest } from "@/interfaces";
 import { IUnitMeasure } from "@/features/unit-measure/interface/unit-measure";
@@ -27,7 +28,8 @@ type EntityTypes =
   | IPABurden
   | IPAThird
   | IPAUnitary
-  | IRequestChange;
+  | IRequestChange
+  | IServiceRegistration;
 
 
 type Extended<T> = T & Record<string, any>;

@@ -21,6 +21,7 @@ export interface IViewRequest {
     } | null;
     nome_solicitante: string;
     email: string;
+    id_usr_keycloak: string;
     whatsapp: string;
     id_fk: number;
 };
@@ -36,6 +37,7 @@ export interface IQueryRequest {
     email?: string | null;
     indexLimit?: number | null;
     offset?: number | null;
+    idKeycloack?: string | null;
 }
 
 

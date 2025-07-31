@@ -1,18 +1,20 @@
-import { FormActionsButtonsRequest, FormInfoChangeRequest, FormLayout, FormObservationDeniedFild, LoadingModal, RequestDeniedInfo, SubTitleForm, Toastify } from "@/components";
+import { FormActionsButtonsRequest, FormLayout, FormObservationDeniedFild, FormProductCategorySelector, LoadingModal, RequestDeniedInfo, SubTitleForm, Toastify } from "@/components";
 import { useDeniedRequest, useEditRequest, useObservationDenied, useReviewRequest } from "@/hooks";
-import { updateRequestChangeService } from "../service/update-request-change.service";
-import { IRequestChange, IRequestChangeRegister } from "../interface/request-change";
-import { requestChangeSchema } from "../schema/request-change.shema";
+import { IServiceRegister, IServiceRegistration } from "../interface/service";
 import { FormStateType, StatusRequest } from "@/interfaces";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { useReview } from "@/context";
 import {
-    ClipboardPen as RequestChangeIcon,
+     Wrench as ServiceIcon,
 } from "lucide-react";
+import { serviceRegistrationSchema } from "../schema/service-registration.schema";
+import { FormDescriptionService } from "@/components/form/form-description-service";
+import { FamilyCodeService, GroupCodeService, TypeCodeService } from "../interface/service-enum";
+import { updateServiceRegistrationService } from "../service/update-service-registration.service";
 
 interface RequestChangeFormManagerProps{
-    defaultValue: IRequestChange;
+    defaultValue: IServiceRegistration;
     mode: FormStateType;
     isChange: boolean;
     loadingModal: boolean;
@@ -24,24 +26,24 @@ interface RequestChangeFormManagerProps{
     setStatusLocal: React.Dispatch<React.SetStateAction<StatusRequest>>;
 };
 
-export const RequestChangeFormManager = ({defaultValue, mode, isChange, loadingModal, setLoadingModal, status, setMode, viewRequestId, obervationRequest,setStatusLocal}:RequestChangeFormManagerProps) => {
+export const ServiceRegistrationFormManager = ({defaultValue, mode, isChange, loadingModal, setLoadingModal, status, setMode, viewRequestId, obervationRequest,setStatusLocal}:RequestChangeFormManagerProps) => {
     if(loadingModal){
         return <LoadingModal/> 
     };
 
-    const methods= useForm<IRequestChangeRegister>({
+    const methods= useForm<IServiceRegister>({
         defaultValues: defaultValue,
-        resolver: yupResolver(requestChangeSchema)
+        resolver: yupResolver(serviceRegistrationSchema)
     });
 
 
     // Hook para lidar com editar a form
-    const { handleEdit } = useEditRequest<IRequestChangeRegister>({
+    const { handleEdit } = useEditRequest<IServiceRegister>({
         setLoadingModal,
         setMode,
         status,
         viewRequestId,
-        updateFunction: updateRequestChangeService,
+        updateFunction: updateServiceRegistrationService,
         setStatusLocal
     });
 
@@ -49,13 +51,12 @@ export const RequestChangeFormManager = ({defaultValue, mode, isChange, loadingM
     const denyRequest = useDeniedRequest(); // salvar no supabase
     const { errorObservation, observationDenied, reset ,setObservationDenied ,validate} = useObservationDenied(); // lidar com a observação, salvar/apagar
 
-
     //Hook para lidar com o modo de revisão e contexto da revisão para lidar com campos vazios
     const reviewRequest = useReviewRequest(); // salvar no supabase
     const {hasEmptyReasons, setShowError} = useReview(); // funçao para verificar se existem campos vazios no modo revisão
 
      // Função para saber qual função irá chamar no botão de salvar, dependendo o modo.
-    const handleConfirm = async (data: IRequestChangeRegister) => {
+    const handleConfirm = async (data: IServiceRegister) => {
         //modo edição
         if(mode === "editing"){
             await handleEdit(defaultValue.id, data);
@@ -76,6 +77,7 @@ export const RequestChangeFormManager = ({defaultValue, mode, isChange, loadingM
                 setStatusLocal
             })
             reset();
+            
         } else if (mode === "reviewing"){
             // modo revisão
             if (hasEmptyReasons()) {
@@ -94,6 +96,7 @@ export const RequestChangeFormManager = ({defaultValue, mode, isChange, loadingM
                 viewRequestId,
                 setStatusLocal
             });
+            console.warn("Modo review: ", mode)
         } else {
             console.warn("Modo não tratado: ", mode)
         }
@@ -101,22 +104,32 @@ export const RequestChangeFormManager = ({defaultValue, mode, isChange, loadingM
 
     return (
         <FormLayout 
-            titleForm={`Alteraçao de Cadastro - #${defaultValue?.id}`} 
-            iconForm={RequestChangeIcon}
+            titleForm={`Cadastro de Serviço - #${defaultValue?.id}`} 
+            iconForm={ServiceIcon}
             showButtonsDefault={false}   
             loading={loadingModal} 
             methods={methods}
             mode={mode}
         >
             {/* Sessão para mostrar a obervação quando a solicitação for negada */}
-                {(mode === "viewing" && status === StatusRequest.NEGADO && obervationRequest) && (
-                    <RequestDeniedInfo observation={obervationRequest}/>
-                )}
+            {(mode === "viewing" && status === StatusRequest.NEGADO && obervationRequest) && (
+                <RequestDeniedInfo observation={obervationRequest}/>
+            )}
             
             {/* Subtitulo */}
-            <SubTitleForm title="Dados para Alteração"  styleLine="border-t-3 border-dashed border-strong/10 mt-4" icon={RequestChangeIcon}/>
+            <SubTitleForm title="Dados do Serviço"  styleLine="border-t-3 border-dashed border-strong/10 mt-4" icon={ServiceIcon}/>
+                
+            {/* Código e descrição do serviço */}
+            <FormDescriptionService methods={methods} mode={mode}/>
             
-            <FormInfoChangeRequest methods={methods} mode={mode}/>
+            {/* Tipo , Grupo E Familia do serviço */}
+            <FormProductCategorySelector 
+                methods={methods} 
+                family={Object.values(FamilyCodeService)}
+                group={Object.values(GroupCodeService)}
+                type={Object.values(TypeCodeService)}
+                mode={mode}
+            />
 
             {/* Sessão para informar o motivo que está negando a solicitação */}
             {mode === "denied" && (
@@ -126,14 +139,13 @@ export const RequestChangeFormManager = ({defaultValue, mode, isChange, loadingM
                     error={errorObservation}
                 />
             )}
-
-            
+          
             {/* Botões de salvar / cancelar */}
             <FormActionsButtonsRequest
                 methods={methods}
                 mode={mode}
                 setMode={setMode}
-                onConfirm={(data) => handleConfirm( data as IRequestChangeRegister)}
+                onConfirm={(data) => handleConfirm( data as IServiceRegister)}
             />
         </FormLayout>
     );

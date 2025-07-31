@@ -1,3 +1,4 @@
+import { ServiceRegistrationFormManager } from "@/features/service-registration/components/service-registration-form-manager";
 import { PaymentConditionFormManager } from "@/features/payment-condition/components/payment-condition-form-manager";
 import { IndirectProductsFormManager } from "@/features/indirect-products/components/indirect-products-form-manager";
 import { RequestChangeFormManager } from "@/features/request-change/components/request-change-form-manager";
@@ -24,7 +25,6 @@ interface ModalRequestRouterProps {
 }
 
 export const ModalRequestRouter = ( {request, mode, setLoadingModal,isTheRouteOfChange, loadingModal, setMode, setStatusLocal}:ModalRequestRouterProps) => {
-    console.log(request)
     switch (request.tabela_origem) {
         case "cad_condicao_pagamento":
             return <ModalRequestWrapper 
@@ -140,6 +140,17 @@ export const ModalRequestRouter = ( {request, mode, setLoadingModal,isTheRouteOf
             return <ModalRequestWrapper
                         request={request}
                         FormComponent={RequestChangeFormManager}
+                        mode={mode} 
+                        isTheRouteOfChange={isTheRouteOfChange} 
+                        setLoadingModal={setLoadingModal}
+                        loadingModal={loadingModal}
+                        setMode={setMode}
+                        setStatusLocal={setStatusLocal}
+                    />
+        case "cad_servico": 
+            return <ModalRequestWrapper
+                        request={request}
+                        FormComponent={ServiceRegistrationFormManager}
                         mode={mode} 
                         isTheRouteOfChange={isTheRouteOfChange} 
                         setLoadingModal={setLoadingModal}
