@@ -30,6 +30,7 @@ export interface ISupplier {
     municipio: string;
     estado: string;
     produtor_rural: OptionYesNo;
+    id_usr_keycloak: string;
 };
 
 export interface ISupplierRegisterForm extends Omit<ISupplier, 'id'> {

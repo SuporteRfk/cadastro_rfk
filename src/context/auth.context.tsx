@@ -191,6 +191,7 @@ export const AuthProvider = ({children}:{children:ReactNode}) => {
         if (!accessToken || !refreshToken) {
             setIsAuthenticated(false);
             setUser(null);
+            navigate("/login", {replace:true})
             return;
         }
         
@@ -221,7 +222,7 @@ export const AuthProvider = ({children}:{children:ReactNode}) => {
         scheduleTokenRefresh(accessToken, refreshToken);
         
     }
-
+    
     //🔹Registar ou atualizar usuario da controladoria 
     const registerUpdateUserController = async(user:IUser):Promise<void> => {
         if(!user.access_approver) return;
@@ -229,7 +230,7 @@ export const AuthProvider = ({children}:{children:ReactNode}) => {
         try {
             await upsertUserApprover(user);
         } catch (error) {
-            console.error(error);
+            console.error('Upsert usuario controladoria: ', error);
             handleApiError(error,'Upsert usuario controladoria')
         }
     };

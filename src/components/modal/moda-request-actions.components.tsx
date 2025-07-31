@@ -39,7 +39,7 @@ export const ModalRequestActions = ({ request, mode, setMode, isTheRouteOfChange
         return isPending || isReview || isApprover
      }
      if(!isTheRouteOfChange){
-        return (user?.email === requestEmail && request.status !== StatusRequest.NEGADO) ;
+        return (user?.email.toLowerCase() === requestEmail && request.status !== StatusRequest.NEGADO) ;
      }
 
      return false

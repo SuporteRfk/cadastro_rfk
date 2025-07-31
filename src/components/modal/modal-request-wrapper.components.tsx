@@ -1,8 +1,11 @@
 import { IPaymentCondition } from "@/features/payment-condition/interface/payment-condition";
 import { IIndirectProducts } from "@/features/indirect-products/interface/indirect-products";
-import { IUnitMeasure } from "@/features/unit-measure/interface/unit-measure";
-import { IPACopacker } from "@/features/pa-copacker/interface/pa-copacker";
+import { IServiceRegistration } from "@/features/service-registration/interface/service";
+import { IRequestChange } from "@/features/request-change/interface/request-change";
 import { FormStateType, IViewRequest, PfOrPj, StatusRequest } from "@/interfaces";
+import { IUnitMeasure } from "@/features/unit-measure/interface/unit-measure";
+import { setPjOrPfSuppliers } from "@/features/suppliers/utils/set-pj-or-pf";
+import { IPACopacker } from "@/features/pa-copacker/interface/pa-copacker";
 import { IPAUnitary } from "@/features/pa-unitary/interface/pa-unitary";
 import { IPABurden } from "@/features/pa-burden/interface/pa-burden";
 import { ISupplier } from "@/features/suppliers/interface/supplier";
@@ -12,7 +15,6 @@ import { IInsumo } from "@/features/insumos/interface/insumos";
 import { IClient } from "@/features/client/interface/client";
 import { handleApiError, applyMasks } from "@/utils";
 import { useEffect, useState } from "react";
-import { setPjOrPfSuppliers } from "@/features/suppliers/utils/set-pj-or-pf";
 import { ReviewProvider } from "@/context";
 
 type EntityTypes =
@@ -25,7 +27,9 @@ type EntityTypes =
   | IPACopacker
   | IPABurden
   | IPAThird
-  | IPAUnitary;
+  | IPAUnitary
+  | IRequestChange
+  | IServiceRegistration;
 
 
 type Extended<T> = T & Record<string, any>;

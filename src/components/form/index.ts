@@ -12,6 +12,7 @@ export * from "./form-product-code.components";
 export * from "./form-actions-buttons-request";
 export * from "./sub-title-form.components";
 export * from "./form-telephone.components";
+export * from "./form-info-change-request";
 export * from "./form-validity.components";
 export * from "./form-section.components";  
 export * from "./form-weights.components";

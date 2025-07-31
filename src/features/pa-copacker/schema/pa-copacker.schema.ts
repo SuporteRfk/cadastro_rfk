@@ -102,5 +102,7 @@ export const paCopackerRegisterSchema: yup.ObjectSchema<IPACopackerRegister> = y
             originalValue === "" ? null : value
         )  
         .nullable()
-        .notRequired()    
+        .notRequired(),
+    id_usr_keycloak: yup.string()
+        .required()        
 });

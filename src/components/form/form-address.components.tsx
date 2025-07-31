@@ -66,6 +66,15 @@ export const FormAddress = <T extends FieldValues>({mode, methods, isBillingAddr
             setLoading(true);
             const address = await consultationCepService(zipCode);
             
+            // 🔒 Se todos os campos forem undefined ou nulos, não faz nada
+            const isEmpty = Object.values(address).every((value) => value === undefined || value === null || value === "");
+
+            if (isEmpty) {
+                console.warn("CEP inválido ou não encontrado. Endereço não preenchido.");
+                return; // 🛑 não seta nada
+            }
+
+
             if(address){
                 methods.setValue(fieldConfig.zip.name as Path<T>, address.cep as PathValue<T, Path<T>>);
                 methods.setValue(fieldConfig.address.name as Path<T>, address.endereco as PathValue<T, Path<T>>);

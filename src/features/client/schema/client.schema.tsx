@@ -8,6 +8,7 @@ export const clientRegisterFormSchema:yup.ObjectSchema<IClientRegisterForm> = yu
         .required("Data é obrigatório"),
     email: yup.string()
         .email("Insira um e-mail valido")
+        .transform((value) => value?.toLowerCase())
         .required("E-mail é obrigatório"),
     whatsapp: yup.string()
         .transform((value) => value.replace(/[\s()-]/g, ""))
@@ -15,6 +16,7 @@ export const clientRegisterFormSchema:yup.ObjectSchema<IClientRegisterForm> = yu
         .matches(/^\+?\d{12,13}$/, "Número inválido")
         .required("Por favor informe o número do whatsapp com o DDD"),
     nome_solicitante: yup.string()
+        .transform((value) => value?.toLowerCase())
         .required("Por favor informe seu nome"),
     tipo: yup.string()
         .oneOf(Object.values(ClientType))
@@ -171,7 +173,8 @@ export const clientRegisterFormSchema:yup.ObjectSchema<IClientRegisterForm> = yu
         return value === "não" 
         ? yup.string().required("Por favor informe o CEP")
         : yup.string().nullable().notRequired()
-    }),    
+    }),
+    id_usr_keycloak: yup.string().required()    
 });
 
 

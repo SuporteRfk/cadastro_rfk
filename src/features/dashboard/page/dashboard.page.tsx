@@ -13,13 +13,13 @@ export const DashboardPage = () => {
     
     
     useEffect(() => {
-           if(!user) return;
-            
-          if(!user.access_approver){
-            setFilter({ offset: 0, indexLimit: filter?.indexLimit || 10, email: user.email });
-          } else{
+        if(!user) return;
+        
+        if(!user.access_approver){
+            setFilter({ offset: 0, indexLimit: filter?.indexLimit || 10, email: user.email, idKeycloack: user.id_keycloak });
+        } else{
             setFilter({ offset: 0, indexLimit: filter?.indexLimit || 10});
-          }
+        }
     }, [user]);
 
     return ((

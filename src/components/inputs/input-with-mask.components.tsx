@@ -6,7 +6,7 @@ import { IconType } from "react-icons";
 interface InputMaskProps {
     name: string;
     label?: string;
-    maskType?: "whatsapp" | "cpf" | "cnpj" | "phone" | "custom" | "dynamic";
+    maskType?: "whatsapp" | "cpf" | "cnpj" | "phone" | "custom" | "dynamic" | "cpf_cnpj" | "codigo_totvs";
     customMask?: string;
     error?: string;
     Icon: LucideIcon | IconType;
@@ -34,6 +34,8 @@ export const InputWithMask = ({ name, label, maskType = "custom", customMask = "
         dynamic: ["99", "(99)9", "(99) 9999-9999", "+55(99) 9 9999-9999"],
         phone: "(99) 9999-9999",
         cnpj: "99.999.999/9999-99",
+        cpf_cnpj: ["999.999.999-99", "99.999.999/9999-99"],
+        codigo_totvs: ["9999999999"],
         custom: customMask,
       };
   
@@ -43,6 +45,8 @@ export const InputWithMask = ({ name, label, maskType = "custom", customMask = "
         cpf: "999.999.999-99",
         dynamic: "(XX) XXXX-XXXX",
         cnpj: "99.999.999/9999-99",
+        cpf_cnpj: "999.999.999-99 / 99.999.999/9999-99",
+        codigo_totvs: "3103110003",
         custom: customMask,
       };
   

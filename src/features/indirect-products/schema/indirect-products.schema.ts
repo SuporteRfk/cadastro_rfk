@@ -62,6 +62,8 @@ export const indirectProductsRegisterSchema: yup.ObjectSchema<IIndirectProductsR
     .transform((value) => value.replace(/[\s.]/g, ""))
     .matches(/^\d{8}$/, "Informe um NCM válido de 8 dígitos. Ex: 8430.10.80")
     .required("Por favor, informe o NCM"),
+  id_usr_keycloak: yup.string()
+    .required()    
 });
 
 

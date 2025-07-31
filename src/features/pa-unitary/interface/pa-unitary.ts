@@ -40,6 +40,7 @@ export interface IPAUnitary {
     armazem_padrao?: string | null;
     lote_economico?: string | null;
     lote_minimo?: string | null;
-}
+    id_usr_keycloak: string;
+}   
 
 export interface IPAUnitaryRegister extends Omit<IPAUnitary, "id"> {}

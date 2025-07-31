@@ -1,4 +1,5 @@
 import { FormLayout, FormProductCategorySelector, FormProductCode, FormPalletizingTrackingConversion, FormProductDescription, FormWeights, Input, PageLayout, SubTitleForm, Toastify, FormProductAttributes } from "@/components";
+import { FormProductPackagingInfo } from "@/components/form/form-product-packaging-info.components";
 import { FamilyCodePAThird, GroupCodePAThird , TypeCodePAThird } from "../interface/pa-third-enum";
 import { insertPATerceiroService } from "../service/insert-pa-third.service";
 import { paThirdRegisterSchema } from "../schema/pa-third.schema";
@@ -13,7 +14,6 @@ import {
     Group as SubGroupIcon,
     Building as PAThirdIcon
 } from "lucide-react";
-import { FormProductPackagingInfo } from "@/components/form/form-product-packaging-info.components";
 
 export const RegisterPAThird = () => {
     const [loading, setLoading] = useState<boolean>(false);
