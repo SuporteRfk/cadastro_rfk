@@ -21,7 +21,6 @@ import { useReview } from "@/context";
 interface PABurdenFormManagerProps{
     defaultValue: IPABurden;
     mode: FormStateType;
-    isChange: boolean;
     loadingModal: boolean;
     setLoadingModal: React.Dispatch<React.SetStateAction<boolean>>;
     status: StatusRequest;
@@ -32,7 +31,7 @@ interface PABurdenFormManagerProps{
 
 }
 
-export const PABurdenFormManager = ({defaultValue, mode, isChange, loadingModal, setLoadingModal, status, setMode, viewRequestId, obervationRequest, setStatusLocal}:PABurdenFormManagerProps) => {
+export const PABurdenFormManager = ({defaultValue, mode, loadingModal, setLoadingModal, status, setMode, viewRequestId, obervationRequest, setStatusLocal}:PABurdenFormManagerProps) => {
         
     if(loadingModal){
         return <LoadingModal/> 

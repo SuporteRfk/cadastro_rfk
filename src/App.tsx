@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { PrivateRoutes, PublicRoutes } from "./routes";
 import { FullPageLoader } from "./components";
 import { AuthContext } from "./context";
-import { useContext, useEffect, useState} from "react";
+import { useContext, useEffect} from "react";
 import { NotFoundPage } from "./pages/not-found.page";
 
 
@@ -11,7 +11,7 @@ export const  App = () =>  {
   const {isAuthenticated, isLoading} = useContext(AuthContext);
   const location = useLocation();
   const navigate = useNavigate();
-  const [isRouteReady, setIsRouteReady] = useState(false);
+  // const [isRouteReady, setIsRouteReady] = useState(false);
   const pathName = location.pathname;
   const allRoutes = [
     ...publicRoutes.map(route => route.path),
@@ -37,17 +37,16 @@ export const  App = () =>  {
       if (!isAuthenticated && isPrivate) {
         navigate("/login", { replace: true });
       }
-
-      setIsRouteReady(true);
+    
+      // setIsRouteReady(true);
     }, 10); // pequeno delay para o React montar tudo
 
     return () => clearTimeout(timeout);
 
   },[pathName, isAuthenticated,navigate]);
 
-  
   return (
-    isLoading || isAuthenticated === null || !isRouteReady? (
+    isLoading || isAuthenticated === null ? (
       <FullPageLoader/>
     ): !routeExists ? (
         <NotFoundPage/>

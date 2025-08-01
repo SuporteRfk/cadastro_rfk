@@ -19,7 +19,6 @@ import { useReview } from "@/context";
 interface SuppliersFormManagerProps{
     defaultValue: ISupplier;
     mode: FormStateType;
-    isChange: boolean;
     loadingModal: boolean;
     setLoadingModal: React.Dispatch<React.SetStateAction<boolean>>;
     status: StatusRequest;
@@ -29,15 +28,14 @@ interface SuppliersFormManagerProps{
     setStatusLocal: React.Dispatch<React.SetStateAction<StatusRequest>>;
 }
 
-export const SuppliersFormManager = ({defaultValue, mode, isChange, loadingModal, setLoadingModal, status, setMode, viewRequestId, obervationRequest, setStatusLocal}:SuppliersFormManagerProps) => {
+export const SuppliersFormManager = ({defaultValue, mode, loadingModal, setLoadingModal, status, setMode, viewRequestId, obervationRequest, setStatusLocal}:SuppliersFormManagerProps) => {
     
     if(loadingModal){
         return <LoadingModal/> 
     }
     
     const [loadingLocal, setLoadingLocal] = useState(false);    
-
-    
+        
     const methods= useForm<ISupplierRegisterForm>({
         defaultValues: defaultValue,
         resolver: yupResolver(supplierRegisterSchema)

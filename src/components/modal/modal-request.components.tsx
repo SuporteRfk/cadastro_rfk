@@ -9,7 +9,6 @@ import { RequestContext } from "@/context";
 interface ModalRequestProps {
   onClose: () => void;
   request: IViewRequest;
-  isTheRouteOfChange: boolean;
 }
 
 const styleBadge = {
@@ -19,7 +18,7 @@ const styleBadge = {
     "Aprovado": "approved"
 } as const;
 
-export const ModalRequest = ({ onClose, request, isTheRouteOfChange }: ModalRequestProps) => {
+export const ModalRequest = ({ onClose, request }: ModalRequestProps) => {
     const [mode, setMode] = useState<FormStateType>("viewing");
     const [loadingModal, setLoadingModal] = useState<boolean>(false);
     const [statusLocal,setStatusLocal] = useState<StatusRequest>(request.status);
@@ -63,7 +62,6 @@ export const ModalRequest = ({ onClose, request, isTheRouteOfChange }: ModalRequ
                             request={request} 
                             mode={mode} 
                             setLoadingModal={setLoadingModal} 
-                            isTheRouteOfChange={isTheRouteOfChange} 
                             loadingModal={loadingModal}
                             setMode={setMode}
                             setStatusLocal={setStatusLocal}
@@ -76,7 +74,6 @@ export const ModalRequest = ({ onClose, request, isTheRouteOfChange }: ModalRequ
                             request={request} 
                             mode={mode} 
                             setMode={setMode} 
-                            isTheRouteOfChange={isTheRouteOfChange}
                             setloadingModal={setLoadingModal}
                             setStatusLocal={setStatusLocal}
                         />

@@ -36,6 +36,7 @@ export interface ITokenBearer {
     sid: string;
     sub: string;
     typ: string;
+    ldap_id: string;
 };
 
 

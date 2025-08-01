@@ -12,7 +12,8 @@ export const unitMeasureSchema:yup.ObjectSchema<IUnitMeasureRegister> = yup.obje
         .required("Por favor informe o número do whatsapp com o DDD"),
     nome_solicitante: yup.string().transform((value) => value?.toLowerCase()).required("Por favor informe seu nome"),
     unidade_medida: yup.string().required("Por favor informe a nova unidade de medida que você quer cadastrar"),
-    descricao_unidade: yup.string().max(300, 'No máximo 300 caracteres').required("Por favor descreva sobre a unidade de medida")
+    descricao_unidade: yup.string().max(300, 'No máximo 300 caracteres').required("Por favor descreva sobre a unidade de medida"),
+    id_usr_keycloak: yup.string().required()    
 });
 
 

@@ -5,6 +5,7 @@ import { IQueryRequest, IViewRequest } from "@/interfaces";
 import { AuthContext } from "./auth.context";
 import { handleApiError } from "@/utils";
 
+
 type Counters = {
     total: number;
     pending: number;
@@ -80,12 +81,12 @@ export const RequestProvider = ({children}:{children: ReactNode}) => {
     },[filter])
 
     
-
+    
     // Hook supabase para escutar as mudanças em tempo real na tabela de solicitações
     useSupabaseRealtime({
         table: "solicitacoes",
         event: "*",
-        schema: "public",
+        schema: 'public',
         channelName: "canal-solicitacoes",
         onChange: async () => {
             if(isApprover){

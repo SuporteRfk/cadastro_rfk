@@ -1,8 +1,11 @@
 import { IPaymentCondition } from "@/features/payment-condition/interface/payment-condition";
 import { IIndirectProducts } from "@/features/indirect-products/interface/indirect-products";
-import { IUnitMeasure } from "@/features/unit-measure/interface/unit-measure";
-import { IPACopacker } from "@/features/pa-copacker/interface/pa-copacker";
+import { IServiceRegistration } from "@/features/service-registration/interface/service";
+import { IRequestChange } from "@/features/request-change/interface/request-change";
 import { FormStateType, IViewRequest, PfOrPj, StatusRequest } from "@/interfaces";
+import { IUnitMeasure } from "@/features/unit-measure/interface/unit-measure";
+import { setPjOrPfSuppliers } from "@/features/suppliers/utils/set-pj-or-pf";
+import { IPACopacker } from "@/features/pa-copacker/interface/pa-copacker";
 import { IPAUnitary } from "@/features/pa-unitary/interface/pa-unitary";
 import { IPABurden } from "@/features/pa-burden/interface/pa-burden";
 import { ISupplier } from "@/features/suppliers/interface/supplier";
@@ -12,7 +15,6 @@ import { IInsumo } from "@/features/insumos/interface/insumos";
 import { IClient } from "@/features/client/interface/client";
 import { handleApiError, applyMasks } from "@/utils";
 import { useEffect, useState } from "react";
-import { setPjOrPfSuppliers } from "@/features/suppliers/utils/set-pj-or-pf";
 import { ReviewProvider } from "@/context";
 
 type EntityTypes =
@@ -25,7 +27,9 @@ type EntityTypes =
   | IPACopacker
   | IPABurden
   | IPAThird
-  | IPAUnitary;
+  | IPAUnitary
+  | IRequestChange
+  | IServiceRegistration;
 
 
 type Extended<T> = T & Record<string, any>;
@@ -35,7 +39,6 @@ interface ModalRequestWrapperProps{
     FormComponent: React.ComponentType<{
         defaultValue: any;
         mode: FormStateType;
-        isChange: boolean;
         loadingModal:boolean;
         setLoadingModal: React.Dispatch<React.SetStateAction<boolean>>;
         status: StatusRequest;
@@ -46,14 +49,13 @@ interface ModalRequestWrapperProps{
     }>;
     request: IViewRequest;
     mode: FormStateType;
-    isTheRouteOfChange: boolean;
     setLoadingModal: React.Dispatch<React.SetStateAction<boolean>>;
     loadingModal:boolean;
     setMode:React.Dispatch<React.SetStateAction<FormStateType>>
     setStatusLocal: React.Dispatch<React.SetStateAction<StatusRequest>>
 }
 
-export const ModalRequestWrapper = ({FormComponent, request, mode, isTheRouteOfChange, setLoadingModal,loadingModal, setMode, setStatusLocal}:ModalRequestWrapperProps) => {
+export const ModalRequestWrapper = ({FormComponent, request, mode, setLoadingModal,loadingModal, setMode, setStatusLocal}:ModalRequestWrapperProps) => {
     
     const [defaultValuesRequest, setDefaultValuesRequest] = useState<Extended<EntityTypes> | null>(null)
     
@@ -100,7 +102,6 @@ export const ModalRequestWrapper = ({FormComponent, request, mode, isTheRouteOfC
             <FormComponent 
                 defaultValue={defaultValuesRequest} 
                 mode={mode} 
-                isChange={isTheRouteOfChange} 
                 loadingModal={loadingModal}
                 setLoadingModal={setLoadingModal}
                 status={request.status}

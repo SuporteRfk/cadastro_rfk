@@ -4,9 +4,10 @@ import { IUnitMeasureRegister } from "../interface/unit-measure";
 
 
 export const updateUnitMeasureService = async (id:number, data:IUnitMeasureRegister):Promise<void> => {
+    const {id_usr_keycloak, ...dataUpdate} = data;
     const {error} = await supabaseApi
         .from("cad_unidade_medida")
-        .update(data)
+        .update(dataUpdate)
         .eq("id", id)
 
         

@@ -11,7 +11,7 @@ export interface ISupplier {
     cnpj_cpf: string;
     razao_social: string;
     nome_fantasia?: string | null;
-    tpj?: SupplierTpj | null          ;
+    tpj: SupplierTpj;
     cnae?: string | null;
     inscricao_estadual?: string | null;
     inscricao_municipal?: string | null;
@@ -30,6 +30,7 @@ export interface ISupplier {
     municipio: string;
     estado: string;
     produtor_rural: OptionYesNo;
+    id_usr_keycloak: string;
 };
 
 export interface ISupplierRegisterForm extends Omit<ISupplier, 'id'> {

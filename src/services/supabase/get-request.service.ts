@@ -18,6 +18,10 @@ export const getRequestService = async (filter?: IQueryRequest):Promise<{data:IV
         query = query.ilike("email", filter.email)
     };
 
+    if(filter?.idKeycloack){
+        query = query.eq("id_usr_keycloak", filter.idKeycloack)
+    }
+
     if(filter?.nome_solicitante){
         query = query.ilike("nome_solicitante", filter.nome_solicitante)
     };
@@ -36,6 +40,7 @@ export const getRequestService = async (filter?: IQueryRequest):Promise<{data:IV
         query = query.range(filter.offset, filter.offset + filter.indexLimit - 1);
     }
 
+    
     const { data, count, error } = await query.order("id", { ascending: false });
 
     if(error){

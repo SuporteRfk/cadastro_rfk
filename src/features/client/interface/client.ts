@@ -38,6 +38,7 @@ export interface IClient {
     contribuinte?: OptionYesNo | null;
     optante_simples?: OptionYesNo | null;
     destaca_ie?: OptionYesNo | null;
+    id_usr_keycloak: string;
 };
 
 export interface IClientRegisterForm extends Omit<IClient, "id">{

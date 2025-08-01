@@ -17,7 +17,6 @@ import { useReview } from "@/context";
 interface PaymentConditionFormManagerProps{
     defaultValue: IUnitMeasure;
     mode: FormStateType;
-    isChange: boolean;
     loadingModal: boolean;
     setLoadingModal: React.Dispatch<React.SetStateAction<boolean>>;
     status: StatusRequest;
@@ -27,7 +26,7 @@ interface PaymentConditionFormManagerProps{
     setStatusLocal: React.Dispatch<React.SetStateAction<StatusRequest>>;
 }
 
-export const UnitMeasureFormManager = ({defaultValue, mode, isChange, loadingModal, setLoadingModal, status, setMode, viewRequestId, obervationRequest, setStatusLocal}:PaymentConditionFormManagerProps) => {   
+export const UnitMeasureFormManager = ({defaultValue, mode, loadingModal, setLoadingModal, status, setMode, viewRequestId, obervationRequest, setStatusLocal}:PaymentConditionFormManagerProps) => {   
     if(loadingModal){
         return <LoadingModal/> 
     }

@@ -22,22 +22,27 @@ export const supplierRegisterSchema:yup.ObjectSchema<ISupplierRegisterForm> = yu
         .required("Por favor informe seu nome"),
     fisica_juridica: yup.string()
         .oneOf(Object.values(PfOrPj))
+        .transform((value) => value?.toUpperCase())
         .required("Por favor selecione o tipo de cadastro"),
     cnpj_cpf: yup.string()
         .transform((value) => value.replace(/\D/g, ""))
         .required("Por favor informe o CNPJ/CPF"),
     tipo: yup.string()
         .oneOf(Object.values(SupplierType))
+        .transform((value) => value?.toUpperCase())
         .required("Por favor selecione o tipo de fornecedor"),
     produtor_rural: yup.string()
         .oneOf(Object.values(OptionYesNo))
+        .transform((value) => value?.toUpperCase())
         .required("Informe se é produtor rural o fornecedor"),
     razao_social: yup.string()
+        .transform((value) => value?.toUpperCase())
         .required("Por favor informe a razão social"),
     nome_fantasia: yup.string()
-        .transform((value, originalValue) =>
-            originalValue === "" ? null : value
-        )   
+        .transform((value) =>{
+            if(!value) return null;
+            return value.toUpperCase();
+        })   
         .nullable()
         .notRequired(),
     cnae: yup.string()
@@ -48,6 +53,7 @@ export const supplierRegisterSchema:yup.ObjectSchema<ISupplierRegisterForm> = yu
         .notRequired(),
     tpj: yup.string()
         .oneOf(Object.values(SupplierTpj))
+        .transform((value) => value?.toUpperCase())
         .required("Por favor selecione o tipo de pessoa jurídica"),
     inscricao_estadual: yup.string()
         .transform((value, originalValue) =>
@@ -70,16 +76,18 @@ export const supplierRegisterSchema:yup.ObjectSchema<ISupplierRegisterForm> = yu
         .notRequired(),
     email_fornecedor: yup.string()
         .email("Insira um e-mail valido")
-        .transform((value, originalValue) =>
-            originalValue === "" ? null : value
-        )   
+        .transform((value) =>{
+            if(!value) return null;
+            return value.toUpperCase();
+        })     
         .nullable()
         .notRequired(),
     optante_simples: yup.string()
         .oneOf(Object.values(OptionYesNo))
-        .transform((value, originalValue) =>
-            originalValue === "" ? null : value
-        )   
+        .transform((value) =>{
+            if(!value) return null;
+            return value.toUpperCase();
+        })    
         .nullable()
         .notRequired(),
     telefone_1: yup.string()
@@ -89,7 +97,7 @@ export const supplierRegisterSchema:yup.ObjectSchema<ISupplierRegisterForm> = yu
     telefone_2: yup.string()
         .notRequired()
         .nullable()
-        .transform((value) => value.replace(/[\s()-]/g, ""))
+        .transform((value) => value ? value.replace(/[\s()-]/g, "") : "")
         .test("valid-telefone_2", "Por favor insira um número válido, Ex: +55 (11) 9 9999-0000", (value) => {
             if (!value) return true; // Se for null ou vazio, passa 
             return /^\+?\d{10,13}$/.test(value);// Valida apenas se houver um valor 
@@ -97,7 +105,7 @@ export const supplierRegisterSchema:yup.ObjectSchema<ISupplierRegisterForm> = yu
     telefone_3: yup.string()
         .notRequired()
         .nullable()
-        .transform((value) => value.replace(/[\s()-]/g, ""))
+        .transform((value) => value ? value.replace(/[\s()-]/g, "") : "")
         .test("valid-telefone_3", "Por favor insira um telefone fixo válido, Ex: (11) 3456-7890", (value) => {
             if (!value) return true; // Se for null ou vazio, passa 
             return /^\+?\d{10,13}$/.test(value);// Valida apenas se houver um valor 
@@ -105,29 +113,36 @@ export const supplierRegisterSchema:yup.ObjectSchema<ISupplierRegisterForm> = yu
     telefone_4: yup.string()
         .notRequired()
         .nullable()
-        .transform((value) => value.replace(/[\s()-]/g, ""))
+        .transform((value) => value ? value.replace(/[\s()-]/g, "") : "")
         .test("valid-telefone_4", "Por favor insira um telefone fixo válido, Ex: (11) 3456-7890", (value) => {
             if (!value) return true; // Se for null ou vazio, passa
             return /^\+?\d{10,13}$/.test(value);// Valida apenas se houver um valor 
         }),
     endereco: yup.string()
+        .transform((value) => value?.toUpperCase())
         .required("Por favor informe o endereço"),
     numero: yup.string()
         .required("Informe o número"),
     bairro: yup.string()
+        .transform((value) => value?.toUpperCase())
         .required("Por favor informe o bairro"),
     complemento: yup.string()
-        .transform((value, originalValue) =>
-            originalValue === "" ? null : value
-        )   
         .nullable()
+        .transform((value, originalValue) => {
+            if (originalValue === "" || value == null) return null;
+            return typeof value === "string" ? value.toUpperCase() : value;
+        })
         .notRequired(),
     estado: yup.string()
+        .transform((value) => value?.toUpperCase())
         .required("Por favor selecione o estado"),
     municipio: yup.string()
+        .transform((value) => value?.toUpperCase())
         .required("Por favor selecione o município"),
     cep: yup.string()
         .required("Por favor informe o CEP"),
+    id_usr_keycloak: yup.string()
+        .required()    
 });
 
 

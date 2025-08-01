@@ -4,9 +4,10 @@ import { ISupplierRegisterSupabase } from "../interface/supplier";
 
 //Atualizar Fornecedores 
 export const upsertSupplierService = async(id:number, data:ISupplierRegisterSupabase):Promise<void> => {
+    const {id_usr_keycloak, ...dataUpdate} = data;
     const {error} = await supabaseApi
         .from("cad_fornecedores")
-        .update(data)
+        .update(dataUpdate)
         .eq("id", id)
         
     if(error){

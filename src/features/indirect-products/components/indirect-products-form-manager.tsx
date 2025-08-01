@@ -18,7 +18,6 @@ import { useReview } from "@/context";
 interface IndirectProductsFormManagerProps{
     defaultValue: IIndirectProducts;
     mode: FormStateType;
-    isChange: boolean;
     loadingModal: boolean;
     setLoadingModal: React.Dispatch<React.SetStateAction<boolean>>;
     status: StatusRequest;
@@ -28,7 +27,7 @@ interface IndirectProductsFormManagerProps{
     setStatusLocal: React.Dispatch<React.SetStateAction<StatusRequest>>;
 }
 
-export const IndirectProductsFormManager = ({defaultValue, mode, isChange, loadingModal, setLoadingModal, status, setMode, viewRequestId, obervationRequest, setStatusLocal}:IndirectProductsFormManagerProps) => {
+export const IndirectProductsFormManager = ({defaultValue, mode, loadingModal, setLoadingModal, status, setMode, viewRequestId, obervationRequest, setStatusLocal}:IndirectProductsFormManagerProps) => {
         
     if(loadingModal){
         return <LoadingModal/> 
