@@ -16,7 +16,7 @@ export const DashboardPage = () => {
         if(!user) return;
         
         if(!user.access_approver){
-            setFilter({ offset: 0, indexLimit: filter?.indexLimit || 10, email: user.email, idKeycloack: user.id_keycloak });
+            setFilter({ offset: 0, indexLimit: filter?.indexLimit || 10, idKeycloack: user.id_keycloak });
         } else{
             setFilter({ offset: 0, indexLimit: filter?.indexLimit || 10});
         }
@@ -36,7 +36,8 @@ export const DashboardPage = () => {
               <RequestTable 
                 titlePage={`Bem vindo, ${user?.name}`} 
                 iconForm={DashIcon} 
-                fixedFilter={!user.access_approver ? {email: user.email} : undefined}
+                fixedFilter={!user.access_approver ? {idKeycloack: user.id_keycloak} : undefined}
+                isApprover={user.access_approver}
               />
             )}
         </PageLayout>

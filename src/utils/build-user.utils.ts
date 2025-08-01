@@ -43,7 +43,7 @@ const userHasAccessApprover = (resource_access: IResourceAccess): boolean => {
  */
 export const buildUserFromToken = (decodedToken: ITokenBearer): IUser => {
     return {
-        id_keycloak: decodedToken.sub,
+        id_keycloak: decodedToken.ldap_id,
         email: decodedToken.email,
         username: decodedToken.preferred_username,
         name: decodedToken.given_name,

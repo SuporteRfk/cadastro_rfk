@@ -4,7 +4,7 @@ import { useSupabaseRealtime } from "@/hooks/use-supabase-realtime.hooks";
 import { IQueryRequest, IViewRequest } from "@/interfaces";
 import { AuthContext } from "./auth.context";
 import { handleApiError } from "@/utils";
-import { schemaDb } from "@/services/supabase/connection-supabase-api";
+
 
 type Counters = {
     total: number;
@@ -86,7 +86,7 @@ export const RequestProvider = ({children}:{children: ReactNode}) => {
     useSupabaseRealtime({
         table: "solicitacoes",
         event: "*",
-        schema: schemaDb,
+        schema: 'public',
         channelName: "canal-solicitacoes",
         onChange: async () => {
             if(isApprover){

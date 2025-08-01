@@ -36,8 +36,12 @@ export const useCNPJSearch = async <T extends FieldValues>({methods, cnpjValue, 
             methods.setValue("nome_fantasia" as Path<T>, cnpjData.nome_fantasia as PathValue<T, Path<T>>);
             methods.setValue("cnae" as Path<T>, `${cnpjData.cnae_fiscal} - ${cnpjData.cnae_fiscal_descricao}` as PathValue<T, Path<T>>)
             //telefones
-            methods.setValue("telefone_3" as Path<T>, handleMaskPhone(cnpjData.ddd_telefone_1) as PathValue<T, Path<T>>)
-            methods.setValue("telefone_4" as Path<T>, handleMaskPhone(cnpjData.ddd_telefone_2) as PathValue<T, Path<T>>)
+            if(cnpjData.ddd_telefone_1){
+                methods.setValue("telefone_3" as Path<T>, handleMaskPhone(cnpjData.ddd_telefone_1) as PathValue<T, Path<T>>);
+            };
+            if(cnpjData.ddd_telefone_2){
+                methods.setValue("telefone_4" as Path<T>, handleMaskPhone(cnpjData.ddd_telefone_2) as PathValue<T, Path<T>>);
+            };
 
             
             // Se optante pelo simples nacional

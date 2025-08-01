@@ -39,7 +39,6 @@ interface ModalRequestWrapperProps{
     FormComponent: React.ComponentType<{
         defaultValue: any;
         mode: FormStateType;
-        isChange: boolean;
         loadingModal:boolean;
         setLoadingModal: React.Dispatch<React.SetStateAction<boolean>>;
         status: StatusRequest;
@@ -50,14 +49,13 @@ interface ModalRequestWrapperProps{
     }>;
     request: IViewRequest;
     mode: FormStateType;
-    isTheRouteOfChange: boolean;
     setLoadingModal: React.Dispatch<React.SetStateAction<boolean>>;
     loadingModal:boolean;
     setMode:React.Dispatch<React.SetStateAction<FormStateType>>
     setStatusLocal: React.Dispatch<React.SetStateAction<StatusRequest>>
 }
 
-export const ModalRequestWrapper = ({FormComponent, request, mode, isTheRouteOfChange, setLoadingModal,loadingModal, setMode, setStatusLocal}:ModalRequestWrapperProps) => {
+export const ModalRequestWrapper = ({FormComponent, request, mode, setLoadingModal,loadingModal, setMode, setStatusLocal}:ModalRequestWrapperProps) => {
     
     const [defaultValuesRequest, setDefaultValuesRequest] = useState<Extended<EntityTypes> | null>(null)
     
@@ -104,7 +102,6 @@ export const ModalRequestWrapper = ({FormComponent, request, mode, isTheRouteOfC
             <FormComponent 
                 defaultValue={defaultValuesRequest} 
                 mode={mode} 
-                isChange={isTheRouteOfChange} 
                 loadingModal={loadingModal}
                 setLoadingModal={setLoadingModal}
                 status={request.status}

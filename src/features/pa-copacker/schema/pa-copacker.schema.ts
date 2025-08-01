@@ -89,8 +89,9 @@ export const paCopackerRegisterSchema: yup.ObjectSchema<IPACopackerRegister> = y
         .matches(/^\d{8}$/, "Informe um NCM válido de 8 dígitos. Ex: 8430.10.80")
         .required("Por favor, informe o NCM"),
     cest:yup.string()
-        .transform((value) => value.replace(/[\s.]/g, ""))
+        .transform((value) => value ? value.replace(/[\s.]/g, "") : null)
         .matches(/^\d{7}$/, "Informe um CEST válido de 7 dígitos. Ex: 84.301.80")
+        .nullable()
         .notRequired(),
     grupo_tributario: yup.number()
         .transform((value, originalValue) =>

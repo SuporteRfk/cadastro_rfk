@@ -22,7 +22,6 @@ import { useReview } from "@/context";
 interface PAUnitaryFormManagerProps{
     defaultValue: IPAUnitary;
     mode: FormStateType;
-    isChange: boolean;
     loadingModal: boolean;
     setLoadingModal: React.Dispatch<React.SetStateAction<boolean>>;
     status: StatusRequest;
@@ -32,7 +31,7 @@ interface PAUnitaryFormManagerProps{
     setStatusLocal: React.Dispatch<React.SetStateAction<StatusRequest>>;
 }
 
-export const PAUnitaryFormManager = ({defaultValue, mode, isChange, loadingModal, setLoadingModal, status, setMode, viewRequestId, obervationRequest, setStatusLocal}:PAUnitaryFormManagerProps) => {
+export const PAUnitaryFormManager = ({defaultValue, mode, loadingModal, setLoadingModal, status, setMode, viewRequestId, obervationRequest, setStatusLocal}:PAUnitaryFormManagerProps) => {
         
     if(loadingModal){
         return <LoadingModal/> 

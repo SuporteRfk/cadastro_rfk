@@ -18,20 +18,18 @@ interface ModalRequestRouterProps {
     request: IViewRequest;
     mode: FormStateType;
     setLoadingModal: React.Dispatch<React.SetStateAction<boolean>>
-    isTheRouteOfChange: boolean;
     loadingModal:boolean;
     setMode:React.Dispatch<React.SetStateAction<FormStateType>>;
     setStatusLocal: React.Dispatch<React.SetStateAction<StatusRequest>>
 }
 
-export const ModalRequestRouter = ( {request, mode, setLoadingModal,isTheRouteOfChange, loadingModal, setMode, setStatusLocal}:ModalRequestRouterProps) => {
+export const ModalRequestRouter = ( {request, mode, setLoadingModal, loadingModal, setMode, setStatusLocal}:ModalRequestRouterProps) => {
     switch (request.tabela_origem) {
         case "cad_condicao_pagamento":
             return <ModalRequestWrapper 
                         request={request} 
                         FormComponent={PaymentConditionFormManager} 
                         mode={mode} 
-                        isTheRouteOfChange={isTheRouteOfChange} 
                         setLoadingModal={setLoadingModal}
                         loadingModal={loadingModal}
                         setMode={setMode}
@@ -42,7 +40,6 @@ export const ModalRequestRouter = ( {request, mode, setLoadingModal,isTheRouteOf
                         request={request}
                         FormComponent={UnitMeasureFormManager}
                         mode={mode} 
-                        isTheRouteOfChange={isTheRouteOfChange} 
                         setLoadingModal={setLoadingModal}
                         loadingModal={loadingModal}
                         setMode={setMode}
@@ -53,7 +50,6 @@ export const ModalRequestRouter = ( {request, mode, setLoadingModal,isTheRouteOf
                         request={request}
                         FormComponent={IndirectProductsFormManager}
                         mode={mode} 
-                        isTheRouteOfChange={isTheRouteOfChange} 
                         setLoadingModal={setLoadingModal}
                         loadingModal={loadingModal}
                         setMode={setMode}
@@ -64,7 +60,6 @@ export const ModalRequestRouter = ( {request, mode, setLoadingModal,isTheRouteOf
                         request={request}
                         FormComponent={PAUnitaryFormManager}
                         mode={mode} 
-                        isTheRouteOfChange={isTheRouteOfChange} 
                         setLoadingModal={setLoadingModal}
                         loadingModal={loadingModal}
                         setMode={setMode}
@@ -75,7 +70,6 @@ export const ModalRequestRouter = ( {request, mode, setLoadingModal,isTheRouteOf
                         request={request}
                         FormComponent={PABurdenFormManager}
                         mode={mode} 
-                        isTheRouteOfChange={isTheRouteOfChange} 
                         setLoadingModal={setLoadingModal}
                         loadingModal={loadingModal}
                         setMode={setMode}
@@ -86,7 +80,6 @@ export const ModalRequestRouter = ( {request, mode, setLoadingModal,isTheRouteOf
                         request={request}
                         FormComponent={PAThirdFormManager}
                         mode={mode} 
-                        isTheRouteOfChange={isTheRouteOfChange} 
                         setLoadingModal={setLoadingModal}
                         loadingModal={loadingModal}
                         setMode={setMode}
@@ -97,7 +90,6 @@ export const ModalRequestRouter = ( {request, mode, setLoadingModal,isTheRouteOf
                         request={request}
                         FormComponent={PACopackerFormManager}
                         mode={mode} 
-                        isTheRouteOfChange={isTheRouteOfChange} 
                         setLoadingModal={setLoadingModal}
                         loadingModal={loadingModal}
                         setMode={setMode}
@@ -108,7 +100,6 @@ export const ModalRequestRouter = ( {request, mode, setLoadingModal,isTheRouteOf
                         request={request}
                         FormComponent={InsumoFormManager}
                         mode={mode} 
-                        isTheRouteOfChange={isTheRouteOfChange} 
                         setLoadingModal={setLoadingModal}
                         loadingModal={loadingModal}
                         setMode={setMode}
@@ -119,7 +110,6 @@ export const ModalRequestRouter = ( {request, mode, setLoadingModal,isTheRouteOf
                         request={request}
                         FormComponent={ClientFormManager}
                         mode={mode} 
-                        isTheRouteOfChange={isTheRouteOfChange} 
                         setLoadingModal={setLoadingModal}
                         loadingModal={loadingModal}
                         setMode={setMode}
@@ -130,7 +120,6 @@ export const ModalRequestRouter = ( {request, mode, setLoadingModal,isTheRouteOf
                         request={request}
                         FormComponent={SuppliersFormManager}
                         mode={mode} 
-                        isTheRouteOfChange={isTheRouteOfChange} 
                         setLoadingModal={setLoadingModal}
                         loadingModal={loadingModal}
                         setMode={setMode}
@@ -141,7 +130,6 @@ export const ModalRequestRouter = ( {request, mode, setLoadingModal,isTheRouteOf
                         request={request}
                         FormComponent={RequestChangeFormManager}
                         mode={mode} 
-                        isTheRouteOfChange={isTheRouteOfChange} 
                         setLoadingModal={setLoadingModal}
                         loadingModal={loadingModal}
                         setMode={setMode}
@@ -152,7 +140,6 @@ export const ModalRequestRouter = ( {request, mode, setLoadingModal,isTheRouteOf
                         request={request}
                         FormComponent={ServiceRegistrationFormManager}
                         mode={mode} 
-                        isTheRouteOfChange={isTheRouteOfChange} 
                         setLoadingModal={setLoadingModal}
                         loadingModal={loadingModal}
                         setMode={setMode}

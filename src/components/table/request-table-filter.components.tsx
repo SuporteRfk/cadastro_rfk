@@ -7,9 +7,10 @@ import { RequestContext } from "@/context";
 
 interface RequestTableFilterProps {
     fixedFilter?: Partial<IQueryRequest>;
+    isApprover?: boolean;
 }
 
-export const RequestTableFilter = ({fixedFilter={}}:RequestTableFilterProps) => {
+export const RequestTableFilter = ({fixedFilter={}, isApprover}:RequestTableFilterProps) => {
   const { filter, setFilter } = useContext(RequestContext);
 
 
@@ -19,7 +20,8 @@ export const RequestTableFilter = ({fixedFilter={}}:RequestTableFilterProps) => 
     operacao: null,
     nome_solicitante: "",
     data: "",
-    email: fixedFilter.email ?? null,
+    email: null,
+    idKeycloack: fixedFilter.idKeycloack
   };
 
   const [localFilter, setLocalFilter] = useState<IQueryRequest>({
@@ -123,7 +125,7 @@ export const RequestTableFilter = ({fixedFilter={}}:RequestTableFilterProps) => 
                 </Select>
 
                 {/* Solicitante */}
-                {fixedFilter?.email === undefined &&
+                {isApprover &&
                     <div className="mt-2">
                         <label className="text-sm my-2 ml-1 font-medium text-text-medium">Solicitante</label>
                         <input

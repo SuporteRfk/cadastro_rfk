@@ -11,29 +11,26 @@ import { RequestContext } from "@/context";
 import { LucideIcon } from "lucide-react";
 import { ModalRequest } from "../modal";
 import { Table} from "../ui"
-import { useLocation } from "react-router-dom";
+
 
 
 interface RequestTableProps {
     titlePage : string;
     iconForm : LucideIcon;
-    showFilterDash?: boolean;
+    isApprover?: boolean;
     fixedFilter?: Partial<IQueryRequest>;
 }
 
 
-export const RequestTable = ({titlePage, iconForm:IconForm, showFilterDash=true, fixedFilter}:RequestTableProps) => {
+export const RequestTable = ({titlePage, iconForm:IconForm, isApprover=false, fixedFilter}:RequestTableProps) => {
     const {loadingSkelleton, request, setFilter, filter} = useContext(RequestContext);
-    const location = useLocation();
-
+    
        
     const [observationOpenId, setObservationOpenId] = useState<number | null>(null);  
     const [modalOpen, setModalOpen] = useState<boolean>(false);
     const [selectedRequest, setSelectedRequest] = useState<IViewRequest | null>(null);
 
-    // verificar se o usuários está na rota de solicitar alteração
-    const isTheRouteOfChange = location.pathname === "/solicitar-alteracao";
-
+    
     // Mostrar observacao | show obversavao
     const onToggleObservation = (id: number) => {
         setObservationOpenId(prev => prev === id ? null : id);
@@ -69,14 +66,13 @@ export const RequestTable = ({titlePage, iconForm:IconForm, showFilterDash=true,
                         {modalOpen && 
                             <ModalRequest 
                                 request={selectedRequest!}
-                                isTheRouteOfChange={isTheRouteOfChange} 
                                 onClose={() => {
                                     setModalOpen(false);
                                     setSelectedRequest(null);
                                 }}/>
                         }
                         <div className="min-h-full w-full flex flex-col justify-between bg-white-default rounded-lg border border-border">
-                            {showFilterDash && <RequestTableFilter fixedFilter={fixedFilter}/>}
+                            <RequestTableFilter fixedFilter={fixedFilter} isApprover={isApprover}/>
                             <div className="flex-1 overflow-auto h-full rounded-sm bg-white">
                                 <Table className="min-w-full">    
                                     <RequestTableHeader table={table}/>

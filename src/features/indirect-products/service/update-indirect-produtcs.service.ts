@@ -5,9 +5,10 @@ import { supabaseApi } from "@/services/supabase/connection-supabase-api";
 
 
 export const updateIndirectProductsService = async (id:number, data:IIndirectProductsRegister):Promise<void> => {
+    const {id_usr_keycloak, ...dataUpdate} = data;
     const {error} = await supabaseApi
         .from("cad_produtos_indiretos")
-        .update(data)
+        .update(dataUpdate)
         .eq("id", id)
 
         

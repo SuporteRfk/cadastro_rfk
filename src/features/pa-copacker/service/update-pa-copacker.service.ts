@@ -5,9 +5,10 @@ import { IPACopackerRegister } from "../interface/pa-copacker";
 
 
 export const updatePACopackerService = async (id:number, data:IPACopackerRegister):Promise<void> => {
+    const {id_usr_keycloak, ...dataUpdate} = data;
     const {error} = await supabaseApi
         .from("cad_pa_copacker")
-        .update(data)
+        .update(dataUpdate)
         .eq("id", id)
 
         

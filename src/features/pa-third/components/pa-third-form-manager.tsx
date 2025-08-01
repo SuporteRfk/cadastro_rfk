@@ -21,7 +21,6 @@ import { useReview } from "@/context";
 interface PAThirdFormManagerProps{
     defaultValue: IPAThird;
     mode: FormStateType;
-    isChange: boolean;
     loadingModal: boolean;
     setLoadingModal: React.Dispatch<React.SetStateAction<boolean>>;
     status: StatusRequest;
@@ -31,7 +30,7 @@ interface PAThirdFormManagerProps{
     setStatusLocal: React.Dispatch<React.SetStateAction<StatusRequest>>;
 }
 
-export const PAThirdFormManager = ({defaultValue, mode, isChange, loadingModal, setLoadingModal, status, setMode, viewRequestId, obervationRequest,setStatusLocal}:PAThirdFormManagerProps) => {
+export const PAThirdFormManager = ({defaultValue, mode, loadingModal, setLoadingModal, status, setMode, viewRequestId, obervationRequest,setStatusLocal}:PAThirdFormManagerProps) => {
         
     if(loadingModal){
         return <LoadingModal/> 

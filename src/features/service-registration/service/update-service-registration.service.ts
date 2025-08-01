@@ -3,9 +3,10 @@ import { IServiceRegister } from "../interface/service";
 
 
 export const updateServiceRegistrationService = async (id:number, data:IServiceRegister):Promise<void> => {
+    const {id_usr_keycloak, ...dataUpdate} = data;
     const {error} = await supabaseApi
         .from("cad_servico")
-        .update(data)
+        .update(dataUpdate)
         .eq("id", id)
 
         

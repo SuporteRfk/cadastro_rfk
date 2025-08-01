@@ -20,7 +20,6 @@ import { useReview } from "@/context";
 interface PACopackerFormManagerProps{
     defaultValue: IPACopacker;
     mode: FormStateType;
-    isChange: boolean;
     loadingModal: boolean;
     setLoadingModal: React.Dispatch<React.SetStateAction<boolean>>;
     status: StatusRequest;
@@ -30,7 +29,7 @@ interface PACopackerFormManagerProps{
     setStatusLocal: React.Dispatch<React.SetStateAction<StatusRequest>>;
 }
 
-export const PACopackerFormManager = ({defaultValue, mode, isChange, loadingModal, setLoadingModal, status, setMode, viewRequestId, obervationRequest,setStatusLocal}:PACopackerFormManagerProps) => {
+export const PACopackerFormManager = ({defaultValue, mode, loadingModal, setLoadingModal, status, setMode, viewRequestId, obervationRequest,setStatusLocal}:PACopackerFormManagerProps) => {
         
     if(loadingModal){
         return <LoadingModal/> 
