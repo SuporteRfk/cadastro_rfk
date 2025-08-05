@@ -1,10 +1,12 @@
+'use client';
+
 import { SafeReviewField } from "../review-field/safe-review-field.components";
 import { consultationCepService } from "@/services/viaCep-api/get-cep.service";
 import { FieldValues, Path, PathValue, UseFormReturn } from "react-hook-form";
 import { FormSection } from "./form-section.components";
 import { Input, InputWithMask } from "../inputs";
 import { FormStateType } from "@/interfaces";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { unMask } from 'remask';
 import {
     MapPinned as ZipCodeIcon,
@@ -20,10 +22,12 @@ interface FormAddressProps<T extends FieldValues> {
     methods: UseFormReturn<T>;   
     isBillingAddress?: boolean;
     setLoading: React.Dispatch<React.SetStateAction<boolean>>
+    shouldIgnoreInitialZipCodeSearch?: boolean; // se true, não faz a busca inicial do CEP
 }
 
-export const FormAddress = <T extends FieldValues>({mode, methods, isBillingAddress=false, setLoading}:FormAddressProps<T>) => {
-    
+export const FormAddress = <T extends FieldValues>({mode, methods, isBillingAddress=false, setLoading, shouldIgnoreInitialZipCodeSearch=false}:FormAddressProps<T>) => {
+    const [hasUserManuallyChangedZip, setHasUserManuallyChangedZip] = useState(false); // Para evitar a busca automática do CEP quando o usuário já digitou algo
+
     const zipCodeValue = methods.watch(isBillingAddress ? "cep_cobranca" as Path<T> : "cep" as Path<T>);
     const zipCodeWithoutMask = zipCodeValue ? unMask(zipCodeValue) : "";
     
@@ -100,9 +104,29 @@ export const FormAddress = <T extends FieldValues>({mode, methods, isBillingAddr
     
     
     useEffect(() => {
-        if (zipCodeWithoutMask?.length === 8) {
-            getAddressData(zipCodeWithoutMask)
+        const zipHas8Digits = zipCodeWithoutMask?.length === 8;
+        
+        if (!zipHas8Digits) {
+            console.log('oi dentro do zipHas8Digits negativo')
+            // Se apagou ou está incompleto, considera que o usuário está modificando o CEP
+            setHasUserManuallyChangedZip(true);
+            return;
+        };
+
+        // Se não precisa ignorar, sempre busca
+        if (zipHas8Digits && !shouldIgnoreInitialZipCodeSearch) {
+            getAddressData(zipCodeWithoutMask);
+            return;
         }
+
+        // if (zipCodeWithoutMask?.length === 8) {
+        //     getAddressData(zipCodeWithoutMask)
+        // }
+
+        // Se deve ignorar a primeira busca, mas o usuário modificou depois, então busca
+        if (shouldIgnoreInitialZipCodeSearch && hasUserManuallyChangedZip && zipHas8Digits) {
+            getAddressData(zipCodeWithoutMask);
+        };
     }, [zipCodeValue]);
    
 

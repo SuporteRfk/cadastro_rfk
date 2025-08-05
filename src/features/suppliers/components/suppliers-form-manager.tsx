@@ -29,7 +29,7 @@ interface SuppliersFormManagerProps{
 }
 
 export const SuppliersFormManager = ({defaultValue, mode, loadingModal, setLoadingModal, status, setMode, viewRequestId, obervationRequest, setStatusLocal}:SuppliersFormManagerProps) => {
-    
+    console.log(defaultValue)
     if(loadingModal){
         return <LoadingModal/> 
     }
@@ -152,7 +152,7 @@ export const SuppliersFormManager = ({defaultValue, mode, loadingModal, setLoadi
             {/* SubTitulo Endereço */}
             <SubTitleForm title="Endereço"  styleLine="border-t-3 border-dashed border-strong/10 mt-4" icon={ZipCodeIcon}/>
             {/* Sessão endereço */}
-            <FormAddress methods={methods} setLoading={setLoadingLocal} mode={mode}/>
+            <FormAddress methods={methods} setLoading={setLoadingLocal} mode={mode} shouldIgnoreInitialZipCodeSearch={true}/>
 
             {/* Sessão para informar o motivo que está negando a solicitação */}
             {mode === "denied" && (
