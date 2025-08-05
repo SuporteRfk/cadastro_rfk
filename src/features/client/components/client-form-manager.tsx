@@ -182,7 +182,7 @@ export const ClientFormManager = ({defaultValue, mode, loadingModal,setLoadingMo
                 />
             </div>
             {/* Sessão endereço */}
-            <FormAddress methods={methods} setLoading={setLoadingLocal} mode={mode}/>
+            <FormAddress methods={methods} setLoading={setLoadingLocal} mode={mode} shouldIgnoreInitialZipCodeSearch={true}/>
             
             {/* Sessão endereço cobrança */}
             {isBillingAddressValue === "não" &&
