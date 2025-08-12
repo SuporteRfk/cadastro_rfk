@@ -73,11 +73,13 @@ export const LoginPage = () => {
                                 type={showPassword ? "text" : "password"}
                                 name="password"
                                 placeholder="Digite sua senha"
+                                autoComplete="off"
                                 className={`
                                     w-full h-8 pl-10 pr-3 rounded-lg text-sm no-spinner 
                                     border ${methods.formState.errors.password ? 'border-error' : 'border-border'}
                                     focus:outline-hidden ${methods.formState.errors.password ? 'focus:border-error focus:ring-error' : 'focus:border-accent focus:ring-1 focus:ring-accent'}
                                     cursor-text bg-white-default text-text-medium
+                                    autofill:fill-none
                                 `}
                             />
                             {methods.formState.errors.password && <p className="text-error/80 text-xs mt-1 pl-1">{methods.formState.errors.password.message}</p>}
