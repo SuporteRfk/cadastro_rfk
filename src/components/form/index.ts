@@ -18,3 +18,4 @@ export * from "./form-section.components";
 export * from "./form-weights.components";
 export * from "./form-address.components";
 export * from "./form-layout.components";
+export * from "./form-info-extra-client";

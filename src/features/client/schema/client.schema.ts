@@ -34,7 +34,6 @@ export const clientRegisterFormSchema:yup.ObjectSchema<IClientRegisterForm> = yu
         .required("Por favor informe a razão social"),
     nome_fantasia: yup.string()
         .transform((value) =>{
-            console.log(value)
             if(!value) return null;
             return value.toUpperCase();
         })  
@@ -188,7 +187,31 @@ export const clientRegisterFormSchema:yup.ObjectSchema<IClientRegisterForm> = yu
         ? yup.string().required("Por favor informe o CEP")
         : yup.string().nullable().notRequired()
     }),
-    id_usr_keycloak: yup.string().required()    
+    id_usr_keycloak: yup.string().required(),
+    nome_contato: yup.string()
+        .transform((value) => {
+            if(!value) return null;
+            return value.toUpperCase();
+        })
+        .nullable()
+        .notRequired(),
+    rota_atendimento: yup.number()
+        .transform((value) => {
+            if(!value) return null;
+            return value;
+        })
+        .nullable()
+        .notRequired(),
+    ramo_atividade: yup.string()
+        .transform((value) => {
+            if(!value) return null;
+            return value.toUpperCase();
+        })
+        .nullable()
+        .notRequired(),
+    data_abertura_nascimento: yup.string()
+        .nullable()
+        .notRequired(),
 });
 
 

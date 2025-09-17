@@ -1,4 +1,5 @@
-import { FormAddress, FormBusinessNames, FormLayout, FormRegistrationIdentification, FormTaxIdentification, FormTelephone, InputRadio, PageLayout, SubTitleForm, Toastify } from "@/components";
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { FormAddress, FormBusinessNames, FormInfoExtraClient, FormLayout, FormRegistrationIdentification, FormTaxIdentification, FormTelephone, InputRadio, PageLayout, SubTitleForm, Toastify } from "@/components";
 import { insertClientService } from "../service/insert-client.service";
 import { clientRegisterFormSchema } from "../schema/client.schema";
 import { ClientTpj ,ClientType } from "../interface/client-enum";
@@ -10,7 +11,8 @@ import { useState } from "react";
 import {
     MapPinned as ZipCodeIcon,
     LocateFixed as BillingAddressIcon,
-    Users as UsersIcon
+    Users as UsersIcon,
+    BadgeInfo as InfoIcon
 } from "lucide-react";
 import { handleIsPJ } from "../utils/handle-is-pj";
 
@@ -76,6 +78,10 @@ export const RegisterClientPage = () => {
                 
                 {/* Sessão telefones */}
                 <FormTelephone methods={methods}/>
+
+                {/* Sessão de dados extras para expansão e eventos */}
+                <SubTitleForm title="Informações Extras" icon={InfoIcon} styleLine="border-t-3 border-dashed border-strong/10 mt-4"/>
+                <FormInfoExtraClient methods={methods}/>
                 
                 {/* SubTitulo Endereço */}
                 <div className="flex flex-col sm:flex-row justify-between border-t-3 border-dashed border-strong/10 mt-4">
