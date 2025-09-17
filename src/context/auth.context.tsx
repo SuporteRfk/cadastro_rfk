@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { ILoginRequest, IToastifyMessageAuthContext, ITokenBearer, ITokenRefresh, IUser } from "@/interfaces";
 import { buildUserFromToken, decodeToken, handleApiError } from "@/utils";
 import { createContext, ReactNode, useEffect, useState } from "react";
@@ -235,6 +236,7 @@ export const AuthProvider = ({children}:{children:ReactNode}) => {
         }
     };
 
+    
     return (
         <AuthContext.Provider value={{
             user,
