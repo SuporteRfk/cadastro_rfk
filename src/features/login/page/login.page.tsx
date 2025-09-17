@@ -1,11 +1,12 @@
 import { FormProvider, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { loginSchema } from "../schema/login.schema";
+import packageJson from "../../../../package.json";
+import { Button, Input } from "@/components";
 import { useContext, useState } from "react";
 import { ILoginRequest } from "@/interfaces";
 import Logo from "@/assets/logo_rfk.png";
 import { AuthContext } from "@/context";
-import { Button, Input } from "@/components";
 import {
     Eye as ViewPasswordIcon, 
     EyeOff as HidePasswordIcon,
@@ -93,6 +94,7 @@ export const LoginPage = () => {
                         </button>
                     </div>
                     <Button type="submit" text="Entrar" isLoading={loadingLocal} />
+                    <p className="mt-4 text-xs text-medium">versão: {packageJson.version}</p>
                 </form>
             </FormProvider>
         </main>

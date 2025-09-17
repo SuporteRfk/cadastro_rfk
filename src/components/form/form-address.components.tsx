@@ -1,5 +1,3 @@
-'use client';
-
 import { SafeReviewField } from "../review-field/safe-review-field.components";
 import { consultationCepService } from "@/services/viaCep-api/get-cep.service";
 import { FieldValues, Path, PathValue, UseFormReturn } from "react-hook-form";
@@ -107,7 +105,6 @@ export const FormAddress = <T extends FieldValues>({mode, methods, isBillingAddr
         const zipHas8Digits = zipCodeWithoutMask?.length === 8;
         
         if (!zipHas8Digits) {
-            console.log('oi dentro do zipHas8Digits negativo')
             // Se apagou ou está incompleto, considera que o usuário está modificando o CEP
             setHasUserManuallyChangedZip(true);
             return;

@@ -34,9 +34,10 @@ interface BaseFormProps<T extends FieldValues> {
     onResetStates?: () => void;
     methods: UseFormReturn<T>;
     loading: boolean;
+    showButtonAttachFile?: boolean;
 }
 
-export const FormLayout = <T extends FieldValues> ({methods, onSubmit, children, mode, showSector, titleForm, iconForm:IconForm, showButtonsDefault=true, modalQuestion, onResetStates, loading }: BaseFormProps<T>) => {
+export const FormLayout = <T extends FieldValues> ({methods, onSubmit, children, mode, showSector, titleForm, iconForm:IconForm, showButtonsDefault=true, modalQuestion, onResetStates, loading, showButtonAttachFile = false}: BaseFormProps<T>) => {
     const {user} = useContext(AuthContext);
     const {openModal} = useContext(ModalContext);
     
@@ -161,6 +162,7 @@ export const FormLayout = <T extends FieldValues> ({methods, onSubmit, children,
                                     )
                                 })}
                             />
+                            {showButtonAttachFile && <Button variant="danger" text="Anexar" sizeWidth="w-[120px]"/>}
                         </div>
                     }
                 </form>

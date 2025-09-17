@@ -46,6 +46,7 @@ export const RegisterIndirectProducts = () => {
                 loading={loading}
                 methods={methods}
                 onSubmit={onSubmit}
+                showButtonAttachFile={true}
             >
                 <SubTitleForm title="Dados do Produto Indireto"  styleLine="border-t-3 border-dashed border-strong/10 mt-4" icon={IndirectProductsIcon}/>
                 
