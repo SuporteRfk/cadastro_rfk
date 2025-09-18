@@ -40,5 +40,10 @@ export enum  PfOrPj {
    FISICO = "F - FISICA",
    JURIDICO = "J - JURIDICA"
 };
-  
 
+
+export enum CategoryPackaging {
+    RETORNAVEL = "R - RETORNAVEL",
+    DESCARTAVEL = "D - DESCARTAVEL"
+};
+  

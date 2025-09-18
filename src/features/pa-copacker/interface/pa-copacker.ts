@@ -1,5 +1,5 @@
 import { TypeCodeoPACopacker , GroupCodePACopacker, FamilyCodePACopacker} from "./pa-copacker-enum";
-import { Trail } from "@/interfaces";
+import { CategoryPackaging, Trail } from "@/interfaces";
 
 
 export interface IPACopacker {
@@ -36,6 +36,9 @@ export interface IPACopacker {
     grupo_tributario?: number | null;
     armazem_padrao?: string | null;
     id_usr_keycloak: string;
+    vasilhame?: string | null;
+    garrafeira?: string | null;
+    categoria_embalagem?: CategoryPackaging | null;
 };
 
 export interface IPACopackerRegister extends Omit<IPACopacker, 'id'>{};

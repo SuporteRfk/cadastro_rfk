@@ -5,13 +5,13 @@ import { getCoreRowModel, useReactTable} from "@tanstack/react-table";
 import { RequestTableBody } from "./request-table-body.components";
 import { LoadingSkelleton } from "../loading-skelleton.components";
 import { IQueryRequest, IViewRequest } from "@/interfaces";
-import { useContext, useState } from "react";
 import { getRequestColumns } from "./request-columns";
+import packageJson from "../../../package.json";
+import { useContext, useState } from "react";
 import { RequestContext } from "@/context";
 import { LucideIcon } from "lucide-react";
 import { ModalRequest } from "../modal";
 import { Table} from "../ui"
-
 
 
 interface RequestTableProps {
@@ -72,7 +72,12 @@ export const RequestTable = ({titlePage, iconForm:IconForm, isApprover=false, fi
                                 }}/>
                         }
                         <div className="min-h-full w-full flex flex-col justify-between bg-white-default rounded-lg border border-border">
-                            <RequestTableFilter fixedFilter={fixedFilter} isApprover={isApprover}/>
+                            <div className="flex justify-between items-center">
+                                {/* versionamento do projeto */}
+                                <p className="pl-4 text-xs text-medium">versao: {packageJson.version}</p>
+                                {/* Filtro */}
+                                <RequestTableFilter fixedFilter={fixedFilter} isApprover={isApprover}/>
+                            </div>
                             <div className="flex-1 overflow-auto h-full rounded-sm bg-white">
                                 <Table className="min-w-full">    
                                     <RequestTableHeader table={table}/>

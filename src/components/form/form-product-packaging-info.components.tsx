@@ -6,7 +6,7 @@ import { Input } from "../inputs";
 import {
     Box as packagingTypeIcon,
     Warehouse as StorageIcon,
-    Expand as packagingSizeIcon,
+    Expand as packagingSizeIcon,    
 } from "lucide-react";
 
 
@@ -65,3 +65,4 @@ export const FormProductPackagingInfo = <T extends FieldValues>({mode, methods, 
         </FormSection>
     );
 };
+

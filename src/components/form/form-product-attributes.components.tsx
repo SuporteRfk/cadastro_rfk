@@ -8,7 +8,8 @@ import {
     Ruler as UnitMeasureIcon,
     Landmark as TaxIcon,
     Crown as MarkIcon,
-    Cherry as FlavorIcon
+    Cherry as FlavorIcon,
+    Replace as ParentIcon
 } from "lucide-react";
 
 
@@ -19,9 +20,10 @@ interface FormProductAttributesProps<T extends FieldValues> {
     showFlavorAndMark?:boolean;
     showCestAndTax?:boolean;
     labelMarkAndFlavor?: "Fardo" | "Unitário" | "Copacker";
+    showParentCode?:boolean;
 }
 
-export const FormProductAttributes =<T extends FieldValues>({mode, methods, labelMarkAndFlavor,showSecondUnitMeasure=false, showFlavorAndMark=false, showCestAndTax=false}:FormProductAttributesProps<T>) => {
+export const FormProductAttributes =<T extends FieldValues>({mode, methods, labelMarkAndFlavor,showSecondUnitMeasure=false, showFlavorAndMark=false, showCestAndTax=false, showParentCode=false}:FormProductAttributesProps<T>) => {
     return (
         <div className="flex flex-col w-full">
             <FormSection className="mt-2 md:mt-3 md:flex-row gap-4">
@@ -50,6 +52,21 @@ export const FormProductAttributes =<T extends FieldValues>({mode, methods, labe
                             type="text"
                             icon={UnitMeasureIcon}
                             readOnly={mode === 'viewing' || mode === 'reviewing'}
+                        />
+                    </SafeReviewField>
+                }
+                {/* Código do produto pai */}
+                {showParentCode &&
+                    <SafeReviewField field="codigo_produto_pai" mode={mode || "viewing"}>
+                        <Input
+                            name="codigo_produto_pai"
+                            error={methods.formState.errors.codigo_produto_pai?.message as string | undefined}
+                            register={methods.register("codigo_produto_pai" as Path<T>)}
+                            type="text"
+                            readOnly={mode === 'viewing' || mode === 'reviewing'}
+                            label="Cod. Produto Pai"
+                            placeholder="Insira o código do produto pai"
+                            icon={ParentIcon}
                         />
                     </SafeReviewField>
                 }

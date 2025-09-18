@@ -1,4 +1,4 @@
-import { FormLayout, FormActionsButtonsRequest, FormPalletizingTrackingConversion, FormProductAttributes, FormProductCategorySelector, FormProductCode, FormProductDescription, FormProductDimensions, FormProductPackagingInfo, FormWeights, SubTitleForm, FormObservationDeniedFild } from "@/components/form";
+import { FormLayout, FormActionsButtonsRequest, FormPalletizingTrackingConversion, FormProductAttributes, FormProductCategorySelector, FormProductCode, FormProductDescription, FormProductDimensions, FormProductPackagingInfo, FormWeights, SubTitleForm, FormObservationDeniedFild, FormProductContainer } from "@/components/form";
 import { FamilyCodePACopacker, GroupCodePACopacker, TypeCodeoPACopacker } from "../interface/pa-copacker-enum";
 import { useDeniedRequest, useObservationDenied, useEditRequest, useReviewRequest } from "@/hooks";
 import { updatePACopackerService } from "../service/update-pa-copacker.service";
@@ -152,6 +152,9 @@ export const PACopackerFormManager = ({defaultValue, mode, loadingModal, setLoad
             {/* Sessão Armazenagem */}
             <SubTitleForm title="Armazenagem e Embalagem"  styleLine="border-t-3 border-dashed border-strong/10 mt-4" icon={StorageIcon}/>
             <FormProductPackagingInfo methods={methods} mode={mode}/>
+
+            {/* Vasilhame/Garrafeira e categoria de embalagem */}
+            <FormProductContainer methods={methods} mode={mode}/>
 
             {/* Sessão para informar o motivo que está negando a solicitação */}
             {mode === "denied" && (

@@ -1,4 +1,4 @@
-import { FormLayout, FormProductCategorySelector, FormProductCode, FormPalletizingTrackingConversion, FormProductDescription, FormWeights, PageLayout, SubTitleForm, Toastify, FormProductDimensions, FormProductAttributes } from "@/components";
+import { FormLayout, FormProductCategorySelector, FormProductCode, FormPalletizingTrackingConversion, FormProductDescription, FormWeights, PageLayout, SubTitleForm, Toastify, FormProductDimensions, FormProductAttributes, FormProductContainer } from "@/components";
 import { FamilyCodePACopacker, GroupCodePACopacker , TypeCodeoPACopacker } from "../interface/pa-copacker-enum";
 import { insertPACopackerService } from "../service/insert-pa-copacker.service";
 import { paCopackerRegisterSchema } from "../schema/pa-copacker.schema";
@@ -81,6 +81,9 @@ export const RegisterPACopacker = () => {
                 {/* Sessão Armazenagem */}
                 <SubTitleForm title="Armazenagem e Embalagem"  styleLine="border-t-3 border-dashed border-strong/10 mt-4" icon={StorageIcon}/>
                 <FormProductPackagingInfo methods={methods}/>
+
+                {/* Vasilhame/Garrafeira e categoria de embalagem */}
+                <FormProductContainer methods={methods}/>
                 
             </FormLayout>
         </PageLayout>
