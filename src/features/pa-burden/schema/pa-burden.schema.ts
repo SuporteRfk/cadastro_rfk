@@ -149,9 +149,15 @@ export const paBurdenRegisterSchema: yup.ObjectSchema<IPABurdenRegister> = yup.o
     id_usr_keycloak: yup.string()
         .required(),
     vasilhame: yup.string()
+        .transform((value, originalValue) =>
+            originalValue === "" ? null : value
+        )
         .nullable()
         .notRequired(),
     garrafeira:yup.string()
+        .transform((value, originalValue) =>
+            originalValue === "" ? null : value
+        )
         .nullable()
         .notRequired(),
     categoria_embalagem: yup.string()
