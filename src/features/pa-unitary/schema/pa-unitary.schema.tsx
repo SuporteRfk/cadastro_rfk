@@ -1,7 +1,7 @@
 import { FamilyCodePAUnitary, GroupCodePAUnitary, TypeCodeoPAUnitary } from "../interface/pa-unitary-enum";
 import { IPAUnitaryRegister } from "../interface/pa-unitary";
 import * as yup from "yup";
-import { Trail, ValidityPeriod } from "@/interfaces";
+import { CategoryPackaging, Trail, ValidityPeriod } from "@/interfaces";
 
 
 export const paUnitaryRegisterSchema: yup.ObjectSchema<IPAUnitaryRegister> = yup.object<IPAUnitaryRegister>().shape({
@@ -149,5 +149,27 @@ export const paUnitaryRegisterSchema: yup.ObjectSchema<IPAUnitaryRegister> = yup
         .nullable()
         .notRequired(),
     id_usr_keycloak: yup.string()
-        .required()
+        .required(),
+    vasilhame: yup.string()
+        .transform((value, originalValue) =>
+            originalValue === "" ? null : value
+        )
+        .nullable()
+        .notRequired(),
+    garrafeira:yup.string()
+        .transform((value, originalValue) =>
+            originalValue === "" ? null : value
+        )
+        .nullable()
+        .notRequired(),
+    categoria_embalagem: yup.string()
+        .oneOf(Object.values(CategoryPackaging))
+        .nullable()
+        .notRequired(), 
+    codigo_produto_pai: yup.string()
+        .transform((value, originalValue) =>
+            originalValue === "" ? null : value
+        )
+        .nullable()
+        .notRequired(),
 });
