@@ -6,6 +6,7 @@ export * from "./form-product-description.componentes";
 export * from "./form-product-dimensions.components";
 export * from "./form-product-attributes.components";
 export * from "./form-tax-identification.components";
+export * from "./form-product-container.components";
 export * from "./form-business-names.components";
 export * from "./form-observation-denied-field";
 export * from "./form-product-code.components";

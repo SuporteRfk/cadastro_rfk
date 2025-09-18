@@ -1,4 +1,4 @@
-import { FormLayout, FormActionsButtonsRequest, FormPalletizingTrackingConversion, FormProductAttributes, FormProductCategorySelector, FormProductCode, FormProductDescription, FormProductDimensions, FormProductPackagingInfo, FormValidity, FormWeights, SubTitleForm, FormObservationDeniedFild } from "@/components/form";
+import { FormLayout, FormActionsButtonsRequest, FormPalletizingTrackingConversion, FormProductAttributes, FormProductCategorySelector, FormProductCode, FormProductDescription, FormProductDimensions, FormProductPackagingInfo, FormValidity, FormWeights, SubTitleForm, FormObservationDeniedFild, FormProductContainer } from "@/components/form";
 import { FamilyCodePABurden, GroupCodePABurden, TypeCodeoPABurden } from "../interface/pa-burden-enum";
 import { useEditRequest, useDeniedRequest, useObservationDenied, useReviewRequest } from "@/hooks";
 import { updatePABurdenService } from "../service/update-pa-burden.service";
@@ -154,6 +154,9 @@ export const PABurdenFormManager = ({defaultValue, mode, loadingModal, setLoadin
             {/* Sessão Armazenagem */}
             <SubTitleForm title="Armazenagem e Embalagem"  styleLine="border-t-3 border-dashed border-strong/10 mt-4" icon={StorageIcon}/>
             <FormProductPackagingInfo methods={methods} mode={mode}/>
+
+            {/* Vasilhame/Garrafeira e categoria de embalagem */}
+            <FormProductContainer methods={methods} mode={mode}/>
 
             {/* Sessão Validade */}
             <SubTitleForm title="Validade e Lote"  styleLine="border-t-3 border-dashed border-strong/10 mt-4" icon={ValidityIcon}/>

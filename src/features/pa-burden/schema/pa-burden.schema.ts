@@ -1,6 +1,6 @@
 import { FamilyCodePABurden, GroupCodePABurden, TypeCodeoPABurden } from "../interface/pa-burden-enum";
 import { IPABurdenRegister } from "../interface/pa-burden";
-import { Trail, ValidityPeriod } from "@/interfaces";
+import { CategoryPackaging, Trail, ValidityPeriod } from "@/interfaces";
 import * as yup from "yup";
 
 export const paBurdenRegisterSchema: yup.ObjectSchema<IPABurdenRegister> = yup.object<IPABurdenRegister>().shape({
@@ -147,5 +147,15 @@ export const paBurdenRegisterSchema: yup.ObjectSchema<IPABurdenRegister> = yup.o
         .nullable()   
         .notRequired(),
     id_usr_keycloak: yup.string()
-        .required()    
+        .required(),
+    vasilhame: yup.string()
+        .nullable()
+        .notRequired(),
+    garrafeira:yup.string()
+        .nullable()
+        .notRequired(),
+    categoria_embalagem: yup.string()
+        .oneOf(Object.values(CategoryPackaging))
+        .nullable()
+        .notRequired(),
 });
