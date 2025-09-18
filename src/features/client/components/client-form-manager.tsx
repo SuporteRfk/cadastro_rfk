@@ -1,4 +1,4 @@
-import { FormAddress, FormActionsButtonsRequest, FormBusinessNames, FormLayout, FormRegistrationIdentification, FormTaxIdentification, FormTelephone, SubTitleForm, FormObservationDeniedFild } from "@/components/form";
+import { FormAddress, FormActionsButtonsRequest, FormBusinessNames, FormLayout, FormRegistrationIdentification, FormTaxIdentification, FormTelephone, SubTitleForm, FormObservationDeniedFild, FormInfoExtraClient } from "@/components/form";
 import { InputRadio, LoadingModal, RequestDeniedInfo, Toastify } from "@/components";
 import { useDeniedRequest, useEditRequest, useObservationDenied, useReviewRequest } from "@/hooks";
 import { upsertClientService } from "../service/update-client.service";
@@ -12,7 +12,8 @@ import { useForm } from "react-hook-form";
 import {
     MapPinned as ZipCodeIcon,
     LocateFixed as BillingAddressIcon,
-    Users as UsersIcon
+    Users as UsersIcon,
+    BadgeInfo as InfoIcon
 } from "lucide-react";
 import { useState } from "react";
 import { useReview } from "@/context";
@@ -170,6 +171,10 @@ export const ClientFormManager = ({defaultValue, mode, loadingModal,setLoadingMo
             {/* Sessão telefones */}
             <FormTelephone methods={methods}  mode={mode}/>
             
+            {/* Sessão de dados extras para expansão e eventos */}
+            <SubTitleForm title="Informações Extras" icon={InfoIcon} styleLine="border-t-3 border-dashed border-strong/10 mt-4"/>
+            <FormInfoExtraClient methods={methods} mode={mode}/>
+           
            {/* SubTitulo Endereço */}
             <div className="flex flex-col sm:flex-row justify-between border-t-3 border-dashed border-strong/10 mt-4">
                 <SubTitleForm title="Endereço" icon={ZipCodeIcon}/>

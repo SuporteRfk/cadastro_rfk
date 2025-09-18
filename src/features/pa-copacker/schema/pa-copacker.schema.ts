@@ -1,6 +1,6 @@
 import { FamilyCodePACopacker, GroupCodePACopacker , TypeCodeoPACopacker } from "../interface/pa-copacker-enum";
 import { IPACopackerRegister } from "../interface/pa-copacker";
-import { Trail } from "@/interfaces";
+import { CategoryPackaging, Trail } from "@/interfaces";
 import * as yup from "yup";
 
 
@@ -105,5 +105,21 @@ export const paCopackerRegisterSchema: yup.ObjectSchema<IPACopackerRegister> = y
         .nullable()
         .notRequired(),
     id_usr_keycloak: yup.string()
-        .required()        
+        .required(),
+    vasilhame: yup.string()
+        .transform((value, originalValue) =>
+            originalValue === "" ? null : value
+        )
+        .nullable()
+        .notRequired(),
+    garrafeira:yup.string()
+        .transform((value, originalValue) =>
+            originalValue === "" ? null : value
+        )
+        .nullable()
+        .notRequired(),
+    categoria_embalagem: yup.string()
+        .oneOf(Object.values(CategoryPackaging))
+        .nullable()
+        .notRequired(),        
 });

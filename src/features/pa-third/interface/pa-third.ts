@@ -1,5 +1,5 @@
 import { FamilyCodePAThird, GroupCodePAThird, TypeCodePAThird} from "./pa-third-enum";
-import { Trail, ConverterType} from "@/interfaces";
+import { Trail, ConverterType, CategoryPackaging} from "@/interfaces";
 
 
 export interface IPAThird {
@@ -17,7 +17,7 @@ export interface IPAThird {
     segunda_unidade_medida: string;
     fator_conversor: number;
     tipo_conversor: ConverterType;
-    armazem_padrao: '055 - REVENDA';
+    armazem_padrao: string;
     peso_bruto: number;
     peso_liquido: number;
     rastro: Trail;
@@ -35,6 +35,10 @@ export interface IPAThird {
     cest: string;
     grupo_tributario?: number | null;
     id_usr_keycloak: string;
+    vasilhame?: string | null;
+    garrafeira?: string | null;
+    categoria_embalagem?: CategoryPackaging | null;
+    codigo_produto_pai?: string | null;
 };
 
 export interface IPAThirdRegister extends Omit<IPAThird, 'id'>{};

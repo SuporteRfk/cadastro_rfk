@@ -1,4 +1,4 @@
-import { FormLayout, FormObservationDeniedFild, FormPalletizingTrackingConversion, FormProductAttributes, FormProductCategorySelector, FormProductCode, FormProductDescription, FormProductDimensions, FormProductPackagingInfo, FormValidity, FormWeights, SubTitleForm, } from "@/components/form";
+import { FormLayout, FormObservationDeniedFild, FormPalletizingTrackingConversion, FormProductAttributes, FormProductCategorySelector, FormProductCode, FormProductContainer, FormProductDescription, FormProductDimensions, FormProductPackagingInfo, FormValidity, FormWeights, SubTitleForm, } from "@/components/form";
 import { FamilyCodePAUnitary, GroupCodePAUnitary, TypeCodeoPAUnitary } from "../interface/pa-unitary-enum";
 import { useDeniedRequest, useObservationDenied, useEditRequest, useReviewRequest} from "@/hooks";
 import { FormActionsButtonsRequest } from "@/components/form/form-actions-buttons-request";
@@ -29,6 +29,7 @@ interface PAUnitaryFormManagerProps{
     viewRequestId: number;
     obervationRequest: string | null;
     setStatusLocal: React.Dispatch<React.SetStateAction<StatusRequest>>;
+    showParentCode?: boolean;
 }
 
 export const PAUnitaryFormManager = ({defaultValue, mode, loadingModal, setLoadingModal, status, setMode, viewRequestId, obervationRequest, setStatusLocal}:PAUnitaryFormManagerProps) => {
@@ -136,8 +137,8 @@ export const PAUnitaryFormManager = ({defaultValue, mode, loadingModal, setLoadi
                 mode={mode}
             />
             
-            {/* Sessão de atributos (unidades de medida, ncm, sabor, marca, grupo tributário e cest) */}
-            <FormProductAttributes methods={methods} showFlavorAndMark showCestAndTax labelMarkAndFlavor="Unitário" mode={mode}/>
+            {/* Sessão de atributos (unidades de medida, ncm, sabor, marca, grupo tributário e cest), codigo do produto pai */}
+            <FormProductAttributes methods={methods} showFlavorAndMark showCestAndTax labelMarkAndFlavor="Unitário" showParentCode mode={mode}/>
 
             {/* Sessão de Peso e Medidas */}
             <SubTitleForm title="Peso e Medidas"  styleLine="border-t-3 border-dashed border-strong/10 mt-4" icon={KgIcon}/>
@@ -154,6 +155,9 @@ export const PAUnitaryFormManager = ({defaultValue, mode, loadingModal, setLoadi
             {/* Sessão Armazenagem */}
             <SubTitleForm title="Armazenagem e Embalagem"  styleLine="border-t-3 border-dashed border-strong/10 mt-4" icon={StorageIcon}/>
             <FormProductPackagingInfo methods={methods} mode={mode}/>
+
+            {/* Vasilhame/Garrafeira e categoria de embalagem */}
+            <FormProductContainer methods={methods} mode={mode}/>
 
             {/* Sessão Validade */}
             <SubTitleForm title="Validade e Lote"  styleLine="border-t-3 border-dashed border-strong/10 mt-4" icon={ValidityIcon}/>

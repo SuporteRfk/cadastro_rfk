@@ -1,6 +1,6 @@
 
 import { FamilyCodePAUnitary, GroupCodePAUnitary, TypeCodeoPAUnitary} from "./pa-unitary-enum";
-import {Trail, ValidityPeriod} from "@/interfaces";
+import {CategoryPackaging, Trail, ValidityPeriod} from "@/interfaces";
 
 export interface IPAUnitary {
     id: number;
@@ -41,6 +41,10 @@ export interface IPAUnitary {
     lote_economico?: string | null;
     lote_minimo?: string | null;
     id_usr_keycloak: string;
+    vasilhame?: string | null;
+    garrafeira?: string | null;
+    categoria_embalagem?: CategoryPackaging | null;
+    codigo_produto_pai?: string | null;
 }   
 
 export interface IPAUnitaryRegister extends Omit<IPAUnitary, "id"> {}
