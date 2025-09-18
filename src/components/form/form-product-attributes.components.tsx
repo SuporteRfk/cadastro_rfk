@@ -9,7 +9,7 @@ import {
     Landmark as TaxIcon,
     Crown as MarkIcon,
     Cherry as FlavorIcon,
-    GitPullRequestCreateArrow as ParentIcon
+    Replace as ParentIcon
 } from "lucide-react";
 
 

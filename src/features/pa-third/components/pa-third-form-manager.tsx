@@ -1,4 +1,4 @@
-import { FormLayout, FormActionsButtonsRequest, FormPalletizingTrackingConversion, FormProductAttributes, FormProductCategorySelector, FormProductCode, FormProductDescription, FormProductPackagingInfo, FormWeights, SubTitleForm, FormObservationDeniedFild } from "@/components/form";
+import { FormLayout, FormActionsButtonsRequest, FormPalletizingTrackingConversion, FormProductAttributes, FormProductCategorySelector, FormProductCode, FormProductDescription, FormProductPackagingInfo, FormWeights, SubTitleForm, FormObservationDeniedFild, FormProductContainer } from "@/components/form";
 import { FamilyCodePAThird, GroupCodePAThird, TypeCodePAThird } from "../interface/pa-third-enum";
 import { useDeniedRequest, useObservationDenied, useEditRequest, useReviewRequest } from "@/hooks";
 import { Input, LoadingModal, RequestDeniedInfo, SafeReviewField, Toastify } from "@/components";
@@ -135,8 +135,8 @@ export const PAThirdFormManager = ({defaultValue, mode, loadingModal, setLoading
                 mode={mode}
             />
 
-            {/* Sessão de atributos (unidades de medida, ncm, sabor, marca, grupo tributário e cest) */}
-            <FormProductAttributes methods={methods} showSecondUnitMeasure showFlavorAndMark showCestAndTax mode={mode}/>
+            {/* Sessão de atributos (unidades de medida, ncm, sabor, marca, grupo tributário e cest), codigo do pai */}
+            <FormProductAttributes methods={methods} showSecondUnitMeasure showFlavorAndMark showCestAndTax showParentCode mode={mode}/>
 
             {/* SubGrupo do produto */}
             <SafeReviewField field="sub_grupo" mode={mode || "viewing"}>
@@ -164,6 +164,9 @@ export const PAThirdFormManager = ({defaultValue, mode, loadingModal, setLoading
             {/* Sessão Armazenagem */}
             <SubTitleForm title="Armazenagem e Embalagem"  styleLine="border-t-3 border-dashed border-strong/10 mt-4" icon={StorageIcon}/>
             <FormProductPackagingInfo methods={methods} valueInitialStorage="055 - REVENDA" mode={mode}/>
+
+            {/* Vasilhame/Garrafeira e categoria de embalagem */}
+            <FormProductContainer methods={methods} mode={mode}/>
 
             {/* Sessão para informar o motivo que está negando a solicitação */}
             {mode === "denied" && (

@@ -1,4 +1,4 @@
-import { FormLayout, FormProductCategorySelector, FormProductCode, FormPalletizingTrackingConversion, FormProductDescription, FormWeights, Input, PageLayout, SubTitleForm, Toastify, FormProductAttributes } from "@/components";
+import { FormLayout, FormProductCategorySelector, FormProductCode, FormPalletizingTrackingConversion, FormProductDescription, FormWeights, Input, PageLayout, SubTitleForm, Toastify, FormProductAttributes, FormProductContainer } from "@/components";
 import { FormProductPackagingInfo } from "@/components/form/form-product-packaging-info.components";
 import { FamilyCodePAThird, GroupCodePAThird , TypeCodePAThird } from "../interface/pa-third-enum";
 import { insertPATerceiroService } from "../service/insert-pa-third.service";
@@ -64,8 +64,8 @@ export const RegisterPAThird = () => {
                     methods={methods}
                 />
 
-                {/* Sessão de atributos (unidades de medida, ncm, sabor, marca, grupo tributário e cest) */}
-                <FormProductAttributes methods={methods} showSecondUnitMeasure showFlavorAndMark showCestAndTax/>
+                {/* Sessão de atributos (unidades de medida, ncm, sabor, marca, grupo tributário e cest), codigo do pai */}
+                <FormProductAttributes methods={methods} showSecondUnitMeasure showFlavorAndMark showCestAndTax showParentCode/>
 
                 {/* SubGrupo do produto */}
                 <Input
@@ -91,6 +91,9 @@ export const RegisterPAThird = () => {
                 <SubTitleForm title="Armazenagem e Embalagem"  styleLine="border-t-3 border-dashed border-strong/10 mt-4" icon={StorageIcon}/>
                 <FormProductPackagingInfo methods={methods} valueInitialStorage="055 - REVENDA"/>
                 
+                {/* Vasilhame/Garrafeira e categoria de embalagem */}
+                <FormProductContainer methods={methods}/>
+
             </FormLayout>
         </PageLayout>
     );
