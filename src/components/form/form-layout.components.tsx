@@ -102,7 +102,7 @@ export const FormLayout = <T extends FieldValues> ({methods, onSubmit, children,
                                 placeholder="Escolhe o seu setor" 
                                 label="Setor"
                                 selectLabel="Setores"
-                                disabled={(mode === 'viewing' || mode === 'reviewing')}
+                                disabled={(mode === 'viewing' || mode === 'reviewing' || mode === 'fiscal')}
                                 error={methods.formState.errors.setor?.message as string | undefined}
                             />
                         }
@@ -128,7 +128,7 @@ export const FormLayout = <T extends FieldValues> ({methods, onSubmit, children,
                             error={methods.formState.errors.whatsapp?.message as string | undefined}
                             Icon={WhatsAppIcon}
                             label="WhatsApp"
-                            readOnly={(mode === 'viewing' || mode === 'reviewing')}
+                            readOnly={(mode === 'viewing' || mode === 'reviewing' || mode === 'fiscal')}
                         />
                     </FormSection>
                     {/* Elementos filhos dinâmicos */}

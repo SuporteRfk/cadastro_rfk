@@ -30,7 +30,7 @@ export const FormPalletizingTrackingConversion = <T extends FieldValues>({mode, 
                             label="Fator Conversor" 
                             placeholder="Fator conversor do insumo"
                             error={methods.formState.errors.fator_conversor?.message as string | undefined} 
-                            readOnly={mode === 'viewing' || mode === 'reviewing'}
+                            readOnly={mode === 'viewing' || mode === 'reviewing' || mode === 'fiscal'}
                         />
                     </SafeReviewField>
                     {/* Tipo de conversor*/}
@@ -42,7 +42,7 @@ export const FormPalletizingTrackingConversion = <T extends FieldValues>({mode, 
                             name="tipo_conversor"
                             error={methods.formState.errors.tipo_conversor?.message as string | undefined}
                             placeholder="Selecione o conversor"
-                            disabled={mode === 'viewing' || mode === 'reviewing'}
+                            disabled={mode === 'viewing' || mode === 'reviewing' || mode === 'fiscal'}
                         />
                     </SafeReviewField>
                 </>
@@ -59,7 +59,7 @@ export const FormPalletizingTrackingConversion = <T extends FieldValues>({mode, 
                             placeholder="Informe a paletização"
                             type="number"
                             icon={PalletIcon}
-                            readOnly={mode === 'viewing' || mode === 'reviewing'}
+                            readOnly={mode === 'viewing' || mode === 'reviewing' || mode === 'fiscal'}
                         />
                     </SafeReviewField>
                     {/* lastro */}
@@ -72,7 +72,7 @@ export const FormPalletizingTrackingConversion = <T extends FieldValues>({mode, 
                             placeholder="Informe o lastro"
                             type="number"
                             icon={BallastIcon}
-                            readOnly={mode === 'viewing' || mode === 'reviewing'}
+                            readOnly={mode === 'viewing' || mode === 'reviewing' || mode === 'fiscal'}
                         />
                     </SafeReviewField>
                 </>
@@ -86,7 +86,7 @@ export const FormPalletizingTrackingConversion = <T extends FieldValues>({mode, 
                 name="rastro"
                 error={methods.formState.errors.rastro?.message as string | undefined}
                 placeholder="Selecione o rastro"
-                disabled={mode === 'viewing' || mode === 'reviewing'}
+                disabled={mode === 'viewing' || mode === 'reviewing' || mode === 'fiscal'}
             />
            </SafeReviewField>
         </FormSection>

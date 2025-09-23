@@ -63,7 +63,7 @@ export const FormProductCode =<T extends FieldValues>({
                             placeholder="Código de barras da nota fiscal"
                             type="number"
                             icon={CodeBarIcon}
-                            readOnly={mode === 'viewing' || mode === 'reviewing'}
+                            readOnly={mode === 'viewing' || mode === 'reviewing' || mode === 'fiscal'}
                         />
                     </SafeReviewField>
 
@@ -78,7 +78,7 @@ export const FormProductCode =<T extends FieldValues>({
                                 placeholder={config!.placeholder}
                                 type="number"
                                 icon={CodeBarIcon}
-                                readOnly={mode === 'viewing' || mode === 'reviewing'}
+                                readOnly={mode === 'viewing' || mode === 'reviewing' || mode === 'fiscal'}
                             />
                         </SafeReviewField>
                     }
@@ -94,7 +94,7 @@ export const FormProductCode =<T extends FieldValues>({
                     placeholder="Código do saib"
                     type="number"
                     icon={CodeSaibIcon}
-                    readOnly={mode === 'viewing' || mode === 'reviewing'}
+                    readOnly={mode === 'viewing' || mode === 'reviewing' || mode === 'fiscal'}
                 />
             </SafeReviewField>
         </FormSection>

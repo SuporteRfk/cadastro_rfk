@@ -46,6 +46,7 @@ export enum StatusRequest {
     REVISAO='Em Revisão',
     NEGADO='Negado',
     APROVADO='Aprovado',
+    FISCAL="Fiscal"
 }
 
 export enum OperationRequest {

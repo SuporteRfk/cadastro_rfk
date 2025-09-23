@@ -37,7 +37,7 @@ export const FormProductAttributes =<T extends FieldValues>({mode, methods, labe
                         placeholder="Unidade de medida por extenso. Ex: Unidade(UN)"
                         type="text"
                         icon={UnitMeasureIcon}
-                        readOnly={mode === 'viewing' || mode === 'reviewing'}
+                        readOnly={mode === 'viewing' || mode === 'reviewing' || mode === 'fiscal'}
                     />
                 </SafeReviewField>
                 {/* segunda unidade de medida*/}
@@ -51,7 +51,7 @@ export const FormProductAttributes =<T extends FieldValues>({mode, methods, labe
                             placeholder="Unidade de medida por extenso. Ex: Unidade(UN)"
                             type="text"
                             icon={UnitMeasureIcon}
-                            readOnly={mode === 'viewing' || mode === 'reviewing'}
+                            readOnly={mode === 'viewing' || mode === 'reviewing' || mode === 'fiscal'}
                         />
                     </SafeReviewField>
                 }
@@ -63,7 +63,7 @@ export const FormProductAttributes =<T extends FieldValues>({mode, methods, labe
                             error={methods.formState.errors.codigo_produto_pai?.message as string | undefined}
                             register={methods.register("codigo_produto_pai" as Path<T>)}
                             type="text"
-                            readOnly={mode === 'viewing' || mode === 'reviewing'}
+                            readOnly={mode === 'viewing' || mode === 'reviewing' || mode === 'fiscal'}
                             label="Cod. Produto Pai"
                             placeholder="Insira o código do produto pai"
                             icon={ParentIcon}
@@ -101,7 +101,7 @@ export const FormProductAttributes =<T extends FieldValues>({mode, methods, labe
                             placeholder="Por favor, insira o sabor"
                             type="text"
                             icon={FlavorIcon}
-                            readOnly={mode === 'viewing' || mode === 'reviewing'}
+                            readOnly={mode === 'viewing' || mode === 'reviewing' || mode === 'fiscal'}
                         />
                     </SafeReviewField>
                     {/* Marca */}
@@ -114,7 +114,7 @@ export const FormProductAttributes =<T extends FieldValues>({mode, methods, labe
                             placeholder="Por favor, insira a marca"
                             type="text"
                             icon={MarkIcon}
-                            readOnly={mode === 'viewing' || mode === 'reviewing'}
+                            readOnly={mode === 'viewing' || mode === 'reviewing' || mode === 'fiscal'}
                         />
                     </SafeReviewField>
                

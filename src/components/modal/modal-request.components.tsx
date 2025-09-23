@@ -15,7 +15,8 @@ const styleBadge = {
     "Pendente": "pending",
     "Em Revisão": "review",
     "Negado": "denied",
-    "Aprovado": "approved"
+    "Aprovado": "approved",
+    "Fiscal": "fiscal"
 } as const;
 
 export const ModalRequest = ({ onClose, request }: ModalRequestProps) => {

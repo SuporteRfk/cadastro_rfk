@@ -29,6 +29,20 @@ const userHasAccessApprover = (resource_access: IResourceAccess): boolean => {
     return false;
 };
 
+const userHasAccessFiscal = (resource_access: IResourceAccess): boolean => {
+    const clientId = import.meta.env.VITE_KEYCLOAK_CLIENT_ID;
+    const roleFiscal = import.meta.env.VITE_KEYCLOAK_USER_FISCAL;
+    const accessUserList = Object.keys(resource_access);
+  
+    if (accessUserList.includes(clientId)) {
+        const rolesClient = resource_access[clientId].roles;
+        return rolesClient.includes(roleFiscal);
+    };
+
+    return false;
+};
+
+
 /**
  * Constrói um objeto `IUser` baseado nos dados decodificados do token.
  * - `id_keycloak`: ID único do Keycloak.
@@ -52,5 +66,6 @@ export const buildUserFromToken = (decodedToken: ITokenBearer): IUser => {
         resource_access: decodedToken.resource_access,
         departaments: getDepartmentFromDistinguishedName(decodedToken.distinguished),
         access_approver: userHasAccessApprover(decodedToken.resource_access),
+        access_fiscal: userHasAccessFiscal(decodedToken.resource_access)
     };
 };

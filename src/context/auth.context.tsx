@@ -6,7 +6,7 @@ import { Login, Logout, RefreshToken } from "@/services/keycloak-api";
 import { Toastify } from "@/components";
 import { AxiosError } from "axios";
 import Cookies from "js-cookie";
-import { upsertUserApprover } from "@/services/supabase";
+import { upsertUserApprover, upsertUserFiscal } from "@/services/supabase";
 import { useNavigate } from "react-router-dom";
 
 interface IAuthContextType {
@@ -76,9 +76,10 @@ export const AuthProvider = ({children}:{children:ReactNode}) => {
             //🔹Decodifica o token e extrai as informações do usuário
             const tokenDecoded:ITokenBearer = decodeToken(access_token) as ITokenBearer;
             const user = buildUserFromToken(tokenDecoded);
-
+            
             setUser(user);
             await registerUpdateUserController(user); // verificar se o usuario é da controladoria e salvando no banco
+            await registerUpdateUserFiscal(user); // verificar se o usuario é responsável pela regra do fiscal e salvando no banco
             setIsAuthenticated(true);
             
             setIsLoading(true);
@@ -233,6 +234,18 @@ export const AuthProvider = ({children}:{children:ReactNode}) => {
         } catch (error) {
             console.error('Upsert usuario controladoria: ', error);
             handleApiError(error,'Upsert usuario controladoria')
+        }
+    };
+    
+    //🔹Registar ou atualizar usuario da controladoria 
+    const registerUpdateUserFiscal = async(user:IUser):Promise<void> => {
+        if(!user.access_fiscal) return;
+
+        try {
+            await upsertUserFiscal(user);
+        } catch (error) {
+            console.error('Upsert usuario fiscal: ', error);
+            handleApiError(error,'Upsert usuario fiscal')
         }
     };
 

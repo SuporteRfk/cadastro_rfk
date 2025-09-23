@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Dispatch, ReactNode, SetStateAction, createContext, useContext, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { menuCommon, menuController } from "@/data/menus";
+import { menuCommon, menuController, menuFiscal } from "@/data/menus";
 import { AuthContext } from "./auth.context";
 import {MenuItem} from "@/interfaces";
 
@@ -53,7 +54,13 @@ export const NavigationProvider = ({children}:{children:ReactNode}) => {
     //Função para abrir/fechar o menu mobile
     const toggleMenuMobile = ():void => setIsMobileOpenMenu((prev) => !prev);
 
-    const menus = user?.access_approver ? [...menuCommon, ...menuController] : menuCommon;  //Escolher qual menu renderizar
+    // Escolher qual menu renderizar
+    let menus: MenuItem[] = menuCommon;
+    if (user?.access_approver) {
+        menus = [...menuCommon, ...menuController];
+    } else if (user?.access_fiscal) {
+        menus = [...menuCommon, ...menuFiscal];
+    }
     const lengthMenuCommom = menuCommon.length; //Pegar tamanho da lista de navegação do menu comum para adicionar uma borda de separação
 
 
