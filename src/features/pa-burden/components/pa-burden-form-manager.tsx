@@ -63,7 +63,7 @@ export const PABurdenFormManager = ({defaultValue, mode, loadingModal, setLoadin
 
     // Função para saber qual função irá chamar no botão de salvar, dependendo o modo.
     const handleConfirm = async (data: IPABurdenRegister) => {
-        if(mode === "editing"){
+        if(mode === "editing" || mode === "fiscal"){
             await handleEdit(defaultValue.id, data);
         } else if (mode === "denied"){
             if(!validate()){
@@ -112,6 +112,7 @@ export const PABurdenFormManager = ({defaultValue, mode, loadingModal, setLoadin
             mode={mode}
             showButtonsDefault={false}            
         >
+            
             {/* Sessão para mostrar a obervação quando a solicitação for negada */}
             {(mode === "viewing" && status === StatusRequest.NEGADO && obervationRequest) && (
                 <RequestDeniedInfo
@@ -125,7 +126,7 @@ export const PABurdenFormManager = ({defaultValue, mode, loadingModal, setLoadin
             <FormProductDescription methods={methods} mode={mode}/>
 
             {/* Sessão do código saib e códigos de barras */}
-            <FormProductCode methods={methods} showSecondCodeBar configSecondCodeBar="formPABurden"/>
+            <FormProductCode methods={methods} showSecondCodeBar configSecondCodeBar="formPABurden" mode={mode}/>
 
             {/* Sessão do tipo, familia e grupo do PA */}
             <FormProductCategorySelector 

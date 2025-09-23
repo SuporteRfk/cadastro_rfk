@@ -59,7 +59,7 @@ export const UnitMeasureFormManager = ({defaultValue, mode, loadingModal, setLoa
 
     // Função para saber qual função irá chamar no botão de salvar, dependendo o modo.
     const handleConfirm = async (data: IUnitMeasureRegister) => {
-        if(mode === "editing"){
+        if(mode === "editing" || mode === "fiscal"){
             // modo edição da solicitação
             await handleEdit(defaultValue.id, data);
         } else if (mode === "denied"){

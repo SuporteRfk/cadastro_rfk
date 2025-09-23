@@ -25,7 +25,7 @@ export const FormProductCategorySelector = <T extends FieldValues>({mode, family
                         placeholder="Selecione a família"
                         options={Object.values(family)}
                         selectLabel="Código da família"
-                        disabled={mode === 'viewing' || mode === 'reviewing'}
+                        disabled={mode === 'viewing' || mode === 'reviewing' || mode === 'fiscal'}
                     />
                 </SafeReviewField>
                 {/* Grupo */}
@@ -37,7 +37,7 @@ export const FormProductCategorySelector = <T extends FieldValues>({mode, family
                         placeholder="Selecione o grupo"
                         options={Object.values(group)}
                         selectLabel="Código do grupo"
-                        disabled={mode === 'viewing' || mode === 'reviewing'}
+                        disabled={mode === 'viewing' || mode === 'reviewing' || mode === 'fiscal'}
                     />
                 </SafeReviewField>
                 {/* Tipo */}
@@ -49,7 +49,7 @@ export const FormProductCategorySelector = <T extends FieldValues>({mode, family
                         name="tipo"
                         error={methods.formState.errors.tipo?.message as string | undefined}
                         placeholder="Selecione o tipo"
-                        disabled={mode === 'viewing' || mode === 'reviewing'}
+                        disabled={mode === 'viewing' || mode === 'reviewing' || mode === 'fiscal'}
                     />
                 </SafeReviewField>
         </FormSection>

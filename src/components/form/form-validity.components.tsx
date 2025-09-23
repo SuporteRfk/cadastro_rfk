@@ -27,7 +27,7 @@ export const FormValidity = <T extends FieldValues>({mode, methods}:FormValidity
                     name="tipo_prazo"
                     error={methods.formState.errors.tipo_prazo?.message as string | undefined}
                     placeholder="Selecione o tipo de prazo"
-                    disabled={mode === 'viewing' || mode === 'reviewing'}
+                    disabled={mode === 'viewing' || mode === 'reviewing' || mode === 'fiscal'}
                 />
             </SafeReviewField>
 
@@ -41,7 +41,7 @@ export const FormValidity = <T extends FieldValues>({mode, methods}:FormValidity
                     placeholder="Informe a validade"
                     type="number"
                     icon={ValidityIcon}
-                    readOnly={mode === 'viewing' || mode === 'reviewing'}
+                    readOnly={mode === 'viewing' || mode === 'reviewing' || mode === 'fiscal'}
                 />
             </SafeReviewField>
 
@@ -55,7 +55,7 @@ export const FormValidity = <T extends FieldValues>({mode, methods}:FormValidity
                     placeholder="Informe o lote econômico"
                     type="text"
                     icon={BatchesEconomicIcon}
-                    readOnly={mode === 'viewing' || mode === 'reviewing'}
+                    readOnly={mode === 'viewing' || mode === 'reviewing' || mode === 'fiscal'}
                 />
             </SafeReviewField>
             
@@ -69,7 +69,7 @@ export const FormValidity = <T extends FieldValues>({mode, methods}:FormValidity
                     placeholder="Informe o lote mínimo"
                     type="text"
                     icon={BatchesMinimumIcon}
-                    readOnly={mode === 'viewing' || mode === 'reviewing'}
+                    readOnly={mode === 'viewing' || mode === 'reviewing' || mode === 'fiscal'}
                 />
             </SafeReviewField>
         </FormSection>

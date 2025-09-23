@@ -30,7 +30,7 @@ export const FormProductDescription = <T extends FieldValues>({mode, methods, vi
                     placeholder="Descrição breve do fardo"
                     type="text"
                     icon={DescriptionIcon}
-                    readOnly={mode === 'viewing' || mode === 'reviewing'}
+                    readOnly={mode === 'viewing' || mode === 'reviewing' || mode === 'fiscal'}
                 />
             </SafeReviewField>
            
@@ -60,7 +60,7 @@ export const FormProductDescription = <T extends FieldValues>({mode, methods, vi
                         placeholder="Para que o produto será utilizado"
                         type="text"
                         icon={DescriptionIcon}
-                        readOnly={mode === 'viewing' || mode === 'reviewing'}
+                        readOnly={mode === 'viewing' || mode === 'reviewing' || mode === 'fiscal'}
                     />
                 </SafeReviewField>
             }
@@ -77,7 +77,7 @@ export const FormProductDescription = <T extends FieldValues>({mode, methods, vi
                             placeholder="Descrição completa do nome cientifíco"
                             type="text"
                             icon={ScientificIcon}
-                            readOnly={mode === 'viewing' || mode === 'reviewing'}
+                            readOnly={mode === 'viewing' || mode === 'reviewing' || mode === 'fiscal'}
                         />
                     </SafeReviewField>
                     {/* mostrar instruções para preenchimento do nome científico */}

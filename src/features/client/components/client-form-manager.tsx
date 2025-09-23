@@ -72,7 +72,7 @@ export const ClientFormManager = ({defaultValue, mode, loadingModal,setLoadingMo
 
     // Função para saber qual função irá chamar no botão de salvar, dependendo o modo.
     const handleConfirm = async (data: IClientRegisterForm) => {
-        if(mode === "editing"){
+        if(mode === "editing" || mode === "fiscal"){
             if(data.mesmo_endereco_cobranca === "sim"){
                 data = {
                     ...data,

@@ -63,7 +63,7 @@ export const PAThirdFormManager = ({defaultValue, mode, loadingModal, setLoading
     
     // Função para saber qual função irá chamar no botão de salvar, dependendo o modo.
     const handleConfirm = async (data: IPAThirdRegister) => {
-        if(mode === "editing"){
+        if(mode === "editing" || mode === "fiscal"){
             await handleEdit(defaultValue.id, data);
         } else if (mode === "denied"){
             if(!validate()){

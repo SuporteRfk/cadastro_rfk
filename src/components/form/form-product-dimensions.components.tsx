@@ -89,7 +89,7 @@ export const FormProductDimensions = <T extends FieldValues>({mode, methods, con
                           label="Profundidade do fardo" 
                           placeholder="Medida da profundidade do fardo"
                           error={methods.formState.errors.profundidade_fardo?.message as string | undefined} 
-                          readOnly={mode === 'viewing' || mode === 'reviewing'}
+                          readOnly={mode === 'viewing' || mode === 'reviewing' || mode === 'fiscal'}
                       />
                     </SafeReviewField>
                     {/* Largura */}
@@ -100,7 +100,7 @@ export const FormProductDimensions = <T extends FieldValues>({mode, methods, con
                           label="Largura do fardo" 
                           placeholder="Medida da largura do fardo"
                           error={methods.formState.errors.largura_fardo?.message as string | undefined}
-                          readOnly={mode === 'viewing' || mode === 'reviewing'} 
+                          readOnly={mode === 'viewing' || mode === 'reviewing' || mode === 'fiscal'} 
                       />
                     </SafeReviewField>
                     {/* Altura */}
@@ -111,7 +111,7 @@ export const FormProductDimensions = <T extends FieldValues>({mode, methods, con
                           label="Altura do fardo" 
                           placeholder="Medida da altura do fardo"
                           error={methods.formState.errors.altura_fardo?.message as string | undefined}
-                          readOnly={mode === 'viewing' || mode === 'reviewing'} 
+                          readOnly={mode === 'viewing' || mode === 'reviewing' || mode === 'fiscal'}
                       />
                     </SafeReviewField>
                 </FormSection>
@@ -126,7 +126,7 @@ export const FormProductDimensions = <T extends FieldValues>({mode, methods, con
                           label={config.depth.label} 
                           placeholder={config.depth.placeholder}
                           error={methods.formState.errors[config.depth.nameRegister]?.message as string | undefined} 
-                          readOnly={mode === 'viewing' || mode === 'reviewing'} 
+                          readOnly={mode === 'viewing' || mode === 'reviewing' || mode === 'fiscal'}
                       />
                     </SafeReviewField>
                     {/* Largura */}
@@ -137,7 +137,7 @@ export const FormProductDimensions = <T extends FieldValues>({mode, methods, con
                           label={config.width.label} 
                           placeholder={config.width.placeholder}
                           error={methods.formState.errors[config.width.nameRegister]?.message  as string | undefined}  
-                          readOnly={mode === 'viewing' || mode === 'reviewing'} 
+                          readOnly={mode === 'viewing' || mode === 'reviewing' || mode === 'fiscal'}
                       />
                     </SafeReviewField>
                     {/* Altura */}
@@ -148,7 +148,7 @@ export const FormProductDimensions = <T extends FieldValues>({mode, methods, con
                           label={config.height.label}
                           placeholder={config.height.placeholder}
                           error={methods.formState.errors[config.height.nameRegister]?.message as string | undefined} 
-                          readOnly={mode === 'viewing' || mode === 'reviewing'} 
+                          readOnly={mode === 'viewing' || mode === 'reviewing' || mode === 'fiscal'}
                       />
                     </SafeReviewField>
                 </FormSection>

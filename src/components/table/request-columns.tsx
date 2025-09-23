@@ -23,7 +23,8 @@ const styleBadge = {
     "Negado": "denied",
     "Aprovado": "approved",
     "alteração": "change",
-    "novo cadastro": "new register"
+    "novo cadastro": "new register",
+    "Fiscal": "fiscal"
 } as const;
 
 export const getRequestColumns = ({

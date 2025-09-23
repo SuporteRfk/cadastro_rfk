@@ -12,16 +12,21 @@ export const getCountersRequest = async () => {
       reviewQuantity: supabaseApi.from("vw_solicitacoes_geral")
         .select("*", { head: true, count: "exact" })
         .eq("status", "Em Revisão"),
+
+      fiscalQuantity: supabaseApi.from("vw_solicitacoes_geral")
+        .select("*", { head: true, count: "exact" })
+        .eq("status", "Fiscal"),
     };
   
-    const [pending, review] = await Promise.all([
-      queries.pendingQuantity, queries.reviewQuantity
+    const [pending, review, fiscal] = await Promise.all([
+      queries.pendingQuantity, queries.reviewQuantity, queries.fiscalQuantity
     ]);
     
     
     return {
       pending: pending.count || 0,
       review: review.count || 0,
-      total: (pending.count || 0) + (review.count || 0),
+      fiscal: fiscal.count || 0,
+      total: (pending.count || 0) + (review.count || 0) + (fiscal.count || 0),
     };
 };
