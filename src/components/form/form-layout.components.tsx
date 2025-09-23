@@ -12,7 +12,7 @@ import { ScrollArea } from "../ui";
 import { 
     LucideIcon, 
     UserRound as UserIcon, 
-    Mail as EmailIcon,
+    Mail as EmailIcon
 } from "lucide-react";
 import { 
     FaWhatsapp as WhatsAppIcon
@@ -34,9 +34,10 @@ interface BaseFormProps<T extends FieldValues> {
     onResetStates?: () => void;
     methods: UseFormReturn<T>;
     loading: boolean;
+    attachFile?: boolean;
 }
 
-export const FormLayout = <T extends FieldValues> ({methods, onSubmit, children, mode, showSector, titleForm, iconForm:IconForm, showButtonsDefault=true, modalQuestion, onResetStates, loading}: BaseFormProps<T>) => {
+export const FormLayout = <T extends FieldValues> ({methods, onSubmit, children, mode, showSector, titleForm, iconForm:IconForm, showButtonsDefault=true, modalQuestion, onResetStates, loading, attachFile=false}: BaseFormProps<T>) => {
     const {user} = useContext(AuthContext);
     const {openModal} = useContext(ModalContext);
     
@@ -56,11 +57,25 @@ export const FormLayout = <T extends FieldValues> ({methods, onSubmit, children,
        
     return(
         <ScrollArea className="max-h-[98vh] w-full min-w-0 max-w-[1920px] mx-auto rounded-lg">
-            {/* Titulo do Formulário */}
-            <h1 className="p-3 text-xl text-text-strong font-bold mt-3 flex gap-2 items-center">
-                {<IconForm size={20}/>}
-                {titleForm}
-            </h1>
+            <div className="flex justify-between items-center mt-3">
+                {/* Titulo do Formulário */}
+                <h1 className="p-3 text-[16px] md:text-xl text-text-strong font-bold flex gap-2 items-center text-nowrap">
+                    {<IconForm size={20}/>}
+                    {titleForm}
+                </h1>
+                {/* Botão de Anexar */}
+                {attachFile && 
+                    <Button
+                        variant="attach"
+                        text="Importar XML"
+                        sizeWidth="w-fit"
+                        onClick={() => openModal("IMPORT_XML", {
+                            message: '',
+                            onConfirm: () => {},       
+                        })}
+                    />
+                }
+            </div>
             <FormProvider {...methods}>
                 <form 
                     className="bg-white-default w-full max-w-full min-w-0 px-4 border rounded-lg shadow-lg shadow-black/15 relative"
@@ -163,6 +178,7 @@ export const FormLayout = <T extends FieldValues> ({methods, onSubmit, children,
                             />
                         </div>
                     }
+                
                 </form>
             </FormProvider>
         </ScrollArea>
