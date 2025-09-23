@@ -27,7 +27,7 @@ export const FormProductContainer = <T extends FieldValues>({mode, methods}:Form
                     placeholder="cod vasilhame"
                     type="text"
                     icon={CaskIcon}
-                    readOnly={mode === 'viewing' || mode === 'reviewing'}
+                    readOnly={mode === 'viewing' || mode === 'reviewing' || mode === 'fiscal'}
                 />
             </SafeReviewField>
           
@@ -41,7 +41,7 @@ export const FormProductContainer = <T extends FieldValues>({mode, methods}:Form
                     placeholder="cod garrafeira"
                     type="text"
                     icon={CellaretIcon}
-                    readOnly={mode === 'viewing' || mode === 'reviewing'}
+                    readOnly={mode === 'viewing' || mode === 'reviewing' || mode === 'fiscal'}
                 />
             </SafeReviewField>
             {/* Categoria da Embalagem */}
@@ -49,7 +49,7 @@ export const FormProductContainer = <T extends FieldValues>({mode, methods}:Form
                 <InputSelect
                     name="categoria_embalagem"
                     placeholder="Retornavel / Descartavel"
-                    disabled={mode === 'viewing' || mode === 'reviewing'}
+                    disabled={mode === 'viewing' || mode === 'reviewing' || mode === 'fiscal'}
                     error={methods.formState.errors.categoria_embalagem?.message as string | undefined}
                     options={Object.values(CategoryPackaging)}
                     label="Categoria Embalagem"

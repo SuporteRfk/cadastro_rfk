@@ -29,14 +29,16 @@ export const NavMenu = () => {
             {menus.map((item, i)=> (
                 // Categorias e opções sem sub menu 
                 <motion.div layout key={item.label} className="mb-1 w-full">
-                    {/* adicionar uma borda para separar o menu comum, como o da controladoria */}
+                    {/* adicionar uma borda para separar o menu comum, com o da controladoria */}
                     {i === lengthMenuCommom && <motion.div layout className={`border ${isMobileOpenMenu ? "border-neutral/30" : "border-border"}  my-2`}/>}
                         
                     {/* categoria ou item direto */}
                     {item.path ? (
                         <button
                             onClick={() => {
-                                item.path === "/dashboard" && setActiveCategory(null); // Resetar categoria ativa ao navegar para dashboard
+                                if(item.path === "/dashboard"){
+                                    setActiveCategory(null); // Resetar categoria ativa ao navegar para dashboard
+                                };
                                 handleNavigate(item.path!)
                             }}
                             title={item.label}
@@ -109,6 +111,7 @@ export const NavMenu = () => {
                                     {/* Badge para contar especificamente as solicitacoes de pendente e review, funciona mobile e desktop */}
                                     {childSubMenu.label === "Pendentes" && <BadgeCounter count={counters.pending} color={`bg-warning`} marginPosition={handlePositionBadgeSubMenu()} size="h-4 w-4"/>}
                                     {childSubMenu.label === "Revisão" && <BadgeCounter count={counters.review} color={`bg-info`} marginPosition={handlePositionBadgeSubMenu()} size="h-4 w-4"/>}
+                                    {childSubMenu.label === "Fiscal" && <BadgeCounter count={counters.fiscal} color={`bg-slate-500`} marginPosition={handlePositionBadgeSubMenu()} size="h-4 w-4"/>}
                                     <motion.span layout>
                                         <childSubMenu.icon className="w-4 h-4" />
                                     </motion.span>

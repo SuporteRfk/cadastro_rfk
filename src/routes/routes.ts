@@ -1,6 +1,7 @@
-import { RequestPendingPage, RequestApprovedPage, RequestDeniedPage, RequestRevisionPage } from "@/features/request/pages";
+import { RequestPendingPage, RequestApprovedPage, RequestDeniedPage, RequestRevisionPage, RequestFiscalPage } from "@/features/request/pages";
 import { RegisterIndirectProducts } from "@/features/indirect-products/page/register-indirect-products.page";
 import { RegisterPaymentCondition } from "@/features/payment-condition/page/register-payment-codition.page";
+import { ServiceRegistrationPage } from "@/features/service-registration/page/service-registration.page";
 import { RegisterUnitMeasure } from "@/features/unit-measure/page/register-unit-measure.page";
 import { RegisterPACopacker } from "@/features/pa-copacker/page/register-pa-copacker.page";
 import { RegisterPAUnitary } from "@/features/pa-unitary/page/register-pa-unitary.page";
@@ -12,7 +13,6 @@ import { RegisterClientPage } from "@/features/client/page/register-client.page"
 import { RegisterInsumo } from "@/features/insumos/page/register-insumo.page";
 import { DashboardPage } from "@/features/dashboard/page/dashboard.page";
 import { LoginPage } from "@/features/login/page/login.page";
-import { ServiceRegistrationPage } from "@/features/service-registration/page/service-registration.page";
 
 
 // Arquivo para organiar as rotas do sistema
@@ -34,7 +34,8 @@ export const privateRoutes = [
     {path: "/solicitacoes/pendentes", element: RequestPendingPage},
     {path: "/solicitacoes/em-revisao", element: RequestRevisionPage},
     {path: "/solicitacoes/negadas", element: RequestDeniedPage},
-    {path: "/solicitacoes/aprovadas", element: RequestApprovedPage}
+    {path: "/solicitacoes/aprovadas", element: RequestApprovedPage},
+    {path: "/solicitacoes/fiscal", element: RequestFiscalPage}
 ];
 
 export const publicRoutes = [

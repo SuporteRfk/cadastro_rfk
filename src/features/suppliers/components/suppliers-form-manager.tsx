@@ -63,7 +63,7 @@ export const SuppliersFormManager = ({defaultValue, mode, loadingModal, setLoadi
     
     // Função para saber qual função irá chamar no botão de salvar, dependendo o modo.
     const handleConfirm = async (data: ISupplierRegisterForm) => {
-        if(mode === "editing"){
+        if(mode === "editing" || mode === "fiscal"){
             const {fisica_juridica, ...dataRegister} = data;
             await handleEdit(defaultValue.id, dataRegister as ISupplierRegisterForm);
         } else if (mode === "denied"){

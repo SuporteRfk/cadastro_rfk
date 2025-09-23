@@ -21,7 +21,8 @@ import {
     FileX2 as DeniedRequestIcon,
     FileCheck2 as ApprovedRequestIcon,
     House as HomeIcon,
-    Wrench as ServiceIcon
+    Wrench as ServiceIcon,
+    FileBadge as RequestFiscalIcon
 } from "lucide-react";
 
 
@@ -84,6 +85,17 @@ export const menuController :MenuItem[] = [
             { label: "Revisão", path: "/solicitacoes/em-revisao", icon: RevisionRequestIcon },
             { label: "Negado", path: "/solicitacoes/negadas", icon: DeniedRequestIcon },
             { label: "Aprovado", path: "/solicitacoes/aprovadas", icon: ApprovedRequestIcon },
+            { label: "Fiscal", path: "/solicitacoes/fiscal", icon: RequestFiscalIcon },
         ]
     }
 ]
+
+export const menuFiscal :MenuItem[] = [
+    {
+        label: "Painel Solicitações",
+        icon: RequestIcon,
+        children: [
+            { label: "Fiscal", path: "/solicitacoes/fiscal", icon: RequestFiscalIcon },
+        ]
+    }
+];

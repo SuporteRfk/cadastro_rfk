@@ -6,9 +6,10 @@ import {
     Pencil as EditIcon,
     CheckCheck as ApproverIcon,
     PencilRuler as ReviewIcon,
-    OctagonMinus as DeniedIcon
+    OctagonMinus as DeniedIcon,
+    Scale as FiscalIcon
 } from "lucide-react";
-import { useRequestApprove } from "@/hooks";
+import { useRequestApprove, useRequestFiscal } from "@/hooks";
 
 
 
@@ -21,30 +22,38 @@ interface ModalRequestActionsProps {
 }
 
 export const ModalRequestActions = ({ request, mode, setMode, setloadingModal,setStatusLocal }: ModalRequestActionsProps) => {
-  const { user } = useContext(AuthContext);
-  const { openModal } = useContext(ModalContext);
+    const { user } = useContext(AuthContext);
+    const { openModal } = useContext(ModalContext);
 
-  const isUserApprover = user?.access_approver;
-  const isPending = request.status === StatusRequest.PENDENTE;
-  const isReview = request.status === StatusRequest.REVISAO;
-  const idKeycloack = request.id_usr_keycloak;
-
+    const isUserApprover = user?.access_approver;
+    const isUserFiscal = user?.access_fiscal;
+    const isPending = request.status === StatusRequest.PENDENTE;
+    const isReview = request.status === StatusRequest.REVISAO;
+    const isFiscal = request.status === StatusRequest.FISCAL;
+    const idKeycloack = request.id_usr_keycloak;
+    let setModeEdit:FormStateType = 'editing';
   
-  const handleReleaseEdit = ():boolean => {
-    if(isUserApprover){
-        return true; 
-    } 
+    const handleReleaseEdit = ():boolean => {
+        if(isUserApprover){
+            return true; 
+        }; 
 
-    if(!isUserApprover && idKeycloack === user?.id_keycloak && (isPending || isReview)){
-        return true;
+        if(!isUserApprover && idKeycloack === user?.id_keycloak && (isPending || isReview)){
+            return true;
+        };
+
+        if(!isUserApprover && isFiscal && isUserFiscal){
+            setModeEdit = 'fiscal';
+            return true;
+        }
+
+        return false
     }
-
-    return false
-  }
   
-  // hook para aprovar a solicitação
-   const approveRequest = useRequestApprove();
-   
+    // hook para aprovar a solicitação
+    const approveRequest = useRequestApprove();
+    const sendFiscal = useRequestFiscal();
+    
  
   return (
     // <div className="flex items-center justify-end gap-2 w-full absolute z-10 bottom-0 p-4">
@@ -55,7 +64,7 @@ export const ModalRequestActions = ({ request, mode, setMode, setloadingModal,se
                     <Button
                         variant={mode=="editing"? "active":"secondary"}
                         text="Editar"
-                        onClick={() => setMode("editing")}
+                        onClick={() => setMode(setModeEdit)}
                         sizeWidth="w-[110px]"
                         iconInText={EditIcon}
                         styleIcon={{
@@ -71,6 +80,26 @@ export const ModalRequestActions = ({ request, mode, setMode, setloadingModal,se
                             sizeWidth="w-[110px]"
                             onClick={() => setMode("reviewing")}
                             iconInText={ReviewIcon}
+                            styleIcon={{
+                                size: 18
+                            }}
+                        />
+                        <Button
+                            variant={"fiscal"}
+                            text="Fiscal"
+                            sizeWidth="w-[110px]"
+                            onClick={async () => openModal("fiscal-request", {
+                                message: `Você tem certeza que deseja enviar para o fiscal a solicitação #${request.id} referente a ${request.tipo}?`,
+                                onConfirm: async () => {
+                                    await sendFiscal({
+                                        setMode: setMode,
+                                        viewRequestId: request.id,
+                                        setStatusLocal: setStatusLocal,
+                                        setLoadingModal: setloadingModal,
+                                    })
+                                }
+                            })}
+                            iconInText={FiscalIcon}
                             styleIcon={{
                                 size: 18
                             }}

@@ -57,7 +57,7 @@ export const ServiceRegistrationFormManager = ({defaultValue, mode, loadingModal
      // Função para saber qual função irá chamar no botão de salvar, dependendo o modo.
     const handleConfirm = async (data: IServiceRegister) => {
         //modo edição
-        if(mode === "editing"){
+        if(mode === "editing" || mode === "fiscal"){
             await handleEdit(defaultValue.id, data);
         } else if (mode === "denied"){
             //modo negado

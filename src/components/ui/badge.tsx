@@ -27,7 +27,9 @@ const badgeVariants = cva(
         "change": 
           "rounded-full border-warning bg-warning/40 text-text-strong font-semibold",
         "counter":
-          "rounded-full border-accent bg-accent/10 text-accent font-semibold", 
+          "rounded-full border-accent bg-accent/10 text-accent font-semibold",
+        "fiscal": 
+          "border-slate-600 bg-slate-400 text-white font-semibold",
       },
     },
     defaultVariants: {

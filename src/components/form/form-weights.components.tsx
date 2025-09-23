@@ -24,7 +24,7 @@ export const FormWeights = <T extends FieldValues>({mode, methods}:FormWeightsPr
                     label="Peso Bruto" 
                     placeholder="Peso Bruto do insumo"
                     error={methods.formState.errors.peso_bruto?.message as string | undefined}
-                    readOnly={mode === 'viewing' || mode === 'reviewing'}
+                    readOnly={mode === 'viewing' || mode === 'reviewing' || mode === 'fiscal'}
                 />
             </SafeReviewField>
             {/* peso líquido*/}
@@ -35,7 +35,7 @@ export const FormWeights = <T extends FieldValues>({mode, methods}:FormWeightsPr
                     label="Peso Líquido" 
                     placeholder="Peso Líquido do insumo"
                     error={methods.formState.errors.peso_liquido?.message  as string | undefined} 
-                    readOnly={mode === 'viewing' || mode === 'reviewing'}
+                    readOnly={mode === 'viewing' || mode === 'reviewing' || mode === 'fiscal'}
                 />
             </SafeReviewField>
         </FormSection>

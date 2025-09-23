@@ -23,6 +23,7 @@ export const useEditRequest = <T> ({setLoadingModal, setMode, status, updateFunc
   // Qualquer outra rota, em uma solicitação que está em revisão, foi presumido que está concertando o erro e saindo de revisão para PENDENTE novamente. 
   const maintainStatus = pathName === "/solicitacoes/em-revisao" && user?.access_approver;
   const setStatus = maintainStatus ? status : StatusRequest.PENDENTE;
+  const operationText = status === StatusRequest.FISCAL ? "Editado pelo fiscal" : "Editar solicitação";
 
   const handleEdit = async (tableRequestId:number, data: T) => {
     try {
@@ -36,7 +37,7 @@ export const useEditRequest = <T> ({setLoadingModal, setMode, status, updateFunc
             data: formatText(new Date(),"data"),
             departamento: user?.departaments || 'departamento',
             nome: user?.fullName || "usuario padrão",
-            operacao: "Editar solicitação"
+            operacao: operationText
         }
       })
    

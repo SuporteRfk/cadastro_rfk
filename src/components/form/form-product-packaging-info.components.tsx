@@ -31,7 +31,7 @@ export const FormProductPackagingInfo = <T extends FieldValues>({mode, methods, 
                     type="text"
                     icon={StorageIcon}
                     valueInitial={valueInitialStorage ?? valueInitialStorage}
-                    readOnly={mode === 'viewing' || mode === 'reviewing'}
+                    readOnly={mode === 'viewing' || mode === 'reviewing' || mode === 'fiscal'}
                 />
              </SafeReviewField>
 
@@ -45,7 +45,7 @@ export const FormProductPackagingInfo = <T extends FieldValues>({mode, methods, 
                     placeholder="Informe o tamanho da embalagem"
                     type="text"
                     icon={packagingSizeIcon}
-                    readOnly={mode === 'viewing' || mode === 'reviewing'}
+                    readOnly={mode === 'viewing' || mode === 'reviewing' || mode === 'fiscal'}
                 />
             </SafeReviewField>
            
@@ -59,7 +59,7 @@ export const FormProductPackagingInfo = <T extends FieldValues>({mode, methods, 
                     placeholder="Informe o tipo de embalagem"
                     type="text"
                     icon={packagingTypeIcon}
-                    readOnly={mode === 'viewing' || mode === 'reviewing'}
+                    readOnly={mode === 'viewing' || mode === 'reviewing' || mode === 'fiscal'}
                 />
             </SafeReviewField>
         </FormSection>

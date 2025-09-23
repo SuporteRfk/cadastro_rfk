@@ -34,7 +34,7 @@ export enum ConverterType{
     MULTIPLICADOR="M - MULTIPLICADOR"
 };
 
-export type FormStateType = 'editing' | 'viewing' | 'reviewing' | 'denied';
+export type FormStateType = 'editing' | 'viewing' | 'reviewing' | 'denied' | 'fiscal';
 
 export enum  PfOrPj {
    FISICO = "F - FISICA",
