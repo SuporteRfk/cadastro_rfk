@@ -6,7 +6,7 @@ import { DateInput, Input, InputSelect } from "../inputs";
 import { FormSection } from "./form-section.components";
 import { AuthContext, ModalContext } from "@/context";
 import { Button } from "../button/button.components";
-import { ReactNode, useContext} from "react";
+import { ReactNode, useContext, useState} from "react";
 import { FormStateType, Sectors } from "@/interfaces";
 import { ScrollArea } from "../ui";
 import { 
@@ -17,6 +17,7 @@ import {
 import { 
     FaWhatsapp as WhatsAppIcon
 } from "react-icons/fa6";
+import { ModalXml } from "../modal-xml";
 
 
 interface BaseFormProps<T extends FieldValues> {
@@ -40,7 +41,7 @@ interface BaseFormProps<T extends FieldValues> {
 export const FormLayout = <T extends FieldValues> ({methods, onSubmit, children, mode, showSector, titleForm, iconForm:IconForm, showButtonsDefault=true, modalQuestion, onResetStates, loading, attachFile=false}: BaseFormProps<T>) => {
     const {user} = useContext(AuthContext);
     const {openModal} = useContext(ModalContext);
-    
+    const [openModalXml,setOpenModalXml] = useState<boolean>(false);
 
 
     const handleReset = () => {
@@ -69,10 +70,7 @@ export const FormLayout = <T extends FieldValues> ({methods, onSubmit, children,
                         variant="attach"
                         text="Importar XML"
                         sizeWidth="w-fit"
-                        onClick={() => openModal("IMPORT_XML", {
-                            message: '',
-                            onConfirm: () => {},       
-                        })}
+                        onClick={() => setOpenModalXml(true)}
                     />
                 }
             </div>
@@ -181,6 +179,9 @@ export const FormLayout = <T extends FieldValues> ({methods, onSubmit, children,
                 
                 </form>
             </FormProvider>
+
+            {/* Abrir o modal para importar o xml */}
+            <ModalXml open={openModalXml} close={setOpenModalXml} titleForm={titleForm} user={{name: user?.fullName || "", email: user?.email}}/>        
         </ScrollArea>
     );
 };
