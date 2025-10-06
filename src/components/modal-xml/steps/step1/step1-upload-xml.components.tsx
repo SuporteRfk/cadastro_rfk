@@ -1,7 +1,8 @@
 import { Upload, FileText as FileIcon, Trash2 as DeleteIcon } from "lucide-react";
+import { Toastify } from "@/components/toastify.components";
 import { XmlIndirectProduct, XmlInfo } from "@/interfaces";
 import { Dispatch, useRef, useState } from "react";
-import { Toastify } from "../toastify.components";
+
 
 interface Step1UploadXmlProps {
     setXmlInfos: Dispatch<React.SetStateAction<XmlInfo[]>>;
@@ -37,13 +38,12 @@ export const Step1UploadXml = ({setXmlInfos, xmlInfos, items, setItems}:Step1Upl
         const counterId = items.length;
         const doc = new DOMParser().parseFromString(xmlText, "application/xml");
         const dets = Array.from(doc.getElementsByTagName("det"))
-        console.log(dets[0])
         return dets.map((det, i) => {
             const prod = det.getElementsByTagName("prod")[0] || null;
             const name = tagText(prod, "xProd");
             const ncm = tagText(prod, "NCM");
             const unit = tagText(prod, "uTrib") || tagText(prod, "uCom");
-            return { id: counterId+i+1, name, ncm, unit_measure: unit, idFile: idFile };
+            return { id: counterId+i+1, name, ncm, unit_measure: unit, idFile: idFile, status: "Pendente"};
         })
     };
     
@@ -87,7 +87,6 @@ export const Step1UploadXml = ({setXmlInfos, xmlInfos, items, setItems}:Step1Upl
             try {
                 const text = await file.text()
                 const extracted = parseNFeToProducts(text, `${file.name}#${file.size}`);
-                console.log(extracted)
                 // registrar os itens
                 setItems((prev) => [...prev, ...extracted]);
 
@@ -190,7 +189,7 @@ export const Step1UploadXml = ({setXmlInfos, xmlInfos, items, setItems}:Step1Upl
             
             {/* Card para mostrar os arquivos que subiram */}
             {xmlInfos.length > 0 && (
-                <div className="flex flex-col w-full min-h-[400px] mt-3 overflow-y-auto p-2">
+                <div className="flex flex-col w-full max-h-96 mt-3 p-2">
                     
                     <button 
                         className="cursor-pointer self-end flex items-center text-text-neutral text-sm hover:underline"
@@ -199,27 +198,29 @@ export const Step1UploadXml = ({setXmlInfos, xmlInfos, items, setItems}:Step1Upl
                         Limpar tudo
                     </button>
 
-                    {xmlInfos.map(xml => {
-                        return (
-                            <div key={xml.id} className="my-1 w-full rounded-md border bg-white px-4 py-3 flex items-center justify-between shadow">
-                                <div className="flex items-center gap-3 min-w-0">
-                                    <FileIcon className="shrink-0 text-accent"/>
-                                    <div className="flex-1 min-w-0" title={xml.name}>
-                                        <p className="text-[15px] font-medium truncate text-text-medium">{xml.name}</p>
-                                        <p className="text-text-neutral text-[14px] truncate">{xml.itemsCount} {xml.itemsCount === 1 ? "Item encontrado" : "Itens encontrados"}</p>
+                    <div className="mt-2 space-y-2 overflow-auto max-h-[clamp(14rem,40vh,28rem)] xl:max-h-none xl:overflow-visible pr-1">
+                        {xmlInfos.map(xml => {
+                            return (
+                                <div key={xml.id} className="my-1 w-full rounded-md border bg-white px-4 py-3 flex items-center justify-between shadow">
+                                    <div className="flex items-center gap-3 min-w-0">
+                                        <FileIcon className="shrink-0 text-accent"/>
+                                        <div className="flex-1 min-w-0" title={xml.name}>
+                                            <p className="text-[15px] font-medium truncate text-text-medium">{xml.name}</p>
+                                            <p className="text-text-neutral text-[14px] truncate">{xml.itemsCount} {xml.itemsCount === 1 ? "Item encontrado" : "Itens encontrados"}</p>
+                                        </div>
                                     </div>
+                                    <button
+                                        type="button"
+                                        className="cursor-pointer"
+                                        title="Remover Xml"
+                                        onClick={() => removeItem(xml.id)}
+                                    >
+                                        <DeleteIcon className="text-error" size={20}/>
+                                    </button>
                                 </div>
-                                <button
-                                    type="button"
-                                    className="cursor-pointer"
-                                    title="Remover Xml"
-                                    onClick={() => removeItem(xml.id)}
-                                >
-                                    <DeleteIcon className="text-error" size={20}/>
-                                </button>
-                            </div>
-                        )
-                    })}
+                            )
+                        })}
+                    </div>
                     <p className="self-end text-sm mt-2 text-text-strong">{items.length} itens extraídos</p>
                 </div>
             )}

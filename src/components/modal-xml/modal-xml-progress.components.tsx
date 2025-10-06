@@ -12,7 +12,7 @@ export const XmlProgress = ({step, quantitySteps=3}:XmlProgressProps) => {
     const progress = Math.round((step * 100) / quantitySteps);
 
     return (
-        <SheetHeader>
+        <SheetHeader className="px-4 pt-4 pb-1">
             <SheetTitle className="md:text-lg text-text-medium flex gap-1 items-center">
                 <XmlIcon size={20} className="text-text-medium"/> Importar Itens via XML (NFe)
             </SheetTitle>

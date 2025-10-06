@@ -36,4 +36,8 @@ export interface IIndirectProducts {
     id_usr_keycloak: string;
 }
 
-export interface IIndirectProductsRegister extends Omit<IIndirectProducts, "id"> {}
+export type IIndirectProductsRegister = Omit<IIndirectProducts, "id">;
+
+
+export type IndirectProducStep2 = Pick<IIndirectProducts, "descricao_uso" | "codigo_familia" | "codigo_grupo" | "tipo">;
+

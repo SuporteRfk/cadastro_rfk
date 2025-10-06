@@ -1,4 +1,4 @@
-import { IIndirectProductsRegister } from "../interface/indirect-products";
+import { IIndirectProductsRegister, IndirectProducStep2 } from "../interface/indirect-products";
 import { UseFormReturn } from "react-hook-form";
 import {
   GroupCodeIndirectProducts_30,
@@ -61,5 +61,51 @@ export const useGroupSelectorIndirectProduct = (methods: UseFormReturn<IIndirect
 
 };
 
+
+
+export const useGroupSelectorIndirectProductInLot = (methods: UseFormReturn<IndirectProducStep2>):
+        | typeof GroupCodeIndirectProducts_30
+        | typeof GroupCodeIndirectProducts_31 
+        | typeof GroupCodeIndirectProducts_32
+        | typeof GroupCodeIndirectProducts_33
+        | typeof GroupCodeIndirectProducts_36
+        | typeof GroupCodeIndirectProducts_37
+        | typeof GroupCodeIndirectProducts_39
+        | string[]  => {
+    
+    const fallbackGroup = ["Selecione uma família"];
+    
+    const [group, setGroup] = useState<
+        | typeof GroupCodeIndirectProducts_30
+        | typeof GroupCodeIndirectProducts_31 
+        | typeof GroupCodeIndirectProducts_32
+        | typeof GroupCodeIndirectProducts_33
+        | typeof GroupCodeIndirectProducts_36
+        | typeof GroupCodeIndirectProducts_37
+        | typeof GroupCodeIndirectProducts_39
+        | typeof fallbackGroup
+    >(fallbackGroup);
+  
+    const groupFamilyMap = {
+      [FamilyCodeIndirectProducts.IMOBILIZADO]: GroupCodeIndirectProducts_37,
+      [FamilyCodeIndirectProducts.INSUMOS_NAO_PRODUTIVOS]: GroupCodeIndirectProducts_30,
+      [FamilyCodeIndirectProducts.MATERIAL_CONSUMO]: GroupCodeIndirectProducts_31,
+      [FamilyCodeIndirectProducts.MERCADORIA_REVENDA]: GroupCodeIndirectProducts_39,
+      [FamilyCodeIndirectProducts.PRODUTO_MANUTENCAO_FROTAS]: GroupCodeIndirectProducts_33,
+      [FamilyCodeIndirectProducts.PRODUTO_MANUTENCAO_INDUSTRIAL]: GroupCodeIndirectProducts_32,
+      [FamilyCodeIndirectProducts.SUBPRODUTO]: GroupCodeIndirectProducts_36,
+    };
+
+
+    const selectedFamilyValue = methods.watch("codigo_familia");
+
+    useEffect(() => {
+      const family = groupFamilyMap[selectedFamilyValue]; 
+      setGroup(family || fallbackGroup);
+    },[selectedFamilyValue])
+
+    return group;
+
+};
 
 
