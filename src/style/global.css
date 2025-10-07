@@ -66,6 +66,7 @@
   ::file-selector-button {
     border-color: var(--color-border, currentColor);
   }
+
 }
 
 :root {
@@ -128,6 +129,8 @@
       width: 100% !important;
       max-width: 100% !important;
     }
+
+   
     
   }
 

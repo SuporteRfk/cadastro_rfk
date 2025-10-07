@@ -1,6 +1,7 @@
 import { FamilyCodeIndirectProducts, GroupCodeIndirectProducts_30, GroupCodeIndirectProducts_31, GroupCodeIndirectProducts_32, GroupCodeIndirectProducts_33, GroupCodeIndirectProducts_36, GroupCodeIndirectProducts_37, GroupCodeIndirectProducts_39, TypeCodeIndirectProducts } from "@/features/indirect-products/interface/indirect-products-enum";
 
-export type StatusItemXml = "Ok"  | "Pendente" | "Descartado";
+export type StatusItemXml = "Ok"  | "Pendente";
+export type Filter = "All" | "OK" | "Pending" | "Selected";
 
 export type XmlInfo = {
     id: string; 

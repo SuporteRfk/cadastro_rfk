@@ -3,8 +3,8 @@ import { IndirectProducStep2 } from "@/features/indirect-products/interface/indi
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../../ui";
 import { Step2EditInLot } from "./step2-edit-in-lot.component";
 import { TableXml } from "./table-xml/table-xml.components";
+import { Filter, XmlIndirectProduct } from "@/interfaces";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { XmlIndirectProduct } from "@/interfaces";
 import { Dispatch, useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -15,13 +15,15 @@ interface Step2Props {
     setItemsOk: Dispatch<React.SetStateAction<XmlIndirectProduct[]>>;
     setItems: Dispatch<React.SetStateAction<XmlIndirectProduct[]>>;
     items: XmlIndirectProduct[];
-    itemsOk: XmlIndirectProduct[]
+    itemsOk: XmlIndirectProduct[];
+    filter: Filter;
 };
 
 
-export const Step2 = ({setItemsOk, setItems, items, itemsOk}:Step2Props) => {
+export const Step2 = ({setItemsOk, setItems, items, itemsOk, filter}:Step2Props) => {
     const [checkItems, setCheckItems] = useState<XmlIndirectProduct[]>([]);
     const [idColor, setIdColor] = useState(1);
+
 
     const itemsPending = items.filter(item => item.status === "Pendente");
 
@@ -91,7 +93,7 @@ export const Step2 = ({setItemsOk, setItems, items, itemsOk}:Step2Props) => {
     
         
     return (
-        <Tabs defaultValue="All" className="px-4 py-2 h-full w-full">
+        <Tabs defaultValue={filter} className="px-4 py-2 h-full w-full">
             {/* header step 2 */}
             {/* título + subtítulo */}
             <div className="min-w-0">
@@ -100,10 +102,10 @@ export const Step2 = ({setItemsOk, setItems, items, itemsOk}:Step2Props) => {
 
             {/* Tabs Menu */}
             <TabsList className="w-full overflow-x-auto !justify-start !flex-nowrap scrollbar-none">
-                <TabsTrigger value="All">Todos ({items.length})</TabsTrigger>
-                <TabsTrigger value="OK">OK ({itemsOk.length})</TabsTrigger>
-                <TabsTrigger value="Pendente">Pendente ({itemsPending.length})</TabsTrigger>
-                <TabsTrigger value="SELECTED">Selecionados ({checkItems.length})</TabsTrigger>
+                <TabsTrigger value={"All" as Filter}>Todos ({items.length})</TabsTrigger>
+                <TabsTrigger value={"OK" as Filter}>OK ({itemsOk.length})</TabsTrigger>
+                <TabsTrigger value={"Pending" as Filter}>Pendente ({itemsPending.length})</TabsTrigger>
+                <TabsTrigger value={"Selected" as Filter}>Selecionados ({checkItems.length})</TabsTrigger>
             </TabsList>
             
             {/* Edição em lote */}
@@ -113,7 +115,7 @@ export const Step2 = ({setItemsOk, setItems, items, itemsOk}:Step2Props) => {
                 {checkItems.length} items selecionados
             </p>
 
-            <TabsContent value="All">
+            <TabsContent value={"All" as Filter}>
                 <TableXml 
                     checkItems={checkItems} 
                     setCheckItems={setCheckItems} 
@@ -123,7 +125,7 @@ export const Step2 = ({setItemsOk, setItems, items, itemsOk}:Step2Props) => {
                 />
             </TabsContent>
 
-            <TabsContent value="OK">
+            <TabsContent value={"OK" as Filter}>
                 <TableXml 
                     checkItems={checkItems} 
                     setCheckItems={setCheckItems} 
@@ -133,7 +135,7 @@ export const Step2 = ({setItemsOk, setItems, items, itemsOk}:Step2Props) => {
                 />
             </TabsContent>
             
-            <TabsContent value="Pendente">
+            <TabsContent value={"Pending" as Filter}>
                 <TableXml 
                     checkItems={checkItems} 
                     setCheckItems={setCheckItems} 
@@ -142,7 +144,7 @@ export const Step2 = ({setItemsOk, setItems, items, itemsOk}:Step2Props) => {
                 />
             </TabsContent>
             
-            <TabsContent value="SELECTED">
+            <TabsContent value={"Selected" as Filter}>
                 <TableXml 
                     checkItems={checkItems} 
                     setCheckItems={setCheckItems} 

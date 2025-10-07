@@ -1,10 +1,20 @@
+import { IIndirectProductsRegister, IndirectProductStep3 } from "@/features/indirect-products/interface/indirect-products";
+import { insertIndirectProductsService } from "@/features/indirect-products/service/insert-indirect-products.service";
+import { indirectProductsStep3Schema } from "@/features/indirect-products/schema";
 import { Step1UploadXml } from "./steps/step1/step1-upload-xml.components";
+import { Filter, IUser, XmlIndirectProduct, XmlInfo } from "@/interfaces";
 import { XmlProgress } from "./modal-xml-progress.components";
-import { XmlIndirectProduct, XmlInfo } from "@/interfaces";
 import { Sheet, SheetContent,  SheetTitle  } from "../ui";
-import { ModalXmlActions } from "./modal-xml-actions";
-import { Dispatch, useState } from "react";
 import { Step2 } from "./steps/step2/step2.components";
+import { Step3 } from "./steps/step3/step3.components";
+import { ModalXmlActions } from "./modal-xml-actions";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { Toastify } from "../toastify.components";
+import { Dispatch, useState } from "react";
+import { useForm } from "react-hook-form";
+import { handleApiError } from "@/utils";
+
+
 
 
 
@@ -13,8 +23,9 @@ interface ModalXmlProps {
     open: boolean;
     close: Dispatch<React.SetStateAction<boolean>>;
     titleForm: string;
-    user: {email?: string | null; name: string}
+    user: IUser | null;
 };
+
 
 
 
@@ -24,13 +35,69 @@ export const ModalXml = ({open, close, titleForm, user}:ModalXmlProps) => {
     const [xmlInfos, setXmlInfos] = useState<XmlInfo[]>([]);
     const [items, setItems] = useState<XmlIndirectProduct[]>([]);
     const [itemsOk, setItemsOk] = useState<XmlIndirectProduct[]>([]);
-    
-  
-    
+    const [filter, setFilter] = useState<Filter>("All");
+        
+
+    const methodsStep3 = useForm({
+        resolver: yupResolver<IndirectProductStep3>(indirectProductsStep3Schema),
+        defaultValues: {
+            whatsapp: "", 
+            setor: undefined, 
+            criado_em: "", 
+            nome_solicitante: user!.fullName, 
+            email: user!.email || "", 
+            id_usr_keycloak: user!.id_keycloak
+        }
+    })
+
+    const closeModal = ():void => {
+        setStep(1);
+        setXmlInfos([]);
+        setItems([]);
+        setItemsOk([]);
+        close(false);
+    };
+
+    // Ação ao finalizar o passo 3 (criar as solicitações em lote)
+    const onSubmitForcreatedRequestsInLot = async (data:IndirectProductStep3) => {
+               
+        const itemsToCreate = itemsOk.map(item => ({
+            criado_em: data.criado_em,
+            nome_solicitante: data.nome_solicitante,
+            email: data.email,
+            whatsapp: data.whatsapp,
+            id_usr_keycloak: data.id_usr_keycloak,
+            setor: data.setor,
+            descricao_curta: item.name,
+            descricao_uso: item!.descricao_uso,
+            codigo_familia: item!.codigo_familia,
+            codigo_grupo: item!.codigo_grupo,
+            tipo: item!.tipo,
+            unidade_medida: item.unit_measure,
+            ncm: item.ncm
+        })) as IIndirectProductsRegister[];
+
+        try {
+            await insertIndirectProductsService(itemsToCreate)
+            
+            Toastify({
+                type: "success",
+                message: `${itemsOk.length} solicitações criadas com sucesso!`,
+                duration: 4000
+            });
+            
+            methodsStep3.reset();
+            closeModal();
+
+        } catch (error) {
+            handleApiError(error, "Erro ao cadastrar produto indireto")
+        } 
+        
+    };
 
  
     return (
-        <Sheet open={open} onOpenChange={close}>
+        <Sheet open={open} onOpenChange={closeModal} modal={false}>
             <SheetContent 
                 side="right" 
                 onInteractOutside={(e) => e.preventDefault()}
@@ -62,12 +129,32 @@ export const ModalXml = ({open, close, titleForm, user}:ModalXmlProps) => {
                                                     setItems={setItems}
                                                     items={items}
                                                     itemsOk={itemsOk} 
+                                                    filter={filter}
                                                 />
                                                 
                                             }
+                                            {step === 3 &&
+                                                <Step3
+                                                    itemsOk={itemsOk}
+                                                    itemsPending={items.filter(item => item.status === "Pendente")}
+                                                    items={items}
+                                                    setStep={setStep}
+                                                    setFilter={setFilter}
+                                                    user={user}
+                                                    methods={methodsStep3}
+                                                />
+                                            }
                                         </div>
                                         <div className="shrink-0">
-                                            <ModalXmlActions step={step} items={items} setItems={setItems} setStep={setStep} quantitySteps={3}/>
+                                            <ModalXmlActions 
+                                                step={step} 
+                                                itemsOk={itemsOk} 
+                                                items={items} 
+                                                setStep={setStep} 
+                                                quantitySteps={3}
+                                                methods={methodsStep3}
+                                                onSubmit={(data) => onSubmitForcreatedRequestsInLot(data)}
+                                            />
                                         </div>
                                     </>
                                 )
@@ -93,9 +180,6 @@ export const ModalXml = ({open, close, titleForm, user}:ModalXmlProps) => {
                         }
                     })()}
                 </div>
-
-                
-               
             </SheetContent>
         </Sheet>
     );

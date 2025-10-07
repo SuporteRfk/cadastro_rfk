@@ -181,7 +181,7 @@ export const FormLayout = <T extends FieldValues> ({methods, onSubmit, children,
             </FormProvider>
 
             {/* Abrir o modal para importar o xml */}
-            <ModalXml open={openModalXml} close={setOpenModalXml} titleForm={titleForm} user={{name: user?.fullName || "", email: user?.email}}/>        
+            <ModalXml open={openModalXml} close={setOpenModalXml} titleForm={titleForm} user={user}/>        
         </ScrollArea>
     );
 };

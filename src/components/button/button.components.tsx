@@ -34,7 +34,7 @@ export const Button = ({
         secondary: "bg-medium/50 text-text-medium hover:bg-gray-300 border-transparent",
         ghost: "bg-transparent text-text-strong hover:bg-neutral/10",
         danger: "bg-error text-white-default hover:bg-red-600",
-        outline: "bg-transparent hover:bg-accent  border border-accent text-accent hover:text-white-default",
+        outline: "bg-transparent hover:bg-accent border border-accent text-accent hover:text-white-default",
         outlineDanger: "bg-transparent hover:bg-error/80 border-2 border-error text-error hover:text-white-default",
         outlineSecondary: "bg-transparente hover:bg-medium/20 border border-medium/50 text-text-medium",
         active: "bg-[#138496] text-white-default border-2 border-[#138496]",
