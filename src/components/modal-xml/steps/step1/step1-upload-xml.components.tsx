@@ -41,9 +41,10 @@ export const Step1UploadXml = ({setXmlInfos, xmlInfos, items, setItems}:Step1Upl
         return dets.map((det, i) => {
             const prod = det.getElementsByTagName("prod")[0] || null;
             const name = tagText(prod, "xProd");
+            const nameFormated = name.replace(/[@+*]/g, "");
             const ncm = tagText(prod, "NCM");
             const unit = tagText(prod, "uTrib") || tagText(prod, "uCom");
-            return { id: counterId+i+1, name, ncm, unit_measure: unit, idFile: idFile, status: "Pendente"};
+            return { id: counterId+i+1, name:nameFormated, ncm, unit_measure: unit, idFile: idFile, status: "Pendente"};
         })
     };
     
