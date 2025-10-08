@@ -1,8 +1,9 @@
-import { flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
+import { flexRender, getCoreRowModel, getSortedRowModel, SortingState, useReactTable } from "@tanstack/react-table";
 import { Table, TableBody, TableCell, TableHeader, TableRow } from "../../../../ui";
 import { XmlIndirectProduct } from "@/interfaces";
 import { getColumnsXml } from "./columns-table";
-import { Dispatch } from "react";
+import { Dispatch, useState } from "react";
+
 
 interface TableXmlProps {
     data: XmlIndirectProduct[];
@@ -10,24 +11,48 @@ interface TableXmlProps {
     setCheckItems: Dispatch<React.SetStateAction<XmlIndirectProduct[]>>;
     blockCheck?: boolean;
     canSelectRow: (item: XmlIndirectProduct) => boolean;
+    setItems: Dispatch<React.SetStateAction<XmlIndirectProduct[]>>;
+    setItemsOk: Dispatch<React.SetStateAction<XmlIndirectProduct[]>>;
 };
 
-export const TableXml = ({data, checkItems, setCheckItems, blockCheck=false, canSelectRow}:TableXmlProps) => {
-    const columns = getColumnsXml({data, checkItems, setCheckItems, blockCheck, canSelectRow});
-
+export const TableXml = ({data, checkItems, setCheckItems, blockCheck=false, canSelectRow, setItems, setItemsOk}:TableXmlProps) => {
+    const [sorting, setSorting] = useState<SortingState>([]);
+        
+    const [editItemId, setEditItemId] = useState<number|null>(null);
+    const [editValue, setEditValue] = useState<string>("");
+    
+    const columns = getColumnsXml({
+        data, 
+        checkItems, 
+        setCheckItems, 
+        blockCheck, 
+        canSelectRow, 
+        editItemId, 
+        setEditItemId, 
+        editValue, 
+        setEditValue, 
+        setItems, 
+        setItemsOk
+    });
+    
     const table = useReactTable({ 
             columns,
             data,
             getCoreRowModel: getCoreRowModel(),
+            getSortedRowModel: getSortedRowModel(), // habilita ordenação
+            state: {
+                sorting
+            },
+            onSortingChange: setSorting // atualiza o estado ao clicar na coluna 
     });
 
     const colorsRows = [
         "bg-white", // branco
         "bg-lime-50",
+        "bg-blue-100",
         "bg-lime-200",
         "bg-green-100",
         "bg-emerald-50",
-        "bg-blue-100",
         "bg-blue-200",
     ];
         

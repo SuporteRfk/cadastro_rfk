@@ -1,9 +1,17 @@
-import {PackageCheck as CheckIcon} from "lucide-react";
 import { XmlIndirectProduct } from "@/interfaces";
 import { ColumnDef } from "@tanstack/react-table";
 import { Badge, Checkbox } from "@/components/ui";
 import { mask as applyMask } from 'remask';
 import { Dispatch } from "react";
+import {
+    PackageCheck as CheckIcon,    
+    ArrowDownUp as SortIcon,
+    ArrowDownZA as SortDescIcon,
+    ArrowUpAZ as SortAscIcon,
+    Pencil as EditName
+    
+    
+} from "lucide-react";
 
 interface getColumnsXmlProps {
     checkItems: XmlIndirectProduct[];
@@ -11,9 +19,15 @@ interface getColumnsXmlProps {
     data: XmlIndirectProduct[];
     blockCheck: boolean;
     canSelectRow: (item: XmlIndirectProduct) => boolean;
+    editItemId: number | null;
+    setEditItemId: Dispatch<React.SetStateAction<number | null>>;
+    editValue: string;
+    setEditValue:  Dispatch<React.SetStateAction<string>>;
+    setItems: Dispatch<React.SetStateAction<XmlIndirectProduct[]>>;
+    setItemsOk: Dispatch<React.SetStateAction<XmlIndirectProduct[]>>;
 };
 
-export const getColumnsXml = ({checkItems, setCheckItems, data, blockCheck, canSelectRow}:getColumnsXmlProps):ColumnDef<XmlIndirectProduct>[] => [
+export const getColumnsXml = ({checkItems, setCheckItems, data, blockCheck, canSelectRow, editItemId, setEditItemId,editValue, setEditValue, setItems, setItemsOk}:getColumnsXmlProps):ColumnDef<XmlIndirectProduct>[] => [
     {
         id: 'select',
         header: () => {
@@ -74,8 +88,70 @@ export const getColumnsXml = ({checkItems, setCheckItems, data, blockCheck, canS
     {
         id: "name",
         accessorKey: "name",
-        header: "Produto",
-        cell: info => info.getValue()
+        header: ({column}) => (
+            <button
+                onClick={() => column.toggleSorting()}
+                className="flex items-center justify-between w-full gap-1 font-semibold cursor-pointer"
+            >
+                Produto 
+                {(column.getIsSorted() !== "asc" && column.getIsSorted() !== "desc") && <SortIcon size={18}/>}
+                {column.getIsSorted() === "asc" && <SortAscIcon size={18}/>}
+                {column.getIsSorted() === "desc" && <SortDescIcon size={18}/>}
+            </button>
+        ),
+        enableSorting: true,
+        cell: ({row}) => {
+            const isEditing = editItemId === row.original.id;
+            
+            const saveEdit = () => {    
+                setItems(prev => 
+                    prev.map(item => 
+                        item.id === row.original.id ? {...item, name:editValue} : item
+                    )
+                );
+
+                setItemsOk(prev => 
+                    prev.map(item => 
+                        item.id === row.original.id ? {...item, name:editValue} : item
+                    )
+                );
+
+                setEditItemId(null);
+            };
+
+            const editItem = () => {
+                setEditItemId(row.original.id)
+                setEditValue(row.original.name)
+            };
+
+            if (isEditing) {
+                return (
+                    <input
+                        defaultValue={editValue}
+                        onChange={(e) => setEditValue(e.target.value.toLocaleUpperCase())}
+                        onBlur={() => saveEdit()}
+                        onKeyDown={(e) => {
+                            if (e.key === "Enter") (e.target as HTMLInputElement).blur(); // força o blur;
+                        }}
+                        className="border-2 outline-0 focus:border-accent py-[1px] px-2 rounded-sm text-sm w-full"
+                        autoFocus
+                />
+                );
+            }
+            return (
+                <span                    
+                    title="Clique no icone do lápis para editar"
+                    className="flex items-center justify-between w-full"
+                >
+                    {row.original.name}
+                    <EditName
+                        className="cursor-pointer hover:underline"
+                        onClick={() => editItem()}
+                        size={18}
+                    />
+                </span>
+            )
+        }
     },
     {
         id: "ncm",

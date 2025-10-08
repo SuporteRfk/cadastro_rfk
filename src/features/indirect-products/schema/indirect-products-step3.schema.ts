@@ -1,10 +1,10 @@
-import {IndirectProducStep3} from "../interface/indirect-products";
+import { IndirectProductStep3 } from "../interface/indirect-products";
 import { Sectors } from "@/interfaces";
 import * as yup from "yup";
 
 
 
-export const indirectProductsStep3Schema: yup.ObjectSchema<IndirectProducStep3> = yup.object<IndirectProducStep3>().shape({
+export const indirectProductsStep3Schema: yup.ObjectSchema<IndirectProductStep3> = yup.object<IndirectProductStep3>().shape({
   criado_em: yup.string()
     .required("Data é obrigatório"),
   nome_solicitante: yup.string()

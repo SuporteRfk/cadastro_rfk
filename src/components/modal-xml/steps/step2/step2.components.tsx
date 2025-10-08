@@ -23,12 +23,9 @@ interface Step2Props {
 export const Step2 = ({setItemsOk, setItems, items, itemsOk, filter}:Step2Props) => {
     const [checkItems, setCheckItems] = useState<XmlIndirectProduct[]>([]);
     const [idColor, setIdColor] = useState(1);
-
-
-    const itemsPending = items.filter(item => item.status === "Pendente");
-
-
     
+    const itemsPending = items.filter(item => item.status === "Pendente");
+   
     const methods= useForm<IndirectProducStep2>({
         resolver: yupResolver(indirectProductsStep2Schema),
         defaultValues: {codigo_familia: undefined, codigo_grupo: undefined, tipo: undefined, descricao_uso: "" }
@@ -122,6 +119,8 @@ export const Step2 = ({setItemsOk, setItems, items, itemsOk, filter}:Step2Props)
                     data={items} 
                     blockCheck
                     canSelectRow={(item) => item.status === "Pendente"}
+                    setItems={setItems}
+                    setItemsOk={setItemsOk}
                 />
             </TabsContent>
 
@@ -131,7 +130,8 @@ export const Step2 = ({setItemsOk, setItems, items, itemsOk, filter}:Step2Props)
                     setCheckItems={setCheckItems} 
                     data={itemsOk}
                     canSelectRow={(item) => item.status === "Ok"}
-
+                    setItems={setItems}
+                    setItemsOk={setItemsOk}
                 />
             </TabsContent>
             
@@ -140,7 +140,9 @@ export const Step2 = ({setItemsOk, setItems, items, itemsOk, filter}:Step2Props)
                     checkItems={checkItems} 
                     setCheckItems={setCheckItems} 
                     data={itemsPending}
-                     canSelectRow={() => true}
+                    canSelectRow={() => true}
+                    setItems={setItems}
+                    setItemsOk={setItemsOk}
                 />
             </TabsContent>
             
@@ -150,6 +152,8 @@ export const Step2 = ({setItemsOk, setItems, items, itemsOk, filter}:Step2Props)
                     setCheckItems={setCheckItems} 
                     data={checkItems}
                     canSelectRow={() => true}
+                    setItems={setItems}
+                    setItemsOk={setItemsOk}
                 />
             </TabsContent>
         </Tabs>

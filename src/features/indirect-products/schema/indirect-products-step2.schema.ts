@@ -16,6 +16,7 @@ import * as yup from "yup";
 
 export const indirectProductsStep2Schema: yup.ObjectSchema<IndirectProducStep2> = yup.object<IndirectProducStep2>().shape({
   descricao_uso: yup.string()
+    .transform((value) => value?.toUpperCase())
     .max(100,"Descrição de no máximo 100 caracteres")
     .required("Por favor, informe para que o produto será utilizado"),
   codigo_familia: yup.string()
