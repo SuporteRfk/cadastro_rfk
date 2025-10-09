@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react-hooks/rules-of-hooks */
 import { FieldValues, Path, UseFormReturn } from "react-hook-form";
 import { FormStateType, PfOrPj, OptionYesNo } from "@/interfaces";
 import { useCNPJSearch } from "@/hooks/use-CNPJ-search.hook";

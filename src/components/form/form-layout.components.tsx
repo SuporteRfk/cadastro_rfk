@@ -4,20 +4,23 @@ import { LoadingModal } from "../loading-modals.components";
 import { SubTitleForm } from "./sub-title-form.components";
 import { DateInput, Input, InputSelect } from "../inputs";
 import { FormSection } from "./form-section.components";
-import { AuthContext, ModalContext } from "@/context";
-import { Button } from "../button/button.components";
 import { ReactNode, useContext, useState} from "react";
 import { FormStateType, Sectors } from "@/interfaces";
+import { AuthContext, ModalContext } from "@/context";
+import { Button } from "../button/button.components";
 import { ScrollArea } from "../ui";
 import { 
     LucideIcon, 
     UserRound as UserIcon, 
-    Mail as EmailIcon
+    Mail as EmailIcon,
+    Eye as ShowItensIcon
 } from "lucide-react";
 import { 
     FaWhatsapp as WhatsAppIcon
 } from "react-icons/fa6";
 import { ModalXml } from "../modal-xml";
+import { ModalSimilarity } from "../modal-similarity";
+import { IIndirectProductSimilarity } from "@/features/indirect-products/interface/indirect-products-similarity";
 
 
 interface BaseFormProps<T extends FieldValues> {
@@ -36,12 +39,32 @@ interface BaseFormProps<T extends FieldValues> {
     methods: UseFormReturn<T>;
     loading: boolean;
     attachFile?: boolean;
-}
+    btnShowSimilarity?:boolean;
+    itemsSimilarity?: IIndirectProductSimilarity[]
+};
 
-export const FormLayout = <T extends FieldValues> ({methods, onSubmit, children, mode, showSector, titleForm, iconForm:IconForm, showButtonsDefault=true, modalQuestion, onResetStates, loading, attachFile=false}: BaseFormProps<T>) => {
-    const {user} = useContext(AuthContext);
-    const {openModal} = useContext(ModalContext);
+export const FormLayout = <T extends FieldValues> ({
+    methods, 
+    onSubmit, 
+    children, 
+    mode, 
+    showSector, 
+    titleForm, 
+    iconForm:IconForm, 
+    showButtonsDefault=true, 
+    modalQuestion, 
+    onResetStates, 
+    loading, 
+    attachFile=false, 
+    btnShowSimilarity=false,
+    itemsSimilarity=[]
+}: BaseFormProps<T>) => {
     const [openModalXml,setOpenModalXml] = useState<boolean>(false);
+    const [openModalSimilarity, setOpenModalSimilarity] = useState<boolean>(false);
+
+    const {openModal} = useContext(ModalContext);
+    const {user} = useContext(AuthContext);
+    
 
 
     const handleReset = () => {
@@ -71,6 +94,22 @@ export const FormLayout = <T extends FieldValues> ({methods, onSubmit, children,
                         text="Importar XML"
                         sizeWidth="w-fit"
                         onClick={() => setOpenModalXml(true)}
+                    />
+                }
+                {/* Botão para mostrar produtos similares */}
+                {btnShowSimilarity && 
+                    <Button
+                        text="Existe Similaridade"
+                        variant="outlineSecondary"
+                        sizeWidth="120px flex-row-reverse !py-1"
+                        roudend="rounded-sm"
+                        iconInText={ShowItensIcon}
+                        title="Mostrar os produtos similares encontrados"
+                        styleIcon={{
+                            color: 'var(--color-medium)',
+                            size: 18
+                        }}
+                        onClick={() => setOpenModalSimilarity(true)}
                     />
                 }
             </div>
@@ -181,7 +220,11 @@ export const FormLayout = <T extends FieldValues> ({methods, onSubmit, children,
             </FormProvider>
 
             {/* Abrir o modal para importar o xml */}
-            <ModalXml open={openModalXml} close={setOpenModalXml} titleForm={titleForm} user={user}/>        
+            <ModalXml open={openModalXml} close={setOpenModalXml} titleForm={titleForm} user={user}/>  
+
+            {/* Abrir o modal para mostrar os itens similares */}
+            <ModalSimilarity open={openModalSimilarity} close={setOpenModalSimilarity} itemsSimilarity={itemsSimilarity!}/>
+
         </ScrollArea>
     );
 };

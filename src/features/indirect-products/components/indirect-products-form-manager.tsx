@@ -1,16 +1,20 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { FormLayout, FormActionsButtonsRequest, FormProductAttributes, FormProductCategorySelector, FormProductDescription, SubTitleForm, FormObservationDeniedFild} from "@/components/form";
 import { FamilyCodeIndirectProducts, TypeCodeIndirectProducts } from "../interface/indirect-products-enum";
+import { useDeniedRequest, useObservationDenied, useEditRequest, useReviewRequest } from "@/hooks";
 import { useGroupSelectorIndirectProduct } from "../hook/use-group-selector-indirect-product";
 import { IIndirectProducts, IIndirectProductsRegister } from "../interface/indirect-products";
 import { updateIndirectProductsService } from "../service/update-indirect-produtcs.service";
 import { indirectProductsRegisterSchema } from "../schema/indirect-products.schema";
-import { useDeniedRequest, useObservationDenied, useEditRequest, useReviewRequest } from "@/hooks";
+import { getSimilarityService } from "../service/get-similarity.service";
 import { LoadingModal, RequestDeniedInfo, Toastify } from "@/components";
 import { PackageCheck as IndirectProductsIcon } from "lucide-react";
 import { FormStateType, StatusRequest } from "@/interfaces";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { useReview } from "@/context";
+import { useEffect, useState } from "react";
+import { IIndirectProductSimilarity } from "../interface/indirect-products-similarity";
 
 
 
@@ -28,12 +32,15 @@ interface IndirectProductsFormManagerProps{
 }
 
 export const IndirectProductsFormManager = ({defaultValue, mode, loadingModal, setLoadingModal, status, setMode, viewRequestId, obervationRequest, setStatusLocal}:IndirectProductsFormManagerProps) => {
-        
+    
     if(loadingModal){
         return <LoadingModal/> 
     }
+    // estado para mostrar ou não o botão de itens similares
+    const [showSimilarity, setShowSimilarity] = useState<boolean>(false);
+    const [itemsSimilarity, setItemsSimilarity] = useState<IIndirectProductSimilarity[]>([])    
   
-    const methods= useForm<IIndirectProductsRegister>({
+    const methods = useForm<IIndirectProductsRegister>({
         defaultValues: defaultValue,
         resolver: yupResolver(indirectProductsRegisterSchema)
     });
@@ -102,7 +109,27 @@ export const IndirectProductsFormManager = ({defaultValue, mode, loadingModal, s
         }
     };
     
+
     
+    //Função para saber se existe similaridade do item
+    const isThereSimilarProduct = async ():Promise<void> => {
+        const resp = await getSimilarityService(defaultValue.id);
+        setShowSimilarity(resp.length === 0 ? false : true)
+        
+        if(showSimilarity){
+            setItemsSimilarity(resp)
+            return
+        };
+
+        return
+    };
+
+    useEffect(() => {
+        if(!defaultValue) return
+        isThereSimilarProduct()
+    },[loadingModal, showSimilarity])
+    
+
     return(
         <FormLayout 
             methods={methods} 
@@ -111,7 +138,9 @@ export const IndirectProductsFormManager = ({defaultValue, mode, loadingModal, s
             iconForm={IndirectProductsIcon}
             mode={mode}
             showSector
-            showButtonsDefault={false}            
+            showButtonsDefault={false}
+            btnShowSimilarity={showSimilarity}
+            itemsSimilarity={itemsSimilarity}            
         >
             {/* Sessão para mostrar a obervação quando a solicitação for negada */}
             {(mode === "viewing" && status === StatusRequest.NEGADO && obervationRequest) && (
