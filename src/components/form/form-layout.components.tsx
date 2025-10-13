@@ -13,7 +13,9 @@ import {
     LucideIcon, 
     UserRound as UserIcon, 
     Mail as EmailIcon,
-    Eye as ShowItensIcon
+    Eye as ShowItensIcon,
+    CircleSlash2 as NoMatchIcon,
+    LoaderCircle as LoadingIcon
 } from "lucide-react";
 import { 
     FaWhatsapp as WhatsAppIcon
@@ -39,7 +41,7 @@ interface BaseFormProps<T extends FieldValues> {
     methods: UseFormReturn<T>;
     loading: boolean;
     attachFile?: boolean;
-    btnShowSimilarity?:boolean;
+    btnShowSimilarity?:'true' | 'false' | 'loading' | 'noShow';
     itemsSimilarity?: IIndirectProductSimilarity[]
 };
 
@@ -56,7 +58,7 @@ export const FormLayout = <T extends FieldValues> ({
     onResetStates, 
     loading, 
     attachFile=false, 
-    btnShowSimilarity=false,
+    btnShowSimilarity='noShow',
     itemsSimilarity=[]
 }: BaseFormProps<T>) => {
     const [openModalXml,setOpenModalXml] = useState<boolean>(false);
@@ -97,21 +99,42 @@ export const FormLayout = <T extends FieldValues> ({
                     />
                 }
                 {/* Botão para mostrar produtos similares */}
-                {btnShowSimilarity && 
-                    <Button
-                        text="Existe Similaridade"
-                        variant="outlineSecondary"
-                        sizeWidth="120px flex-row-reverse !py-1"
-                        roudend="rounded-sm"
-                        iconInText={ShowItensIcon}
-                        title="Mostrar os produtos similares encontrados"
-                        styleIcon={{
-                            color: 'var(--color-medium)',
-                            size: 18
-                        }}
-                        onClick={() => setOpenModalSimilarity(true)}
-                    />
-                }
+                {btnShowSimilarity !== 'noShow' && (
+                    btnShowSimilarity === 'loading' ? (
+                        <Button
+                            text="Analisando Similaridade..."
+                            variant="analisyLoading"
+                            sizeWidth="w-fit"
+                            roudend="rounded-sm"                            
+                        />
+                    ) : btnShowSimilarity === 'true' ? (
+                        <Button
+                            text="Existe Similaridade"
+                            variant="outlineSecondary"
+                            sizeWidth="120px flex-row-reverse !py-1"
+                            roudend="rounded-sm"
+                            iconInText={ShowItensIcon}
+                            title="Mostrar os produtos similares encontrados"
+                            styleIcon={{
+                                color: 'var(--color-medium)',
+                                size: 18
+                            }}
+                            onClick={() => setOpenModalSimilarity(true)}
+                        />
+                    ) : (
+                        <Button
+                            text="Sem Similaridade"
+                            variant="similarityFalse"
+                            sizeWidth="120px flex-row-reverse !py-1"
+                            roudend="rounded-sm"
+                            iconInText={NoMatchIcon}
+                            styleIcon={{
+                                color: 'var(--color-error)',
+                                size: 18
+                            }}
+                        />
+                    )
+            )}
             </div>
             <FormProvider {...methods}>
                 <form 

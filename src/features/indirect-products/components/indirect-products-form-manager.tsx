@@ -5,16 +5,16 @@ import { useDeniedRequest, useObservationDenied, useEditRequest, useReviewReques
 import { useGroupSelectorIndirectProduct } from "../hook/use-group-selector-indirect-product";
 import { IIndirectProducts, IIndirectProductsRegister } from "../interface/indirect-products";
 import { updateIndirectProductsService } from "../service/update-indirect-produtcs.service";
+import { IIndirectProductSimilarity } from "../interface/indirect-products-similarity";
 import { indirectProductsRegisterSchema } from "../schema/indirect-products.schema";
 import { getSimilarityService } from "../service/get-similarity.service";
 import { LoadingModal, RequestDeniedInfo, Toastify } from "@/components";
 import { PackageCheck as IndirectProductsIcon } from "lucide-react";
 import { FormStateType, StatusRequest } from "@/interfaces";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useReview } from "@/context";
-import { useEffect, useState } from "react";
-import { IIndirectProductSimilarity } from "../interface/indirect-products-similarity";
 
 
 
@@ -37,7 +37,7 @@ export const IndirectProductsFormManager = ({defaultValue, mode, loadingModal, s
         return <LoadingModal/> 
     }
     // estado para mostrar ou não o botão de itens similares
-    const [showSimilarity, setShowSimilarity] = useState<boolean>(false);
+    const [showSimilarity, setShowSimilarity] = useState<'true' | 'false' | 'loading'>('loading');
     const [itemsSimilarity, setItemsSimilarity] = useState<IIndirectProductSimilarity[]>([])    
   
     const methods = useForm<IIndirectProductsRegister>({
@@ -112,22 +112,52 @@ export const IndirectProductsFormManager = ({defaultValue, mode, loadingModal, s
 
     
     //Função para saber se existe similaridade do item
-    const isThereSimilarProduct = async ():Promise<void> => {
+    const isThereSimilarProduct = async ():Promise<"loading" | "done"> => {
         const resp = await getSimilarityService(defaultValue.id);
-        setShowSimilarity(resp.length === 0 ? false : true)
         
-        if(showSimilarity){
-            setItemsSimilarity(resp)
-            return
+        if (resp === null) {
+            setShowSimilarity('loading');
+            return "loading";
         };
-
-        return
+        
+        if(resp.true.length > 0){
+            setShowSimilarity('true');
+            setItemsSimilarity(resp.true);
+        }else if (resp.false.length > 0){
+            setShowSimilarity('false');
+            setItemsSimilarity(resp.false);
+        
+        }
+        
+        return "done";
     };
 
     useEffect(() => {
         if(!defaultValue) return
-        isThereSimilarProduct()
-    },[loadingModal, showSimilarity])
+        
+        
+        let attempts = 0;
+        const maxAttempts = 10;
+        let interval: NodeJS.Timeout;
+        
+        (async () => {
+            const status = await isThereSimilarProduct();
+
+            if(status === "loading"){
+                interval = setInterval(async () => {
+                    attempts++;
+                    const result = await isThereSimilarProduct();
+                    
+                    // Parar se já concluiu ou atingiu limite de tentativas
+                    if (result === "done" || attempts >= maxAttempts) {
+                        clearInterval(interval);
+                    };
+                },3000) 
+            }
+        })()
+        
+        return () => clearInterval(interval);
+    },[loadingModal])
     
 
     return(

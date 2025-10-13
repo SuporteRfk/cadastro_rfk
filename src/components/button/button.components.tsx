@@ -10,7 +10,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     size?: number;
     color?: string;
   };
-  variant?: "primary" | "secondary" | "ghost" | "danger" | "outline" | "active" | "outlineDanger" | "fiscal" | "attach" | "outlineSecondary";
+  variant?: "primary" | "secondary" | "ghost" | "danger" | "outline" | "active" | "outlineDanger" | "fiscal" | "attach" | "outlineSecondary" | "similarityFalse" | "analisyLoading";
   title?:string;
   roudend?: string;
 }
@@ -36,8 +36,10 @@ export const Button = ({
         danger: "bg-error text-white-default hover:bg-red-600",
         outline: "bg-transparent hover:bg-accent border border-accent text-accent hover:text-white-default",
         outlineDanger: "bg-transparent hover:bg-error/80 border-2 border-error text-error hover:text-white-default",
-        outlineSecondary: "bg-transparente hover:bg-medium/20 border border-medium/50 text-text-medium",
-        active: "bg-[#138496] text-white-default border-2 border-[#138496]",
+        outlineSecondary: "bg-transparent hover:bg-medium/20 border border-medium/50 text-text-medium",
+        similarityFalse: "bg-red-600/10 border border-red-600 text-red-600",
+        analisyLoading: "bg-medium/10 border border-medium/50 text-text-medium",
+        active: "bg-[#138496] text-white-default border-2 border-[#138496] ",
         fiscal: "bg-slate-500 text-white-default hover:bg-slate-300 hover:text-text-medium",
         attach: "text-nowrap h-8 text-white font-medium! bg-blue-600 hover:bg-blue-700/70 mr-3 rounded-sm shadow-sm",
     };
@@ -47,7 +49,7 @@ export const Button = ({
   return (
     <button
       onClick={onClick}
-      className={` flex items-center cursor-pointer justify-center outline-none gap-2 ${roudend} px-4 py-2 text-sm font-semibold transition duration-200 ${
+      className={`flex items-center cursor-pointer justify-center outline-none gap-2 ${roudend} px-4 py-2 text-sm font-semibold transition duration-200 ${
         disabled || isLoading ? "bg-gray-300 text-gray-500 cursor-not-allowed!" : style
       } ${sizeWidth}`}
       title={title}
@@ -55,11 +57,14 @@ export const Button = ({
       {...rest}
       disabled={disabled || isLoading}
     >
-      {isLoading ? (
-        <Loader2 className="animate-spin h-5 w-5" />
+      {isLoading || variant === "analisyLoading"? (
+        <div className="flex justify-center items-center gap-1">
+          <Loader2 className="animate-spin h-5 w-5" />
+          {variant === "analisyLoading" && text}
+        </div>
       ) : (
         <>
-          {Icon && <Icon size={styleIcon.size} color={styleIcon.color} />}
+          {Icon && <Icon size={styleIcon.size} color={styleIcon.color}/>}
           {text}
         </>
       )}
