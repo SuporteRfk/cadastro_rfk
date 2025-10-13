@@ -88,7 +88,7 @@ export const FormLayout = <T extends FieldValues> ({
                     {titleForm}
                 </h1>
                 {/* Botão de Anexar */}
-                {attachFile && 
+                {(attachFile && user?.access_xml) && 
                     <Button
                         variant="attach"
                         text="Importar XML"
