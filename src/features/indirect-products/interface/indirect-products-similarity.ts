@@ -10,6 +10,7 @@ export interface IIndirectProductSimilarity {
     id_cad_produto_indireto: number;
     descricao_produto: string;
     produto_ncm:string;
+    ativo: boolean;
 };
 
 

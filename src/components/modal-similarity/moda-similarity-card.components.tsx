@@ -10,6 +10,7 @@ import {
   Tag,
 } from "lucide-react";
 
+
 interface IModalSimilarityCardProps {
     item: IIndirectProductSimilarity;
 };
@@ -18,6 +19,8 @@ export const ModalSimilarityCard = ({item}:IModalSimilarityCardProps) => {
     const family = FamilyDescriptions[item.familia_produto];
     const group = GroupDescriptions[item.grupo_produto];
     const type = TypeDescription[item.tipo_produto];
+
+    console.log(item)
 
     return (
         <div className="border-l-4 border border-neutral/50 border-l-accent rounded-md p-4 shadow-sm hover:shadow-md hover:scale-[102%] bg-white hover:bg-slate-50 text-sm transition-all">
@@ -29,9 +32,18 @@ export const ModalSimilarityCard = ({item}:IModalSimilarityCardProps) => {
                    {item.descricao_produto}
                 </h3>
                 
-                <span className="text-xs text-text-neutral flex items-center gap-1">
-                    <Barcode size={14} /> Cod: {item.id_produto_totvs}
-                </span>
+                <div className="flex gap-2 items-center">
+                    <span className="text-text-strong flex items-center gap-1">
+                        <Barcode size={14} className="text-text-neutral"/> Cod: {item.id_produto_totvs}
+                    </span>
+
+                    <div className={`
+                        border rounded-sm
+                        ${item.ativo ? "bg-green-600 border-transparent text-white" : "bg-red-100 border-red-500 text-red-500"}
+                    `}>
+                        <p className=" p-1 text-xs w-18 text-center">{item.ativo ? "Ativo" : "Bloqueado"}</p>
+                    </div>
+                </div>
             </div>
              
             {/* NCM */}
