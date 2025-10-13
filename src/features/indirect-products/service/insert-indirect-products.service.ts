@@ -2,7 +2,7 @@ import { IIndirectProductsRegister } from "../interface/indirect-products";
 import { supabaseApi } from "@/services/supabase/connection-supabase-api";
 
 //Cadastrar Produtos Indiretos 
-export const insertIndirectProductsService = async (data:IIndirectProductsRegister):Promise<void> => {
+export const insertIndirectProductsService = async (data:IIndirectProductsRegister|IIndirectProductsRegister[]):Promise<void> => {
     const {error} = await supabaseApi
         .from("cad_produtos_indiretos")
         .insert(data)

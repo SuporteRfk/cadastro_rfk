@@ -42,6 +42,19 @@ const userHasAccessFiscal = (resource_access: IResourceAccess): boolean => {
     return false;
 };
 
+const userHasAccessXml = (resource_access: IResourceAccess): boolean => {
+    const clientId = import.meta.env.VITE_KEYCLOAK_CLIENT_ID;
+    const roleXml = import.meta.env.VITE_KEYCLOAK_USER_XML;
+    const accessUserList = Object.keys(resource_access);
+  
+    if (accessUserList.includes(clientId)) {
+        const rolesClient = resource_access[clientId].roles;
+        return rolesClient.includes(roleXml);
+    };
+
+    return false;
+};
+
 
 /**
  * Constrói um objeto `IUser` baseado nos dados decodificados do token.
@@ -66,6 +79,7 @@ export const buildUserFromToken = (decodedToken: ITokenBearer): IUser => {
         resource_access: decodedToken.resource_access,
         departaments: getDepartmentFromDistinguishedName(decodedToken.distinguished),
         access_approver: userHasAccessApprover(decodedToken.resource_access),
-        access_fiscal: userHasAccessFiscal(decodedToken.resource_access)
+        access_fiscal: userHasAccessFiscal(decodedToken.resource_access),
+        access_xml: userHasAccessXml(decodedToken.resource_access)
     };
 };

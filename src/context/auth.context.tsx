@@ -1,4 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react-refresh/only-export-components */
+ 
 import { ILoginRequest, IToastifyMessageAuthContext, ITokenBearer, ITokenRefresh, IUser } from "@/interfaces";
 import { buildUserFromToken, decodeToken, handleApiError } from "@/utils";
 import { createContext, ReactNode, useEffect, useState } from "react";
@@ -43,7 +45,7 @@ export const AuthProvider = ({children}:{children:ReactNode}) => {
         if (isAuthenticated) {
             const sessionInterval = setInterval(() => {
                 checkSession();
-            }, 300000); // 300000 ms = 5 minutos
+            }, 360000); // 300000 ms = 5 minutos  || 1200000 ms = 20 min || 3600000ms = 1h(60min)
             return () => clearInterval(sessionInterval); // 🔹 Limpa o intervalo ao desmontar 
         }
     }, [isAuthenticated]); // 🔹 Executa quando isAuthenticated muda 

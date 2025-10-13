@@ -1,0 +1,1 @@
+export * from "./apply-info-products-indirect-in-lot.components";

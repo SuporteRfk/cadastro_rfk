@@ -4,19 +4,25 @@ import { LoadingModal } from "../loading-modals.components";
 import { SubTitleForm } from "./sub-title-form.components";
 import { DateInput, Input, InputSelect } from "../inputs";
 import { FormSection } from "./form-section.components";
+import { ReactNode, useContext, useState} from "react";
+import { FormStateType, Sectors } from "@/interfaces";
 import { AuthContext, ModalContext } from "@/context";
 import { Button } from "../button/button.components";
-import { ReactNode, useContext} from "react";
-import { FormStateType, Sectors } from "@/interfaces";
 import { ScrollArea } from "../ui";
 import { 
     LucideIcon, 
     UserRound as UserIcon, 
     Mail as EmailIcon,
+    Eye as ShowItensIcon,
+    CircleSlash2 as NoMatchIcon,
+    LoaderCircle as LoadingIcon
 } from "lucide-react";
 import { 
     FaWhatsapp as WhatsAppIcon
 } from "react-icons/fa6";
+import { ModalXml } from "../modal-xml";
+import { ModalSimilarity } from "../modal-similarity";
+import { IIndirectProductSimilarity } from "@/features/indirect-products/interface/indirect-products-similarity";
 
 
 interface BaseFormProps<T extends FieldValues> {
@@ -34,11 +40,32 @@ interface BaseFormProps<T extends FieldValues> {
     onResetStates?: () => void;
     methods: UseFormReturn<T>;
     loading: boolean;
-}
+    attachFile?: boolean;
+    btnShowSimilarity?:'true' | 'false' | 'loading' | 'noShow';
+    itemsSimilarity?: IIndirectProductSimilarity[]
+};
 
-export const FormLayout = <T extends FieldValues> ({methods, onSubmit, children, mode, showSector, titleForm, iconForm:IconForm, showButtonsDefault=true, modalQuestion, onResetStates, loading}: BaseFormProps<T>) => {
-    const {user} = useContext(AuthContext);
+export const FormLayout = <T extends FieldValues> ({
+    methods, 
+    onSubmit, 
+    children, 
+    mode, 
+    showSector, 
+    titleForm, 
+    iconForm:IconForm, 
+    showButtonsDefault=true, 
+    modalQuestion, 
+    onResetStates, 
+    loading, 
+    attachFile=false, 
+    btnShowSimilarity='noShow',
+    itemsSimilarity=[]
+}: BaseFormProps<T>) => {
+    const [openModalXml,setOpenModalXml] = useState<boolean>(false);
+    const [openModalSimilarity, setOpenModalSimilarity] = useState<boolean>(false);
+
     const {openModal} = useContext(ModalContext);
+    const {user} = useContext(AuthContext);
     
 
 
@@ -56,11 +83,59 @@ export const FormLayout = <T extends FieldValues> ({methods, onSubmit, children,
        
     return(
         <ScrollArea className="max-h-[98vh] w-full min-w-0 max-w-[1920px] mx-auto rounded-lg">
-            {/* Titulo do Formulário */}
-            <h1 className="p-3 text-xl text-text-strong font-bold mt-3 flex gap-2 items-center">
-                {<IconForm size={20}/>}
-                {titleForm}
-            </h1>
+            <div className="flex justify-between items-center mt-3">
+                {/* Titulo do Formulário */}
+                <h1 className="p-3 text-[16px] md:text-xl text-text-strong font-bold flex gap-2 items-center text-nowrap">
+                    {<IconForm size={20}/>}
+                    {titleForm}
+                </h1>
+                {/* Botão de Anexar */}
+                {(attachFile && user?.access_xml) && 
+                    <Button
+                        variant="attach"
+                        text="Importar XML"
+                        sizeWidth="w-fit"
+                        onClick={() => setOpenModalXml(true)}
+                    />
+                }
+                {/* Botão para mostrar produtos similares */}
+                {btnShowSimilarity !== 'noShow' && (
+                    btnShowSimilarity === 'loading' ? (
+                        <Button
+                            text="Analisando Similaridade..."
+                            variant="analisyLoading"
+                            sizeWidth="w-fit"
+                            roudend="rounded-sm"                            
+                        />
+                    ) : btnShowSimilarity === 'true' ? (
+                        <Button
+                            text="Existe Similaridade"
+                            variant="outlineSecondary"
+                            sizeWidth="120px flex-row-reverse !py-1"
+                            roudend="rounded-sm"
+                            iconInText={ShowItensIcon}
+                            title="Mostrar os produtos similares encontrados"
+                            styleIcon={{
+                                color: 'var(--color-medium)',
+                                size: 18
+                            }}
+                            onClick={() => setOpenModalSimilarity(true)}
+                        />
+                    ) : (
+                        <Button
+                            text="Sem Similaridade"
+                            variant="similarityFalse"
+                            sizeWidth="120px flex-row-reverse !py-1"
+                            roudend="rounded-sm"
+                            iconInText={NoMatchIcon}
+                            styleIcon={{
+                                color: 'var(--color-error)',
+                                size: 18
+                            }}
+                        />
+                    )
+            )}
+            </div>
             <FormProvider {...methods}>
                 <form 
                     className="bg-white-default w-full max-w-full min-w-0 px-4 border rounded-lg shadow-lg shadow-black/15 relative"
@@ -163,8 +238,16 @@ export const FormLayout = <T extends FieldValues> ({methods, onSubmit, children,
                             />
                         </div>
                     }
+                
                 </form>
             </FormProvider>
+
+            {/* Abrir o modal para importar o xml */}
+            <ModalXml open={openModalXml} close={setOpenModalXml} titleForm={titleForm} user={user}/>  
+
+            {/* Abrir o modal para mostrar os itens similares */}
+            <ModalSimilarity open={openModalSimilarity} close={setOpenModalSimilarity} itemsSimilarity={itemsSimilarity!}/>
+
         </ScrollArea>
     );
 };
