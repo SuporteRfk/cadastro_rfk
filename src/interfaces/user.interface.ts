@@ -12,4 +12,5 @@ export interface IUser {
     groups: string[];
     departaments: string;
     access_fiscal: boolean;
+    access_xml: boolean;
 };

@@ -46,4 +46,4 @@ export enum CategoryPackaging {
     RETORNAVEL = "R - RETORNAVEL",
     DESCARTAVEL = "D - DESCARTAVEL"
 };
-  
+

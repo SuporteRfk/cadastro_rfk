@@ -5,7 +5,7 @@ import { Toastify } from "@/components";
 import { AuthContext, useReview } from "@/context";
 import { useContext } from "react";
 
-interface UseDeniedRequestParams {
+interface UseReviewRequestParams {
   viewRequestId  : number;
   setLoadingModal:React.Dispatch<React.SetStateAction<boolean>>;
   setMode:React.Dispatch<React.SetStateAction<FormStateType>>;
@@ -16,7 +16,7 @@ export const useReviewRequest = () => {
   const {user} = useContext(AuthContext);
   const {reviewFields} = useReview();
     
-    const handleReviewRequest = async ({setLoadingModal, setMode, viewRequestId, setStatusLocal }:UseDeniedRequestParams) => { 
+    const handleReviewRequest = async ({setLoadingModal, setMode, viewRequestId, setStatusLocal }:UseReviewRequestParams) => { 
         try {
             setLoadingModal(true);
             await updateRequestService({
