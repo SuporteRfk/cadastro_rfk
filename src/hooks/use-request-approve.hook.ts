@@ -20,14 +20,14 @@ export const useRequestApprove = () => {
         try {
             setLoadingModal(true);
             await updateRequestService({
-            solicitacao_id: viewRequestId,
-            status: StatusRequest.APROVADO,
-            novo_solicitante: {
-                data: formatText(new Date(),"data"),
-                departamento: user?.departaments || 'departamento',
-                nome: user?.fullName || "usuario padrão",
-                operacao: "Aprovar solicitação"
-            }
+                solicitacao_id: viewRequestId,
+                status: StatusRequest.APROVADO,
+                novo_solicitante: {
+                    data: formatText(new Date(),"data"),
+                    departamento: user?.departaments || 'departamento',
+                    nome: user?.fullName || "usuario padrão",
+                    operacao: "Aprovar solicitação"
+                }
             })
 
             Toastify({

@@ -14,8 +14,7 @@ import {
     UserRound as UserIcon, 
     Mail as EmailIcon,
     Eye as ShowItensIcon,
-    CircleSlash2 as NoMatchIcon,
-    LoaderCircle as LoadingIcon
+    CircleSlash2 as NoMatchIcon
 } from "lucide-react";
 import { 
     FaWhatsapp as WhatsAppIcon

@@ -150,9 +150,10 @@ export const IndirectProductsFormManager = ({defaultValue, mode, loadingModal, s
                     
                     // Parar se já concluiu ou atingiu limite de tentativas
                     if (result === "done" || attempts >= maxAttempts) {
+                        setShowSimilarity('false');
                         clearInterval(interval);
                     };
-                },3000) 
+                },2000) 
             }
         })()
         
