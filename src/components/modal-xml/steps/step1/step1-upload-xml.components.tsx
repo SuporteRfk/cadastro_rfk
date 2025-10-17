@@ -95,10 +95,11 @@ export const Step1UploadXmlCsvExcel = ({setXmlInfos, xmlInfos, items, setItems}:
             const name = row["Descrição Curta "] || row["Descrição Curta"] || row["Descrição "] || row["Descrição"] || "";
             const ncm = row["NCM"] || "";
             const unit = row["Unidade"] || row["Unid"] || row["Uni"] || "";
+            const diameter = row["Diam/pot"] || row["Diam/pot "] || "";
             return {
                 id: counterId + i + 1,
                 idFile,
-                name,
+                name: `${name} ${diameter}`,
                 ncm,
                 unit_measure: unit,
                 status: "Pendente"
