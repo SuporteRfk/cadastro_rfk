@@ -92,7 +92,7 @@ export const FormLayout = <T extends FieldValues> ({
                 {(attachFile && user?.access_xml) && 
                     <Button
                         variant="attach"
-                        text="Importar XML"
+                        text="Importar Arquivos"
                         sizeWidth="w-fit"
                         onClick={() => setOpenModalXml(true)}
                     />
