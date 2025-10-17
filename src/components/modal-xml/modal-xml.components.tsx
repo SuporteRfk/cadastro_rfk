@@ -1,7 +1,7 @@
 import { IIndirectProductsRegister, IndirectProductStep3 } from "@/features/indirect-products/interface/indirect-products";
 import { insertIndirectProductsService } from "@/features/indirect-products/service/insert-indirect-products.service";
+import { Step1UploadXmlCsvExcel } from "./steps/step1/step1-upload-xml.components";
 import { indirectProductsStep3Schema } from "@/features/indirect-products/schema";
-import { Step1UploadXml } from "./steps/step1/step1-upload-xml.components";
 import { Filter, IUser, XmlIndirectProduct, XmlInfo } from "@/interfaces";
 import { XmlProgress } from "./modal-xml-progress.components";
 import { Sheet, SheetContent,  SheetTitle  } from "../ui";
@@ -116,7 +116,7 @@ export const ModalXml = ({open, close, titleForm, user}:ModalXmlProps) => {
                                         {/* body*/}
                                         <div className="min-h-0 flex-1 overflow-auto">
                                             {step === 1 && 
-                                                <Step1UploadXml 
+                                                <Step1UploadXmlCsvExcel 
                                                     setXmlInfos={setXmlInfos}
                                                     xmlInfos={xmlInfos}
                                                     items={items}

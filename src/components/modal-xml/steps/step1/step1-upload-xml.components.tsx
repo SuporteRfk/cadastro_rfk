@@ -2,9 +2,10 @@ import { Upload, FileText as FileIcon, Trash2 as DeleteIcon } from "lucide-react
 import { Toastify } from "@/components/toastify.components";
 import { XmlIndirectProduct, XmlInfo } from "@/interfaces";
 import { Dispatch, useRef, useState } from "react";
+import * as XLSX from "xlsx";
 
 
-interface Step1UploadXmlProps {
+interface Step1UploadXmlCsvExcelProps {
     setXmlInfos: Dispatch<React.SetStateAction<XmlInfo[]>>;
     xmlInfos: XmlInfo[];
     items: XmlIndirectProduct[];
@@ -12,29 +13,40 @@ interface Step1UploadXmlProps {
 };
 
 
-const accept = ".xml,application/xml,text/xml";
+const accept = `
+    .xml,
+    .csv,
+    .xls,
+    .xlsx,
+    text/xml,
+    text/csv,
+    application/xml,
+    application/vnd.ms-excel,
+    application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
+`;
 
 
-export const Step1UploadXml = ({setXmlInfos, xmlInfos, items, setItems}:Step1UploadXmlProps) => {
+export const Step1UploadXmlCsvExcel = ({setXmlInfos, xmlInfos, items, setItems}:Step1UploadXmlCsvExcelProps) => {
     const [dragging, setDragging] = useState<boolean>(false); 
 
     const inputRef = useRef<HTMLInputElement>(null);
+    let existingKeys: Set<string>;
 
-    // valida se é XML, por extensão .xml OU por MIME contendo "xml"
-    const isXmlFile = (file: File):boolean => {
-        return (
-            /\.xml$/i.test(file.name)  // garante extensão .xml (case-insensitive).
-            || /xml/i.test(file.type) // alguns navegadores preenchem type como application/xml ou text/xml. Se qualquer um dos dois bater, é válido.
-        ); 
+    // valida se é XML ou CSV/Excel
+    const isSupportedFile  = (file: File):boolean => {
+        const hasValidExtension = /\.(xml|csv|xlsx?)$/i.test(file.name);
+        const hasValidMimeType = /(xml|excel|spreadsheet|csv|text)/i.test(file.type);
+
+        return hasValidExtension || hasValidMimeType;
     };
 
-    // Ler texto de uma tag <tag> dentro de um elemento
+    // Ler texto de uma tag <tag> dentro de um elemento (XML)
     const tagText = (parent: Element | null | undefined, tag: string):string => {
         return parent?.getElementsByTagName(tag)[0]?.textContent?.trim() || ""
     };
     
-    // parse da NF e extrair os itens
-    const parseNFeToProducts = (xmlText:string, idFile:string): XmlIndirectProduct[] => {
+    // parse da NF e extrair os itens (XML)
+    const parseXmlToProducts = (xmlText:string, idFile:string): XmlIndirectProduct[] => {
         const counterId = items.length;
         const doc = new DOMParser().parseFromString(xmlText, "application/xml");
         const dets = Array.from(doc.getElementsByTagName("det"))
@@ -44,8 +56,68 @@ export const Step1UploadXml = ({setXmlInfos, xmlInfos, items, setItems}:Step1Upl
             const nameFormated = name.replace(/[@+*]/g, "");
             const ncm = tagText(prod, "NCM");
             const unit = tagText(prod, "uTrib") || tagText(prod, "uCom");
-            return { id: counterId+i+1, name:nameFormated, ncm, unit_measure: unit, idFile: idFile, status: "Pendente"};
+            return { 
+                id: counterId+i+1, 
+                name:nameFormated, 
+                ncm, 
+                unit_measure: unit, 
+                idFile: idFile, 
+                status: "Pendente"
+            };
         })
+    };
+
+    //parse dos items do CSV/Excel
+    const parseCsvExcelToProducts = async (file:File, idFile: string):Promise<XmlIndirectProduct[]> => {
+        const counterId = items.length;
+               
+        const data = await file.arrayBuffer(); // criar buffer do arquivo
+        const workbook = XLSX.read(data, {type: "array"}); // criar o worbook 
+        const firstSheetName = workbook.SheetNames[0]; // pegar nome da primeira planina
+        const worksheet = workbook.Sheets[firstSheetName]; // pegar a planilha pelo nome
+        const rows: any[] = XLSX.utils.sheet_to_json(worksheet,{header: 1, defval: "", blankrows: true, range: 0 }) // le tudo como array de arrays.
+        const headerRowIndex = rows.findIndex((r: any) => Array.isArray(r) && (r.includes("Descrição ") || r.includes("NCM")))
+        
+        if(headerRowIndex === -1){
+            Toastify({
+                type: "error",
+                message: "Arquivo Excel/CSV está incorreto, não segue o padrão exigido",
+                position: "top-right",
+                duration: 6000
+            });
+            throw new Error("Cabeçalho não encontrado.");
+        };
+
+        //planilha do excel    
+        const sheet: any[] = XLSX.utils.sheet_to_json<Record<string, any>>(worksheet, { defval: "", range: headerRowIndex});
+
+        const products:XmlIndirectProduct[] = sheet.map((row: any, i: number) => {
+            const name = row["Descrição Curta "] || row["Descrição Curta"] || row["Descrição "] || row["Descrição"] || "";
+            const ncm = row["NCM"] || "";
+            const unit = row["Unidade"] || row["Unid"] || row["Uni"] || "";
+            return {
+                id: counterId + i + 1,
+                idFile,
+                name,
+                ncm,
+                unit_measure: unit,
+                status: "Pendente"
+            };
+        });
+        
+        
+        return products
+    };
+
+
+    //Processar arquivo baseado no tipo
+    const processFile = async (file:File, idFile:string): Promise<XmlIndirectProduct[]> => {
+        if(file.name.toLocaleLowerCase().endsWith('.xml') && file.type.includes('xml')){
+            const text = await file.text()
+            return parseXmlToProducts(text, idFile);
+        } else {
+            return parseCsvExcelToProducts(file, idFile);
+        }
     };
     
     //Função central para lidar com o upload do arquivo xml
@@ -55,11 +127,11 @@ export const Step1UploadXml = ({setXmlInfos, xmlInfos, items, setItems}:Step1Upl
         if(!fileList || fileList.length === 0) return;
 
         // Validar se algum algum arquivo não é xml, se tiver cancela tudo.
-        const fileInvalid = arrFiles.find(file => !isXmlFile(file));
+        const fileInvalid = arrFiles.find(file => !isSupportedFile(file));
         if(fileInvalid){
             Toastify({
                 type: "error",
-                message: "Selecione apenas arquivos XML. Operação cancelada.",
+                message: "Selecione apenas arquivos XML, CSV ou Excel. Operação cancelada.",
                 position: "top-right",
             });
             return;
@@ -67,8 +139,9 @@ export const Step1UploadXml = ({setXmlInfos, xmlInfos, items, setItems}:Step1Upl
 
 
         // evitar duplicidade de arquivos pelo par+nome
-        const existingKeys = new Set(xmlInfos.map((info) => `${info.file.name}#${info.file.size}`));
+        existingKeys = new Set(xmlInfos.map((info) => `${info.file.name}#${info.file.size}`));
         const newFiles = arrFiles.filter((f) => !existingKeys.has(`${f.name}#${f.size}`));
+        
         if(!newFiles.length || newFiles.length === 0){
             Toastify({
                 type: "info",
@@ -86,8 +159,7 @@ export const Step1UploadXml = ({setXmlInfos, xmlInfos, items, setItems}:Step1Upl
         //processar arquivo por arquivo
         for (const file of newFiles){
             try {
-                const text = await file.text()
-                const extracted = parseNFeToProducts(text, `${file.name}#${file.size}`);
+                const extracted = await processFile(file, `${file.name}#${file.size}`)
                 // registrar os itens
                 setItems((prev) => [...prev, ...extracted]);
 
@@ -96,7 +168,8 @@ export const Step1UploadXml = ({setXmlInfos, xmlInfos, items, setItems}:Step1Upl
                     ...prev,
                     {id: `${file.name}#${file.size}`, file: file, itemsCount: extracted.length, name: file.name }
                 ])
-            } catch {
+            } catch(error) {
+                console.log(error)
                 Toastify({
                     type: "error",
                     message: `Falha ao ler o arquivo ${file.name}.`,
@@ -110,6 +183,7 @@ export const Step1UploadXml = ({setXmlInfos, xmlInfos, items, setItems}:Step1Upl
     const clearAll = ():void => {
         setXmlInfos([])
         setItems([])
+        existingKeys.clear()
         Toastify({
             type: "success",
             message: "Itens removidos",
@@ -120,6 +194,7 @@ export const Step1UploadXml = ({setXmlInfos, xmlInfos, items, setItems}:Step1Upl
 
     //Remover item especifico
     const removeItem = (id:string):void => {
+        inputRef.current!.value = ''
         // remover o arquivo
         setXmlInfos((prev) => prev.filter((file) => file.id !== id));
         // remove os itens que vieram dele
@@ -137,10 +212,10 @@ export const Step1UploadXml = ({setXmlInfos, xmlInfos, items, setItems}:Step1Upl
             {/* instruções texto */}
             <div className="flex flex-col gap-2 justify-center items-center">
                 <h3 className="text-text-strong text-2xl font-semibold">
-                    Upload do XML da NFe
+                    Upload do XML ou CSV/Excel
                 </h3>
                 <p className="text-text-neutral text-sm text-center">
-                    Selecione o arquivo XML da Nota Fiscal Eletrônica para importar os produtos
+                    Selecione o arquivo XML, CSV ou arquivo de Excel para importar os produtos
                 </p>
             </div>
 
@@ -168,10 +243,10 @@ export const Step1UploadXml = ({setXmlInfos, xmlInfos, items, setItems}:Step1Upl
                     {/* Ícone opcional: use o que preferir */}
                     <Upload/>
                     <p className="text-text-medium font-medium">
-                        Arraste o arquivo XML ou clique para selecionar
+                        Arraste o arquivo ou clique para selecionar
                     </p>
                     <p className="text-text-neutral text-xs">
-                        Apenas arquivos XML são aceitos
+                        Apenas arquivos XML,CSV,XLS,XLSX são aceitos
                     </p>
                 </div>
 
